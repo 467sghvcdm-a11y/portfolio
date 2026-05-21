@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Tax · Matt Kirkpatrick</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Figtree:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
+
+    body {
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100dvh;
+      background-color: #000000;
+      background-image:
+        radial-gradient(ellipse at 85% 15%, rgba(110,35,155,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(185,22,38,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(70,18,110,0.28) 0%, transparent 46%);
+      background-attachment: fixed;
+      --accent: #d92638;
+      --card-radius: 14px;
+    }
+
+    .pv-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 8px 8px 120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      padding: 56px 64px 72px;
+      position: relative;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.22);
+    }
+
+    /* ── Canvas ── */
+    canvas.hero-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: transparent;
+      color: #f4ede2;
+      min-height: 68vh;
+      padding: 36px 48px 56px;
+      display: flex;
+      flex-direction: column;
+      margin: -8px -8px 0;
+      border-radius: 0;
+    }
+
+    .cs-chap-nav {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: rgba(10,10,10,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 100px;
+      padding: 3px;
+      white-space: nowrap;
+    }
+    .cs-chap-link {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: rgba(244,237,226,0.72);
+      text-decoration: none;
+      padding: 5px 14px;
+      border-radius: 100px;
+      transition: color 150ms, background 150ms;
+    }
+    .cs-chap-link:hover { color: #f4ede2; }
+    .cs-chap-link.active { color: #f4ede2; background: rgba(255,255,255,0.18); }
+
+    .cs-back {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 100;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(244,237,226,0.6);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      background: rgba(10,10,10,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 100px;
+      padding: 8px 16px;
+      transition: color 150ms, background 150ms, border-color 150ms;
+    }
+    .cs-back:hover { color: #f4ede2; background: rgba(10,10,10,0.85); }
+    .cs-back.on-light { color: rgba(0,0,0,0.5); background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
+    .cs-back.on-light:hover { color: rgba(0,0,0,0.85); background: rgba(255,255,255,0.96); }
+
+    .hero-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-top: 72px;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .cs-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 64px;
+      line-height: 1.0;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: #f4ede2;
+      max-width: 800px;
+    }
+
+    .hero-foot {
+      display: flex;
+      gap: 48px;
+      margin-top: 48px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #767676;
+    }
+    .hero-foot b {
+      display: block;
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 380;
+      font-size: 28px;
+      color: #f4ede2;
+      margin-top: 6px;
+      letter-spacing: -0.01em;
+      text-transform: none;
+      white-space: nowrap;
+      line-height: 1.15;
+    }
+
+    /* ── Body ── */
+    p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    h3 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 28px;
+      line-height: 1.15;
+      font-weight: 380;
+      letter-spacing: -0.01em;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    h4 {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #1a1a1a;
+      margin: 40px 0 14px;
+    }
+
+    .cs-section {
+      margin-top: 64px;
+      padding-top: 56px;
+      border-top: 1px solid #eee;
+    }
+
+    /* ── Callout ── */
+    .cs-callout {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 20px;
+      font-weight: 300;
+      font-style: italic;
+      color: #1a1a1a;
+      line-height: 1.4;
+      padding: 24px 28px;
+      border-left: 3px solid var(--accent);
+      background: #fafafa;
+      border-radius: 0 8px 8px 0;
+      margin: 28px 0;
+    }
+
+    /* ── Inline annotation ── */
+    .cs-annotation {
+      font-style: italic;
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    /* ── Metrics table ── */
+    .cs-metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 28px 0;
+    }
+    .cs-metrics-table th {
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #767676;
+      font-weight: 500;
+      padding: 0 20px 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .cs-metrics-table td {
+      padding: 11px 20px 11px 0;
+      border-bottom: 1px solid #f5f5f5;
+      color: #767676;
+      font-size: 13px;
+    }
+    .cs-metrics-table td:first-child { color: #767676; }
+    .cs-win { color: #1a1a1a !important; font-weight: 500; }
+    .cs-itc {
+      font-size: 11px;
+      color: #767676;
+      font-weight: 400;
+      margin-left: 6px;
+    }
+
+    /* ── Distribution bars ── */
+    .cs-dist {
+      margin: 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cs-dist-row {
+      display: grid;
+      grid-template-columns: 52px 1fr 1fr;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      color: #767676;
+    }
+    .cs-dist-row.dominant { color: #1a1a1a; }
+    .cs-dist-pct {
+      font-family: 'Figtree', -apple-system, sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: #767676;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .cs-dist-row.dominant .cs-dist-pct {
+      font-size: 36px;
+      color: var(--accent);
+    }
+    .cs-dist-bar { background: #f0f0f0; height: 4px; border-radius: 2px; }
+    .cs-dist-bar-fill { height: 100%; border-radius: 2px; background: #e0e0e0; }
+    .cs-dist-row.dominant .cs-dist-bar-fill { background: var(--accent); }
+
+    /* ── Provocation list ── */
+    .cs-provocation-list {
+      list-style: none;
+      margin: 24px 0;
+    }
+    .cs-provocation-list li {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 20px;
+      align-items: start;
+      padding: 22px 0;
+      border-top: 1px solid #eee;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #767676;
+    }
+    .cs-provocation-list li:first-child { border-top: none; }
+    .cs-provocation-list li:last-child { border-bottom: none; }
+    .cs-provocation-num {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: #767676;
+      line-height: 1.4;
+    }
+
+    /* ── Artifact list ── */
+    .cs-artifact-list {
+      list-style: none;
+      margin: 20px 0;
+    }
+    .cs-artifact-list li {
+      padding: 13px 0;
+      border-top: 1px solid #f0f0f0;
+      font-size: 13px;
+      color: #767676;
+      line-height: 1.5;
+      display: flex;
+      gap: 12px;
+    }
+    .cs-artifact-list li:last-child { border-bottom: 1px solid #f0f0f0; }
+    .cs-artifact-list li::before {
+      content: '→' / '';
+      color: #ccc;
+      flex-shrink: 0;
+    }
+
+    /* ── Altitude grid ── */
+    .cs-altitude-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin: 28px 0;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .cs-altitude { background: #fafafa; padding: 28px 32px; }
+    .cs-altitude-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .cs-altitude-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .cs-altitude-desc {
+      font-size: 13px;
+      line-height: 1.65;
+      color: #767676;
+    }
+
+    /* ── Chapter breaks ── */
+    .cs-chapter, .card { scroll-margin-top: 72px; }
+
+    .cs-chapter {
+      margin: 64px -64px 0;
+      padding: 44px 64px;
+      background: #f8f8f6;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+    .cs-chapter-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cs-chapter-label::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); }
+    .cs-chapter-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+    .cs-chapter-sub { font-size: 15px; color: #767676; max-width: 58ch; }
+
+    /* ── Metric grids ── */
+    .cs-metrics { display: grid; gap: 24px; margin: 28px 0; }
+    .cs-metrics-2 { grid-template-columns: repeat(2, 1fr); }
+    .cs-metrics-3 { grid-template-columns: repeat(3, 1fr); }
+    .cs-metrics-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .cs-metric { border-top: 2px solid #e0e0e0; padding-top: 16px; }
+    .cs-metric.hi { border-top-color: #1a1a1a; }
+    .cs-metric.win { border-top-color: #007A66; }
+    .cs-metric.neg { border-top-color: var(--accent); }
+
+    .cs-metric-val {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 64px;
+      font-weight: 300;
+      color: #767676;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .cs-metric-val.hi { color: #1a1a1a; }
+    .cs-metric-val.win { color: #007A66; }
+    .cs-metric-val.neg { color: var(--accent); }
+    .cs-metric-sup { font-family: 'Figtree', sans-serif; font-size: 12px; color: #767676; font-weight: 400; margin-left: 4px; letter-spacing: 0.04em; }
+    .cs-metric-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: #767676; margin-top: 10px; }
+    .cs-metric-ctx { font-size: 13px; color: #767676; margin-top: 6px; line-height: 1.5; }
+
+    /* ── Takeaway ── */
+    .cs-takeaway { margin-top: 72px; padding-top: 56px; }
+    .cs-takeaway-text { font-family: 'Fraunces', Georgia, serif; font-size: 32px; font-weight: 300; font-style: italic; color: #1a1a1a; line-height: 1.25; max-width: 22ch; margin-bottom: 20px; letter-spacing: -0.02em; }
+    .cs-takeaway-sub { font-size: 16px; color: #1a1a1a; max-width: 55ch; line-height: 1.75; }
+
+    /* ── Next project ── */
+    .cs-next { display: block; margin-top: 80px; padding-top: 32px; border-top: 1px solid #eee; text-decoration: none; color: inherit; }
+    .cs-next:hover .cs-next-title { color: var(--accent); }
+    .cs-next:hover .cs-next-arrow { transform: translateX(4px); color: var(--accent); }
+    .cs-next-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #767676; margin-bottom: 8px; }
+    .cs-next-title { font-family: 'Fraunces', Georgia, serif; font-size: 28px; font-weight: 380; color: #1a1a1a; letter-spacing: -0.01em; transition: color 200ms ease; display: inline; }
+    .cs-next-arrow { font-size: 20px; color: #767676; transition: transform 200ms ease, color 200ms ease; display: inline-block; margin-left: 8px; vertical-align: middle; }
+
+    /* ── Footer ── */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 48px;
+      font-size: 12px;
+      color: rgba(244,237,226,0.55);
+    }
+    .footer .mark {
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+      font-size: 14px;
+      color: rgba(244,237,226,0.45);
+    }
+    .copy-btn { background: none; border: none; cursor: pointer; padding: 15px; margin: -15px; border-radius: 4px; color: rgba(244,237,226,0.3); display: flex; align-items: center; transition: color 150ms, background 150ms; flex-shrink: 0; }
+    .copy-btn:hover { color: rgba(244,237,226,0.9); background: rgba(255,255,255,0.08); }
+    .copy-btn.copied { color: #4ade80; }
+    .copy-btn svg { display: block; }
+
+    /* ── Responsive ── */
+
+    @media (max-width: 760px) {
+      .pv-inner { padding: 6px 0 120px; }
+      .card { padding: 48px 40px 64px; box-shadow: none; }
+      .hero { padding: 40px 40px 48px; margin: -6px 0 0; }
+      .hero-body { margin-top: 56px; }
+      .hero-foot { flex-wrap: wrap; gap: 16px 40px; }
+      .cs-chapter { margin-left: -40px; margin-right: -40px; padding-left: 40px; padding-right: 40px; }
+      .cs-metrics-3, .cs-metrics-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 520px) {
+      .pv-inner { padding: 4px 0 120px; }
+      .card { padding: 40px 20px 56px; }
+      .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
+      .hero-body { margin-top: 48px; }
+      .cs-title { font-size: 44px; }
+      .cs-chap-nav { left: 116px; right: 16px; transform: none; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
+      .cs-chap-nav::-webkit-scrollbar { display: none; }
+      .cs-chap-nav.nav-scrolled { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); }
+      .cs-chap-nav.nav-at-end { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%); mask-image: linear-gradient(to right, transparent 0%, black 20%); }
+      .hero-eyebrow::before { display: none; }
+      .cs-chap-nav.on-light { background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
+      .cs-chap-nav.on-light .cs-chap-link { color: rgba(0,0,0,0.4); }
+      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(0,0,0,0.8); background: rgba(0,0,0,0.08); }
+      .cs-chapter { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
+      .cs-altitude-grid { grid-template-columns: 1fr; }
+      .cs-metrics-2, .cs-metrics-3, .cs-metrics-4 { grid-template-columns: 1fr; }
+      .cs-metric-val { font-size: 48px; }
+      p { font-size: 16px; line-height: 1.6; }
+      .footer { position: relative; padding: 20px 20px; background: transparent; }
+      .footer .mark { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+  <a href="a2-preview.html" class="cs-back">← Work</a>
+  <nav class="cs-chap-nav" id="cs-chap-nav">
+    <a class="cs-chap-link" href="#intro" aria-current="false">Overview</a>
+    <a class="cs-chap-link" href="#ch1" aria-current="false">The cascade</a>
+    <a class="cs-chap-link" href="#ch2" aria-current="false">The bigger picture</a>
+    <a class="cs-chap-link" href="#ch3" aria-current="false">What I learned</a>
+  </nav>
+  <div class="pv-inner" role="main">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-body">
+        <div>
+          <p class="hero-eyebrow">TurboTax Business Tax</p>
+          <h1 class="cs-title">The Product Was Broken Before They Got There</h1>
+        </div>
+        <div class="hero-foot">
+          <span>Role<b>Design Lead</b></span>
+          <span>Year<b>2025</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="card" id="intro">
+
+      <h3>The problem no one had named</h3>
+      <p>TurboTax had a starts problem in Business Tax. Customers were arriving at the business tax product and not starting. The program realigned around the metric. Fix starts.</p>
+      <p>But starts wasn't the real problem.</p>
+      <p>A sole proprietor and a self-employed filer file the exact same tax forms. They have the same tax situation. The only meaningful difference between them is which front door they walked through to reach TurboTax. Sole prop customers were being routed into TTO Premium, a product designed for individual filers, and then asked to navigate a business tax experience that assumed knowledge they didn't have, forced decisions that shouldn't exist, and ended with a pricing surprise they weren't prepared for.</p>
+      <p>The starts problem was a symptom. Naming that changed everything about how I responded to it.</p>
+      <div class="cs-callout">You can't A/B test your way out of a broken product architecture.</div>
+      <p>But you can buy time with metric wins while building the case for the real fix.</p>
+      <div class="cs-callout">I ran both tracks simultaneously this season.</div>
+
+      <div class="cs-section">
+        <h3>The equation</h3>
+        <p>When the program focused on the metric, my first design decision was to build a shared understanding of what was actually happening. Not a task list. Not a roadmap. A diagnosis.</p>
+        <p>The result was a single line I sketched across the top of the canonical design file that became the operating canvas for the rest of the season:</p>
+        <div class="cs-callout">Auth + Realm creation + Entity selection = Start</div>
+        <p>Three friction points. Three places where customers were falling out before they ever entered the product. Every test I ran was a response to one of these three variables.</p>
+        <p>This wasn't a complicated insight. But naming it mattered. It gave the program a shared mental model for what "fixing starts" actually meant at the design level. It turned a panic response into a coordinated one.</p>
+      </div>
+
+      <div class="cs-chapter" id="ch1">
+        <div class="cs-chapter-label">Chapter 1 &nbsp;·&nbsp; The cascade</div>
+        <div class="cs-chapter-title">The tests that bought time.</div>
+        <div class="cs-chapter-sub">Four wins. One breakout. One honest loss that led to a structural reframe.</div>
+      </div>
+
+      <div style="margin-top:48px;">
+        <h3>What shipped</h3>
+        <p>I tracked every test the program ran in a canonical file: wins, kills, and everything in between. Both design and program management used it to understand what was happening in real time. Four tests won and shipped.</p>
+
+        <h4>Dual Intent Landing Page</h4>
+        <p>A meaningful share of customers arriving at the business tax landing page had mixed intent: they weren't sure whether they needed business tax or personal tax. I redesigned the combined landing page to clarify the path earlier, before auth, reducing the number of customers who arrived uncertain and abandoned. Launched and rolled to baseline 3/10.</p>
+
+        <h4>Business Tax Homepage v1 and v2</h4>
+        <p>Two successive iterations on the business tax home page entry experience. Recipe B rolled. Recipe C rolled. Each one a sharper, more confident version of the product's first impression, reducing the cognitive cost of deciding to start.</p>
+        <p>None of these were the breakout win. That was Dual Auth.</p>
+      </div>
+
+      <div class="cs-section">
+        <h3>The breakout: Dual Auth</h3>
+        <p>The Dual Auth test performed at twice the baseline rate. Throughout this case study, test results show percentage lift above or below the control group.</p>
+        <p>The design insight was specific. The realm selection screen (the moment where TurboTax asks customers to choose between personal and business tax) was confusing customers who had QuickBooks-linked businesses. They had a business. TurboTax knew they had a business. But the screen didn't show them that. It presented an abstract fork in the road and asked them to make a choice without giving them the information they needed to make it confidently.</p>
+        <p>I redesigned the realm chooser to surface their actual business names directly. Not abstract options. Real names they recognized. The choice became confirmation, not decision-making.</p>
+        <p>The hypothesis was also doing something more important than conversion optimization. By explicitly telling customers they needed to complete their business taxes before their personal taxes, I named the joint-filing dependency for the first time in the flow, reducing the confusion that caused customers to rush through or abandon later in the season.</p>
+
+        <div class="cs-metrics cs-metrics-4">
+          <div class="cs-metric win">
+            <div class="cs-metric-val win">29,178</div>
+            <div class="cs-metric-lbl">Business Tax Auths</div>
+            <div class="cs-metric-ctx">from 1,548</div>
+          </div>
+          <div class="cs-metric win">
+            <div class="cs-metric-val win">4,724</div>
+            <div class="cs-metric-lbl">Business Tax Starts</div>
+            <div class="cs-metric-ctx">from 170</div>
+          </div>
+          <div class="cs-metric win">
+            <div class="cs-metric-val win">$762K</div>
+            <div class="cs-metric-lbl">Franchise Revenue</div>
+            <div class="cs-metric-ctx">from $42K</div>
+          </div>
+          <div class="cs-metric win">
+            <div class="cs-metric-val win">+66%</div>
+            <div class="cs-metric-lbl">Completion rate</div>
+          </div>
+        </div>
+
+        <p>Rolled to 90% traffic. The ~18x revenue lift in the affected cohort wasn't a rounding error. It was evidence that the product had been systematically failing a customer segment that was willing to buy, and that one well-targeted design decision could unlock that segment almost immediately.</p>
+        <div class="cs-callout">One well-targeted design decision unlocked a customer segment the product had been ignoring for years.</div>
+      </div>
+
+      <div class="cs-section">
+        <h3>Design judgment: Reductive GTKMB R1 → R2</h3>
+        <p>Not every test I ran won. The more interesting story is what happened when one lost.</p>
+        <p>The Reductive Get to Know My Business (GTKMB) test was my attempt to simplify entity selection: the screen where customers had to identify their business structure before TurboTax would let them proceed. Entity selection is one of the three variables in the equation. It was responsible for a meaningful share of abandonment.</p>
+
+        <h4>R1: the honest loss</h4>
+        <p>The first version presented three tiles: Single-member LLC, Multi-member LLC, S-corp.</p>
+        <p>46% of customers selected a tile and continued. 47% abandoned.</p>
+        <p>The catchall screen caught another 42% into business tax, but 45% abandoned there too. The test failed. But the failure contained the real insight.</p>
+        <p>When the data came back, it showed the actual distribution of entity types:</p>
+
+        <div class="cs-dist">
+          <div class="cs-dist-row dominant">
+            <span class="cs-dist-pct">58%</span>
+            <span>Sole prop</span>
+            <div class="cs-dist-bar"><div class="cs-dist-bar-fill" style="width:100%"></div></div>
+          </div>
+          <div class="cs-dist-row">
+            <span class="cs-dist-pct">11%</span>
+            <span>Partnership</span>
+            <div class="cs-dist-bar"><div class="cs-dist-bar-fill" style="width:19%"></div></div>
+          </div>
+          <div class="cs-dist-row">
+            <span class="cs-dist-pct">10%</span>
+            <span>"I'm not sure" &nbsp;·&nbsp; 90% of those didn't start</span>
+            <div class="cs-dist-bar"><div class="cs-dist-bar-fill" style="width:17%"></div></div>
+          </div>
+          <div class="cs-dist-row">
+            <span class="cs-dist-pct">9%</span>
+            <span>S-corp</span>
+            <div class="cs-dist-bar"><div class="cs-dist-bar-fill" style="width:15%"></div></div>
+          </div>
+          <div class="cs-dist-row">
+            <span class="cs-dist-pct">0.02%</span>
+            <span>C-corp</span>
+            <div class="cs-dist-bar"><div class="cs-dist-bar-fill" style="width:1%"></div></div>
+          </div>
+        </div>
+
+        <p>The vast majority of customers were sole proprietors. The screen was asking them to make a decision they didn't need to make. The entity question had been built for the product's internal taxonomy, not for the customer's self-understanding.</p>
+
+        <h4>R2: the reframe</h4>
+        <div class="cs-callout" style="font-family:'Inter',sans-serif;font-size:15px;font-style:normal;line-height:1.65;">"If we provide an 'I'm not sure' option, and then route all customers who select that into the sole prop SKU, reduce and simplify the content, reduce the choices, and lower cognitive burden, then we will reduce abandonment and increase starts."</div>
+        <p>The "I'm not sure" routing is the key design decision. Most onboarding flows force a choice and treat uncertainty as a failure state. I treated uncertainty as information. 58% of customers were sole props. 10% didn't know what they were. Routing uncertain customers to the most likely correct outcome wasn't a hack. It was designing for the actual distribution instead of the assumed one.</p>
+
+        <div class="cs-metrics cs-metrics-3">
+          <div class="cs-metric win">
+            <div class="cs-metric-val win">+10%</div>
+            <div class="cs-metric-lbl">Start rate</div>
+            <div class="cs-metric-ctx">38.65% vs. 35.22% control</div>
+          </div>
+          <div class="cs-metric win">
+            <div class="cs-metric-val win">+24%</div>
+            <div class="cs-metric-lbl">Complete rate</div>
+            <div class="cs-metric-ctx">5.49% vs. 4.41% control</div>
+          </div>
+          <div class="cs-metric win">
+            <div class="cs-metric-val win">+20%</div>
+            <div class="cs-metric-lbl">Revenue per visitor</div>
+            <div class="cs-metric-ctx">$16.01 vs. $13.30 control</div>
+          </div>
+        </div>
+
+        <p>The win was structural. It didn't just improve a metric. It changed who got routed where. That's a different category of design decision than copy optimization or visual refinement.</p>
+      </div>
+
+      <div class="cs-chapter" id="ch2">
+        <div class="cs-chapter-label">Chapter 2 &nbsp;·&nbsp; The bigger picture</div>
+        <div class="cs-chapter-title">Running two tracks simultaneously.</div>
+        <div class="cs-chapter-sub">While the tests were moving metrics, a patterns library, a diagnostic, and a product vision were being built in parallel.</div>
+      </div>
+
+      <div class="cs-section" style="border-top:none;padding-top:0;">
+        <h3>The work underneath the cascade</h3>
+        <p>The four shipped tests were the visible layer. Running in parallel, all season, was a complete in-product design system.</p>
+        <p>I started the Patterns: Assisted Business Tax file on January 9th with cards and levels scaffolding. By February 11th it had become "Business: modernized landing tables with next best action." The addition of "next best action" signals the shift from a product that collects data to a product that guides behavior. By April 23rd the file contained fully designed Prove identity verification flows: the automated business info collection concept from the vision work, moved into production-quality execution.</p>
+        <p>The vision and the craft work were running in parallel. The big swings weren't sitting in a strategy deck while the patterns file did something else. I was building both simultaneously.</p>
+        <p>Five screen template categories shipped as ready for dev by end of season: Section onramp, Section topic launcher (3 variants), Worksheet (3 variants), Overview Collection (4 variants), Data collection: Question Answer (3 variants).</p>
+      </div>
+
+      <div class="cs-section">
+        <h3>What the tests were responding to</h3>
+        <p>Every test I ran was a response to a documented problem. I built the FY26 sole prop onboarding target state file to map the complete customer journey (from off-platform discovery through auth through entity selection) with problem annotations at each friction point and a reframed design question at each one.</p>
+        <p>This wasn't a wish list. It was a diagnostic. The journey map identified the structural problems. The test cascade addressed the ones solvable within the season. The target state documented the ones that required more runway.</p>
+
+        <ul class="cs-provocation-list">
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">01</span>
+            <span><strong>Front doors:</strong> How might we match customers to business industry and state-specific tax experts?</span>
+          </li>
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">02</span>
+            <span><strong>Shell / Stationary:</strong> How might we take a tax platform approach to onboarding that helps customers wayfare to the right solution, no matter where they started?</span>
+          </li>
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">03</span>
+            <span><strong>Auth:</strong> How might we avoid price shock at checkout?</span>
+          </li>
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">04</span>
+            <span><strong>GTKMB:</strong> How might we shift the burden of entity selection off the customer and onto TurboTax?</span>
+          </li>
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">05</span>
+            <span><strong>GTKMB:</strong> How might we provide guidance on when and how to file business and personal taxes together?</span>
+          </li>
+        </ul>
+
+        <p>Question #4 was answered directly by Reductive GTKMB: the "I'm not sure → sole prop" routing was a literal execution of "shift the burden of entity selection off the customer." Question #5 was answered by Dual Auth: naming the joint-filing dependency explicitly for the first time in the flow.</p>
+        <p>Questions #1, #2, and #3 required a different kind of change: rethinking the front door architecture, the onboarding model, and the pricing reveal. I documented them, presented them, and they became the foundation for the vision work.</p>
+      </div>
+
+      <div class="cs-section">
+        <h3>The vision: what should be built</h3>
+        <p>I started the big swings work from four provocations.</p>
+
+        <ul class="cs-provocation-list">
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">01</span>
+            <span>Dual login evolves into a post-authentication product experience: a unified hub where business and personal returns are peer entities, not a binary modal fork at the start of every session.</span>
+          </li>
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">02</span>
+            <span>Business profile creation is eliminated. Three automated paths (Prove identity verification, website/Etsy URL, prior-year PDF) all converge on a pre-populated "Review and verify" screen. The customer's job becomes confirmation, not data entry.</span>
+          </li>
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">03</span>
+            <span>There is no more GTKMB. Entity type is inferred from automated business info collection, not asked.</span>
+          </li>
+          <li>
+            <span class="cs-provocation-num" aria-hidden="true">04</span>
+            <span>Instead of asking the customer for their entity type, TurboTax tells them what it is. Recommendation-driven pricing before checkout. The pricing moment moves from surprise to recommendation.</span>
+          </li>
+        </ul>
+
+        <p>These aren't aspirational positions. They're the logical endpoint of the diagnostic. Entity selection causes 47% abandonment because customers don't know their entity type, so eliminate entity selection. Realm creation introduces unnecessary friction before the product knows enough about the customer to route them correctly, so eliminate realm creation. The dual login forks customers at the wrong moment, so eliminate the fork.</p>
+        <p>I followed every provocation through to production-quality comps. I mapped six distinct customer entry paths (shopping for personal tax, shopping for business, shopping for sole prop, returning customer, optional upgrade, required upgrade) all converging on the same automated onboarding moment. Different front doors. One product.</p>
+      </div>
+
+      <div class="cs-section">
+        <h3>The post-onboarding vision</h3>
+        <p>I started from three customer problems, stated plainly. Sole proprietor customers are treated the same as TTO Premium customers, even though they have fundamentally different needs. Customers are afraid because they think taxes with business income are complicated, and as income grows, that fear compounds. And there is willingness to pay for a solution that builds confidence in tax outcomes, but the product wasn't designed to earn it.</p>
+        <p>My design response was a complete end-to-end product redesign. Not wireframes or concepts. Production-quality screens for every stage of the experience. Business info, income, and expenses flows. Personal info, income, and deductions, all the way through to a deductions outcome screen designed as a resolution, not a handoff. The experience ends at the emotional outcome, not the last data entry field.</p>
+        <p>I designed the personal tax flows inside the business tax file. That wasn't scope expansion. It was the argument made concrete. A sole prop files one return. The product should feel like one return.</p>
+        <p>I grounded every design decision in research. Customer findings were cited at the relevant moments in the flow, not as decoration, but as the evidence chain connecting customer problem to design response. Each question was traceable back to a finding.</p>
+      </div>
+
+      <div class="cs-chapter" id="ch3">
+        <div class="cs-chapter-label">Chapter 3 &nbsp;·&nbsp; What I learned</div>
+        <div class="cs-chapter-title">Three altitudes. One season.</div>
+        <div class="cs-chapter-sub">Vision, diagnostic, and execution: running in parallel, and connected.</div>
+      </div>
+
+      <div class="cs-section" style="border-top:none;padding-top:0;">
+
+        <div class="cs-altitude-grid">
+          <div class="cs-altitude">
+            <div class="cs-altitude-label">Vision</div>
+            <div class="cs-altitude-title">Complete product redesign</div>
+            <div class="cs-altitude-desc">Principles, provocations, a wayfaring architecture across six customer entry paths, and production-quality comps for every design move. The strategic argument for what this product should become.</div>
+          </div>
+          <div class="cs-altitude">
+            <div class="cs-altitude-label">Target state</div>
+            <div class="cs-altitude-title">Diagnostic + design questions</div>
+            <div class="cs-altitude-desc">Every stage of the customer journey mapped, every friction point named, every question reframed as a design opportunity. The bridge between the vision and the tests.</div>
+          </div>
+          <div class="cs-altitude">
+            <div class="cs-altitude-label">Execution</div>
+            <div class="cs-altitude-title">Shipped test cascade</div>
+            <div class="cs-altitude-desc">Dual Auth at 2× the control rate, Reductive GTKMB R2 at 10% above control, a patterns library built from January through April, five screen template categories handed off as ready for dev.</div>
+          </div>
+        </div>
+
+        <p>The three layers connect. The "I'm not sure → sole prop" routing in Reductive GTKMB R2 was the literal execution of "shift the burden of entity selection off the customer." The Prove verification flow in the patterns file was the same automated business info collection concept from the vision work. The personal tax flows designed inside the business tax file were the practical expression of "one product, one return."</p>
+
+        <div class="cs-takeaway">
+          <div class="cs-takeaway-text">Name the structural problem earlier and louder.</div>
+          <div class="cs-takeaway-sub">I spent most of the season treating the broken architecture as context for the test work. It deserved to be the primary argument. The test wins were evidence for it, not the other way around.</div>
+        </div>
+      </div>
+
+      <a href="ae-tof.html" class="cs-next">
+        <div class="cs-next-label">Also in this portfolio</div>
+        <span class="cs-next-title">Activate Experts: reimagining the front door for expert tax help</span><span class="cs-next-arrow" aria-hidden="true">→</span>
+      </a>
+
+
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span>© 2026 Matt Kirkpatrick</span>
+    <span class="mark">Made with care.</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;">
+      m.k.kirkpatrick@icloud.com
+      <button class="copy-btn" data-copy="m.k.kirkpatrick@icloud.com" title="Copy email">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M2.5 9.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </span>
+  </footer>
+
+  <script>
+  // Page transitions — content slides, background persists
+  (function () {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
+    const inner = document.querySelector('.pv-inner');
+
+    // Arrive: slide up from below
+    inner.style.opacity = '0';
+    inner.style.transform = 'translateY(20px)';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      inner.style.transition = 'opacity 0.42s ease, transform 0.42s ease';
+      inner.style.opacity = '1';
+      inner.style.transform = 'translateY(0)';
+    }));
+
+    // Leave: slide down and out
+    document.querySelector('.cs-back').addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault();
+      const href = this.href;
+      inner.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
+      inner.style.opacity = '0';
+      inner.style.transform = 'translateY(-16px)';
+      setTimeout(() => { location.href = href; }, 240);
+    });
+  })();
+
+  // cs-back on-light detection
+  (function () {
+    const back = document.querySelector('.cs-back');
+    const card = document.querySelector('.card');
+    const chapNav = document.getElementById('cs-chap-nav');
+    function updateBack() {
+      const overCard = card.getBoundingClientRect().top < 48;
+      back.classList.toggle('on-light', overCard);
+      if (window.matchMedia('(max-width: 520px)').matches) {
+        chapNav.classList.toggle('on-light', overCard);
+      }
+    }
+    window.addEventListener('scroll', updateBack, { passive: true });
+    updateBack();
+  })();
+
+  // Chapter nav
+  (function () {
+    const nav = document.getElementById('cs-chap-nav');
+    const chapters = ['intro','ch1','ch2','ch3'].map(id => document.getElementById(id));
+    const links = Array.from(nav.querySelectorAll('.cs-chap-link'));
+    function updateMask() {
+      const atStart = nav.scrollLeft <= 2;
+      const atEnd = nav.scrollLeft + nav.offsetWidth >= nav.scrollWidth - 2;
+      nav.classList.toggle('nav-scrolled', !atStart);
+      nav.classList.toggle('nav-at-end', atEnd && !atStart);
+    }
+    nav.addEventListener('scroll', updateMask, { passive: true });
+    updateMask();
+    function update() {
+      let active = -1;
+      chapters.forEach((ch, i) => { if (ch && ch.getBoundingClientRect().top <= 80) active = i; });
+      links.forEach((l, i) => {
+        l.classList.toggle('active', i === active);
+        if (i === active) { l.setAttribute('aria-current', 'true'); }
+        else { l.setAttribute('aria-current', 'false'); }
+      });
+      if (active >= 0) {
+        const link = links[active];
+        nav.scrollTo({ left: link.offsetLeft - (nav.offsetWidth - link.offsetWidth) / 2, behavior: 'smooth' });
+      }
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
+  (function () {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [], meteors = [], frame = 0, raf = null;
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 180 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.1 + 0.2,
+        opacity: Math.random() * 0.35 + 0.05,
+        twinkleSpeed: Math.random() * 0.008 + 0.002,
+        twinkleOffset: Math.random() * Math.PI * 2,
+      }));
+      meteors = Array.from({ length: 28 }, () => makeMeteor(true));
+    }
+
+    function makeMeteor(immediate) {
+      const angle   = Math.PI / 8 + Math.random() * (Math.PI / 16);
+      const length  = Math.random() * 200 + 40;
+      const speed   = Math.random() * 1.0 + 0.3;
+      const opacity = Math.random() * 0.22 + 0.06;
+      const width   = Math.random() * 1.4 + 0.4;
+      const x = Math.random() * canvas.width * 1.4;
+      const y = immediate
+        ? Math.random() * canvas.height
+        : -length - Math.random() * canvas.height * 0.5;
+      return { x, y, length, speed, opacity, angle, width };
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        const twinkle = Math.sin(frame * s.twinkleSpeed + s.twinkleOffset);
+        const op = s.opacity + twinkle * 0.08;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(0, op)})`;
+        ctx.fill();
+      });
+      frame++;
+      meteors.forEach((m, i) => {
+        const dx = Math.cos(m.angle) * m.length;
+        const dy = Math.sin(m.angle) * m.length;
+        const grad = ctx.createLinearGradient(m.x, m.y, m.x + dx, m.y + dy);
+        grad.addColorStop(0,   `rgba(255,255,255,0)`);
+        grad.addColorStop(0.2, `rgba(255,255,255,${m.opacity * 0.3})`);
+        grad.addColorStop(1,   `rgba(255,255,255,${m.opacity})`);
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(m.x + dx, m.y + dy);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = m.width;
+        ctx.stroke();
+        m.x += Math.cos(m.angle) * m.speed;
+        m.y += Math.sin(m.angle) * m.speed;
+        if (m.y > canvas.height + m.length || m.x > canvas.width + m.length) {
+          meteors[i] = makeMeteor(false);
+        }
+      });
+      raf = requestAnimationFrame(draw);
+    }
+
+    let resizeRaf = 0;
+    window.addEventListener('resize', () => {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => { resizeRaf = 0; resize(); });
+    });
+    resize();
+    draw();
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
+      else if (!raf) draw();
+    });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      cancelAnimationFrame(raf); raf = null;
+    }
+  })();
+  </script>
+  <script>
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    var text = btn.dataset.copy;
+    function showCopied() {
+      var orig = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.style.display = 'inline-flex';
+      btn.style.alignItems = 'center';
+      btn.style.gap = '4px';
+      btn.style.whiteSpace = 'nowrap';
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:11px;font-family:inherit;letter-spacing:0.04em;">Copied</span>';
+      setTimeout(function () {
+        btn.classList.remove('copied');
+        btn.style.display = '';
+        btn.style.alignItems = '';
+        btn.style.gap = '';
+        btn.style.whiteSpace = '';
+        btn.innerHTML = orig;
+      }, 2000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(function () { fallbackCopy(text); showCopied(); });
+    } else { fallbackCopy(text); showCopied(); }
+  }, true);
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+  </script>
+</body>
+</html>

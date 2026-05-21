@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Preview — Matt Kirkpatrick</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background: #e6e2d8;
+      --accent: #d92638;
+      --ink: #0b1220;
+      --card-radius: 14px;
+    }
+
+    .pv-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #fbfaf6;
+      border-radius: var(--card-radius);
+      padding: 40px 44px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 -8px 40px rgba(11,18,32,0.1);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: transparent;
+      min-height: calc(100vh - 200px);
+      padding: 36px 44px 44px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      margin: -8px -8px 0;
+      border-radius: 0;
+    }
+
+    canvas.hero-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 2;
+    }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(160deg, #c5c5c5, #a8a8a8);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .nav-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-left: auto;
+    }
+
+    /* ── Hero body ── */
+    .hero-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-top: 64px;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1.hero-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 96px;
+      line-height: 0.92;
+      font-weight: 300;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      max-width: 720px;
+    }
+    h1.hero-title em.acc {
+      font-style: normal;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .hero-sub {
+      margin-top: 24px;
+      font-size: 14px;
+      max-width: 460px;
+      color: #5b6068;
+      line-height: 1.55;
+    }
+
+    .hero-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #777;
+      border-top: 1px solid #d8d3c5;
+      padding-top: 18px;
+      margin-top: 32px;
+    }
+    .hero-foot .idx {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 22px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    /* ── Section headings ── */
+    h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 20px;
+      color: var(--ink);
+    }
+    h2 em.acc { font-style: italic; color: var(--accent); }
+
+    /* ── Work ── */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .work-item {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: calc(var(--card-radius) * 0.6);
+      background: linear-gradient(135deg, #d6d1c4 0%, #b7b1a2 100%);
+      border: 1px solid rgba(11,18,32,0.08);
+      transition: box-shadow 150ms ease;
+      transform-style: preserve-3d;
+      transform-origin: center center;
+      will-change: transform;
+    }
+    .work-item:hover { cursor: none; }
+    .work-cursor {
+      position: fixed;
+      background: rgba(255,255,255,0.92);
+      color: #1a1a1a;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 100px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.85);
+      transition: opacity 180ms ease, transform 180ms ease;
+      white-space: nowrap;
+    }
+    .work-cursor.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .work-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(11,18,32,0.3);
+    }
+    .work-overlay {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 60px 18px 18px;
+      background: linear-gradient(to top, rgba(11,18,32,0.85), transparent);
+      color: #fff;
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+      font-size: 22px;
+      letter-spacing: -0.01em;
+    }
+    .work-problem {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+      font-style: normal;
+    }
+    .work-overlay .meta {
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      opacity: 1;
+      margin-bottom: 4px;
+    }
+
+    /* ── Systems ── */
+    .systems-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .systems-stat { padding: 4px 28px 4px 0; }
+    .systems-stat + .systems-stat {
+      padding-left: 28px;
+      padding-right: 28px;
+      border-left: 1px solid #d8d3c5;
+    }
+    .systems-stat:last-child { padding-right: 0; }
+    .systems-num {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .systems-label {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.4;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 36px;
+      align-items: start;
+    }
+    .about-text p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #5b6068;
+      margin-bottom: 16px;
+    }
+    .about-text p:last-of-type { margin-bottom: 20px; }
+    .portrait {
+      width: 200px;
+      height: 280px;
+      border-radius: 12px;
+      background: linear-gradient(160deg, #c5c5c5, #a8a8a8);
+      overflow: hidden;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: 12px;
+      padding: 5px 11px;
+      border: 1px solid #c8c2b3;
+      border-radius: 100px;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+
+    /* ── Experience ── */
+    .exp-list { list-style: none; }
+
+    .exp-item {
+      padding: 16px 0;
+    }
+
+    .exp-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+    }
+    .exp-company {
+      font-size: 17px;
+      color: var(--ink);
+    }
+    .exp-right {
+      text-align: right;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #777;
+    }
+
+    /* Intuit sub-roles */
+    .intuit-roles {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .intuit-role {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      font-size: 13px;
+      color: #5b6068;
+      line-height: 1.4;
+    }
+    .intuit-role-left { flex: 1; }
+    .intuit-role-title { color: #5b6068; }
+    .intuit-role-award {
+      font-size: 11.5px;
+      color: #aaa;
+      margin-top: 2px;
+    }
+    .intuit-role-date {
+      font-size: 11px;
+      color: #bbb;
+      white-space: nowrap;
+      padding-top: 1px;
+    }
+
+    /* Earlier career footnote */
+    .exp-earlier-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #bbb;
+      margin: 24px 0 10px;
+    }
+    .exp-item-footnote {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      padding: 9px 0;
+    }
+    .exp-company-footnote { font-size: 13px; color: #bbb; }
+    .exp-right-footnote {
+      text-align: right;
+      font-size: 11px;
+      line-height: 1.4;
+      color: #ccc;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 300px 48px 48px;
+      font-size: 12px;
+      color: #aaa;
+    }
+    .footer .mark {
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+      font-size: 14px;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <canvas class="hero-canvas" id="hero-canvas"></canvas>
+  <div class="work-cursor" id="work-cursor">↗ View</div>
+  <div class="pv-inner">
+
+    <!-- ── Hero ── -->
+    <div class="hero">
+
+      <div class="nav">
+        <div class="avatar"><img src="assets/portrait.jpg" alt="Matt Kirkpatrick"></div>
+        <span class="nav-name">Matt Kirkpatrick</span>
+        <span class="nav-dot"></span>
+      </div>
+
+      <div class="hero-body">
+        <div>
+          <h1 class="hero-title">
+            Put me on the hardest problem. I build the <em class="acc">systems</em> that solve it.
+          </h1>
+          <p class="hero-sub">Fintech · AI · Systems · Strategy · 0→1</p>
+        </div>
+        <div class="hero-foot">
+          <span>Currently<b>Intuit</b></span>
+          <span>Recognition<b>Scott Cook Award</b></span>
+          <span>Experience<b><span id="exp-years">16</span> years</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Featured Work ── -->
+    <div class="card">
+      <h2>Work</h2>
+      <div class="work-grid">
+        <a href="business-tax.html" class="work-item">
+          <img src="assets/work-business-tax.jpg" alt="Business Tax">
+          <div class="work-overlay">
+            <div class="work-problem">How do you grow a product category most customers don't know exists?</div>
+            Business Tax
+          </div>
+        </a>
+        <a href="ae-tof.html" class="work-item">
+          <img src="assets/work-ae-tof.jpg" alt="AE TOF">
+          <div class="work-overlay">
+            <div class="work-problem">How do you design an AI-first acquisition flow when the AI itself is the product?</div>
+            AE TOF
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── About ── -->
+    <div class="card">
+      <div class="about-grid">
+        <div class="about-text">
+          <h2>About</h2>
+          <p>I helped build TurboTax Full Service from the ground up, won the Scott Cook Innovation Award for Same Day Full Service, and now own AI acquisition strategy across Intuit's assisted tax products. 16 years in, the through-line is consistent: I work where design, strategy, and evidence have to function as one thing.</p>
+          <p>Most designers operate in one register. I move across craft, strategy, business, and data, catching attribution model errors in live threads and writing specs engineers can build from in the same season. The more structurally complex the problem, the more I'm calibrated for it.</p>
+          <div class="tags">
+            <span class="tag">Product design</span>
+            <span class="tag">AI experience strategy</span>
+            <span class="tag">Design systems</span>
+            <span class="tag">0→1</span>
+            <span class="tag">Design strategy</span>
+            <span class="tag">Data-informed design</span>
+            <span class="tag">Cross-functional leadership</span>
+          </div>
+        </div>
+        <div class="portrait"><img src="assets/portrait.jpg" alt="Matt Kirkpatrick" style="width:100%;height:100%;object-fit:cover;"></div>
+      </div>
+    </div>
+
+    <!-- ── Experience ── -->
+    <div class="card">
+      <h2>Experience</h2>
+      <ul class="exp-list">
+
+        <li class="exp-item">
+          <div class="exp-row">
+            <span class="exp-company">Intuit</span>
+            <div class="exp-right">
+              <span>Principal Product Designer</span><br>
+              <span>2017—Today &nbsp;·&nbsp; 8+ yrs</span>
+            </div>
+          </div>
+          <div class="intuit-roles">
+            <div class="intuit-role">
+              <div class="intuit-role-left">
+                <div class="intuit-role-title">T6 &nbsp;·&nbsp; Activate Experts, AI-assisted acquisition strategy</div>
+              </div>
+              <div class="intuit-role-date">Aug 2025—Today</div>
+            </div>
+            <div class="intuit-role">
+              <div class="intuit-role-left">
+                <div class="intuit-role-title">T6 &nbsp;·&nbsp; TurboTax Business, sole proprietor top-of-funnel</div>
+              </div>
+              <div class="intuit-role-date">Dec 2024—Aug 2025</div>
+            </div>
+            <div class="intuit-role">
+              <div class="intuit-role-left">
+                <div class="intuit-role-title">M3 &nbsp;·&nbsp; Full Service, design lead</div>
+              </div>
+              <div class="intuit-role-date">2024</div>
+            </div>
+            <div class="intuit-role">
+              <div class="intuit-role-left">
+                <div class="intuit-role-title">T3–T6 &nbsp;·&nbsp; Full Service, built from the ground up</div>
+                <div class="intuit-role-award">Scott Cook Innovation Award, Same Day Full Service</div>
+              </div>
+              <div class="intuit-role-date">2017—2024</div>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+
+      <div class="exp-earlier-label">Earlier career</div>
+      <ul class="exp-list">
+        <li class="exp-item-footnote">
+          <span class="exp-company-footnote">Mirum Agency</span>
+          <div class="exp-right-footnote">
+            Associate Design Director &nbsp;·&nbsp; 2013—2017
+          </div>
+        </li>
+        <li class="exp-item-footnote">
+          <span class="exp-company-footnote">StudioPMG</span>
+          <div class="exp-right-footnote">
+            Art Director &nbsp;·&nbsp; 2010—2013
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── Footer ── -->
+    <div class="footer">
+      <span>© 2026 Matt Kirkpatrick</span>
+      <span class="mark">Made with care.</span>
+      <span>m.k.kirkpatrick@icloud.com</span>
+    </div>
+
+  </div>
+
+  <script>
+  (function () {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Dynamic experience years (career start: 2010)
+    const yrs = new Date().getFullYear() - 2010;
+    document.getElementById('exp-years').textContent = yrs;
+
+    // B1 canvas — cobalt accent stars + meteors on light cream hero
+    // tone="light", opacityScale=2.8 per design spec
+    const ACCENT = [28, 63, 192]; // #1c3fc0
+    let stars = [], meteors = [], frame = 0, raf = null;
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 120 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.0 + 0.2,
+        opacity: Math.random() * 0.10 + 0.02,
+        twinkleSpeed: Math.random() * 0.008 + 0.002,
+        twinkleOffset: Math.random() * Math.PI * 2,
+      }));
+      meteors = Array.from({ length: 18 }, () => makeMeteor(true));
+    }
+
+    function makeMeteor(immediate) {
+      const angle   = Math.PI / 8 + Math.random() * (Math.PI / 16);
+      const length  = Math.random() * 200 + 40;
+      const speed   = Math.random() * 1.0 + 0.3;
+      const opacity = (Math.random() * 0.10 + 0.03) * 2.8;
+      const width   = Math.random() * 1.2 + 0.3;
+      const x = Math.random() * canvas.width * 1.4;
+      const y = immediate
+        ? Math.random() * canvas.height
+        : -length - Math.random() * canvas.height * 0.5;
+      return { x, y, length, speed, opacity, angle, width };
+    }
+
+    function rgba(op) {
+      return `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${Math.max(0, op)})`;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      stars.forEach(s => {
+        const twinkle = Math.sin(frame * s.twinkleSpeed + s.twinkleOffset);
+        const op = s.opacity + twinkle * 0.03;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = rgba(op);
+        ctx.fill();
+      });
+
+      frame++;
+
+      meteors.forEach((m, i) => {
+        const dx = Math.cos(m.angle) * m.length;
+        const dy = Math.sin(m.angle) * m.length;
+        const grad = ctx.createLinearGradient(m.x, m.y, m.x + dx, m.y + dy);
+        grad.addColorStop(0,   rgba(0));
+        grad.addColorStop(0.2, rgba(m.opacity * 0.3));
+        grad.addColorStop(1,   rgba(m.opacity));
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(m.x + dx, m.y + dy);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = m.width;
+        ctx.stroke();
+
+        m.x += Math.cos(m.angle) * m.speed;
+        m.y += Math.sin(m.angle) * m.speed;
+        if (m.y > canvas.height + m.length || m.x > canvas.width + m.length) {
+          meteors[i] = makeMeteor(false);
+        }
+      });
+
+      raf = requestAnimationFrame(draw);
+    }
+
+    let resizeRaf = 0;
+    window.addEventListener('resize', () => {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => { resizeRaf = 0; resize(); });
+    });
+
+    resize();
+    draw();
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
+      else if (!raf) draw();
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      cancelAnimationFrame(raf);
+      raf = null;
+    }
+  })();
+
+  // Custom cursor + 3D tilt for work cards
+  (function () {
+    const cursor = document.getElementById('work-cursor');
+    const items  = document.querySelectorAll('.work-item');
+    let cx = 0, cy = 0, tx = 0, ty = 0, raf = null;
+    const MAX_TILT = 7;
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function loop() {
+      cx = lerp(cx, tx, 0.14);
+      cy = lerp(cy, ty, 0.14);
+      cursor.style.left = cx + 'px';
+      cursor.style.top  = cy + 'px';
+      raf = requestAnimationFrame(loop);
+    }
+
+    document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        cursor.classList.add('visible');
+        item.style.boxShadow = '0 24px 52px rgba(11,18,32,0.22)';
+        if (!raf) loop();
+      });
+
+      item.addEventListener('mousemove', e => {
+        const r  = item.getBoundingClientRect();
+        const nx = (e.clientX - r.left)  / r.width  - 0.5;
+        const ny = (e.clientY - r.top)   / r.height - 0.5;
+        const rx = -ny * MAX_TILT;
+        const ry =  nx * MAX_TILT;
+        item.style.transition = 'transform 80ms ease, box-shadow 80ms ease';
+        item.style.transform  = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) scale(0.96)`;
+      });
+
+      item.addEventListener('mouseleave', () => {
+        cursor.classList.remove('visible');
+        cancelAnimationFrame(raf);
+        raf = null;
+        item.style.transition = 'transform 500ms ease, box-shadow 500ms ease';
+        item.style.transform  = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)';
+        item.style.boxShadow  = '';
+      });
+    });
+  })();
+
+  // Sticky card stacking with scale-down depth
+  (function () {
+    const P = 'perspective(1100px)';
+    const STACK_TOP = 8;
+    const STACK_GAP = 40; // visible peek of card behind
+
+    const all = [
+      document.querySelector('.hero'),
+      ...document.querySelectorAll('.pv-inner > .card')
+    ].filter(Boolean);
+
+    all.forEach((el, i) => {
+      el.style.zIndex = String(i + 1);
+      el.style.willChange = 'transform';
+      if (i === 0) return; // hero — not sticky
+      el.style.position = 'sticky';
+      el.style.top = (STACK_TOP + (i - 1) * STACK_GAP) + 'px';
+    });
+
+    let pending = false;
+
+    function tick() {
+      pending = false;
+      const vh = window.innerHeight;
+
+      all.forEach((el, i) => {
+        const { top } = el.getBoundingClientRect();
+
+        // Hero: fold back as it scrolls up
+        if (i === 0) {
+          if (top < 0) {
+            const p = Math.min(1, -top / (vh * 0.65));
+            el.style.transformOrigin = '50% 0%';
+            el.style.transform = P + ' rotateX(' + (-p * 9).toFixed(2) + 'deg) scale(' + (1 - p * 0.02).toFixed(3) + ')';
+          } else {
+            el.style.transformOrigin = '50% 50%';
+            el.style.transform = 'none';
+          }
+          return;
+        }
+
+        // Last card — nothing covers it, never scale
+        if (i === all.length - 1) { el.style.transform = 'none'; return; }
+
+        // Only scale when the card is stuck (pinned at top)
+        const stickyTop = STACK_TOP + (i - 1) * STACK_GAP;
+        if (top > stickyTop + 2) { el.style.transform = 'none'; return; }
+
+        // Progress = next card traveling from viewport bottom up to its own sticky top
+        const next = all[i + 1];
+        const nextTop = next.getBoundingClientRect().top;
+        const nextStickyTop = STACK_TOP + i * STACK_GAP;
+        const progress = Math.max(0, Math.min(1, (vh - nextTop) / (vh - nextStickyTop)));
+        const scale = 1 - progress * 0.12; // 12% reduction — clearly visible depth
+
+        el.style.transformOrigin = '50% 0%';
+        el.style.transform = progress < 0.005 ? 'none' : 'scale(' + scale.toFixed(3) + ')';
+      });
+    }
+
+    const queue = () => { if (!pending) { pending = true; requestAnimationFrame(tick); } };
+    window.addEventListener('scroll', queue, { passive: true });
+    tick();
+  })();
+  </script>
+</body>
+</html>

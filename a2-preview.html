@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>A2 Preview · Matt Kirkpatrick</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Figtree:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      min-height: 100dvh;
+      background-color: #000000;
+    }
+
+    body {
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100dvh;
+      background-color: #000000;
+      background-image:
+        radial-gradient(ellipse at 85% 15%, rgba(110,35,155,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(185,22,38,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(70,18,110,0.28) 0%, transparent 46%);
+      background-size: 100% 100dvh;
+      background-repeat: no-repeat;
+      --accent: #d92638;
+      --card-radius: 20px;
+    }
+
+    .pv-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 8px 8px 120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      padding: 80px 40px;
+      position: relative;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.22);
+    }
+
+    .pv-inner > .card:first-child {
+      border-radius: 28px 28px var(--card-radius) var(--card-radius);
+      box-shadow: 0 -60px 120px rgba(0,0,0,0.85), 0 -1px 0 rgba(255,255,255,0.1);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: transparent;
+      color: #f4ede2;
+      min-height: calc(100vh - 200px);
+      padding: 70px 48px 48px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      margin: -8px -8px 0;
+      border-radius: 0;
+    }
+
+    canvas.hero-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      z-index: 100;
+    }
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 7px 16px 7px 10px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,10,10,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 220ms, border-color 220ms;
+      text-align: left;
+    }
+    .nav-pill:hover {
+      background: rgba(10,10,10,0.85);
+      border-color: rgba(255,255,255,0.14);
+    }
+    .nav-pill:hover .nav-name { color: #ffffff; }
+    .nav-menu {
+      position: fixed;
+      top: 66px;
+      left: 16px;
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 8px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity 0.42s ease, transform 0.42s ease;
+    }
+    .nav-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(244,237,226,0.85);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 150ms, color 150ms;
+    }
+    .nav-menu-item:hover { background: rgba(255,255,255,0.08); color: #f4ede2; }
+    .nav-menu-email {
+      cursor: default;
+    }
+    .nav-menu-email:hover { background: none; }
+    .nav-menu-email span {
+      flex: 1;
+      font-size: 13px;
+      color: rgba(244,237,226,0.5);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.01em;
+    }
+    .nav-menu-email-link { color: inherit; text-decoration: none; flex: 1; font-size: 13px; font-family: 'JetBrains Mono', monospace; letter-spacing: -0.01em; }
+    .nav-menu-email-link:hover { text-decoration: underline; }
+    .copy-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 15px;
+      margin: -15px;
+      border-radius: 4px;
+      color: rgba(244,237,226,0.4);
+      display: flex;
+      align-items: center;
+      transition: color 150ms, background 150ms;
+      flex-shrink: 0;
+    }
+    .copy-btn:hover { color: rgba(244,237,226,0.9); background: rgba(255,255,255,0.08); }
+    .copy-btn.copied { color: #4ade80; }
+    .copy-btn svg { display: block; }
+    .avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(160deg, #4a463e, #2a2722);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .nav-name {
+      font-family: 'Figtree', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #f4ede2;
+      letter-spacing: 0.04em;
+    }
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      top: 29px;
+      right: 40px;
+      z-index: 200;
+      animation: dot-breathe 7s ease-in-out infinite;
+      padding: 0;
+    }
+    body { position: relative; }
+    .nav-dot::before {
+      content: '';
+      position: absolute;
+      inset: -24px;
+      border-radius: 50%;
+    }
+    @keyframes dot-breathe {
+      0%, 100% {
+        box-shadow:
+          0 0 3px 1px rgba(180,40,30,0.45),
+          0 0 10px 3px rgba(180,40,30,0.18);
+      }
+      50% {
+        box-shadow:
+          0 0 5px 2px rgba(180,40,30,0.65),
+          0 0 18px 6px rgba(180,40,30,0.28),
+          0 0 32px 10px rgba(180,40,30,0.1);
+      }
+    }
+    .nav-dot.active {
+      animation: dot-pulse 3.2s ease-in-out infinite;
+    }
+    @keyframes dot-pulse {
+      0%, 100% {
+        box-shadow:
+          0 0 5px 2px rgba(180,40,30,0.55),
+          0 0 16px 6px rgba(180,40,30,0.22),
+          0 0 36px 12px rgba(180,40,30,0.08);
+      }
+      50% {
+        box-shadow:
+          0 0 7px 3px rgba(180,40,30,0.70),
+          0 0 24px 9px rgba(180,40,30,0.32),
+          0 0 48px 18px rgba(180,40,30,0.13);
+      }
+    }
+
+    /* ── Thought card ── */
+    .thought-card {
+      position: fixed;
+      top: 66px;
+      right: 48px;
+      max-width: 272px;
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 20px 22px;
+      z-index: 200;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.42s ease, transform 0.42s ease;
+    }
+    .thought-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .thought-text {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 15px;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(244,237,226,0.88);
+      line-height: 1.65;
+    }
+
+    /* ── Hero body ── */
+    .hero-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-top: 56px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #f4ede2;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1.hero-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 64px;
+      line-height: 0.92;
+      font-weight: 300;
+      letter-spacing: -0.035em;
+      color: #f4ede2;
+      max-width: 900px;
+    }
+    h1.hero-title b  { font-weight: 600; color: #fff; }
+    h1.hero-title em.acc {
+      font-style: normal;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78em;
+      font-weight: 400;
+      color: var(--accent);
+      background: rgba(180,40,30,0.12);
+      border: 1px solid rgba(180,40,30,0.35);
+      border-radius: 5px;
+      padding: 3px 10px 6px;
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+    }
+
+    /* ── Altitude grid ── */
+    .altitude-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 28px;
+    }
+    .altitude-cell {
+      padding: 0 32px 0 0;
+      border-right: 1px solid #eee;
+    }
+    .altitude-cell:last-child {
+      padding-right: 0;
+      border-right: none;
+    }
+    .altitude-cell + .altitude-cell { padding-left: 32px; }
+    .altitude-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .altitude-eyebrow::before {
+      content: '';
+      width: 12px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .altitude-heading {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: #1a1a1a;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+    .altitude-body {
+      font-size: 14px;
+      color: #767676;
+      line-height: 1.7;
+    }
+
+    /* ── Hero breadcrumb ── */
+    .hero-breadcrumb {
+      margin-top: 24px;
+      font-size: 18px;
+      letter-spacing: 0.01em;
+      text-transform: none;
+      color: rgba(244,237,226,1);
+    }
+
+    /* ── Systems ── */
+    .systems-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .systems-stat { padding: 4px 28px 4px 0; }
+    .systems-stat + .systems-stat {
+      padding-left: 28px;
+      padding-right: 28px;
+      border-left: 1px solid #e8e8e8;
+    }
+    .systems-stat:last-child { padding-right: 0; }
+    .systems-num {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      color: #1a1a1a;
+      line-height: 1;
+    }
+    .systems-label {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #767676;
+      line-height: 1.4;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Section headings ── */
+    h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 38px;
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+    }
+
+    /* ── Work ── */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .work-item {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #c8c8c8 0%, #b0b0b0 100%);
+      margin: 8px;
+      box-shadow: 0 0 0 6px rgba(255,255,255,0.85);
+      transition: box-shadow 150ms ease;
+      transform-style: preserve-3d;
+      transform-origin: center center;
+      will-change: transform;
+    }
+    @media (hover: hover) { .work-item:hover { cursor: none; } }
+    .work-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .work-cursor {
+      position: fixed;
+      background: rgba(10,10,10,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(244,237,226,0.6);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      padding: 7px 16px;
+      border-radius: 100px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.85);
+      transition: opacity 180ms ease, transform 180ms ease;
+      white-space: nowrap;
+    }
+    .work-cursor.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .work-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(0,0,0,0.35);
+    }
+    .work-overlay {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 60px 18px 18px;
+      background: linear-gradient(to top, rgba(20,20,20,0.85), transparent);
+      color: #fff;
+      font-family: 'Figtree', sans-serif;
+      font-size: 22px;
+      letter-spacing: -0.01em;
+    }
+    .work-problem {
+      font-family: 'Figtree', sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(255,255,255,1);
+      margin-bottom: 8px;
+      font-style: normal;
+    }
+    .work-overlay .meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 36px;
+      align-items: start;
+    }
+    .about-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+    }
+    .about-text p:last-of-type { margin-bottom: 20px; }
+    .portrait {
+      width: 280px;
+      height: 280px;
+      border-radius: 8px;
+      background: linear-gradient(160deg, #c5c5c5, #a8a8a8);
+      overflow: hidden;
+      box-shadow: 0 0 0 6px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; }
+    .about-speaking {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #767676;
+      line-height: 1.5;
+    }
+    .about-speaking-label {
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-right: 8px;
+    }
+    .tag {
+      font-size: 12px;
+      padding: 5px 11px;
+      border: 1px solid #d0d0d0;
+      border-radius: 100px;
+      line-height: 1.2;
+      color: #1a1a1a;
+    }
+
+    /* ── Experience ── */
+    .exp-list { list-style: none; }
+
+    .exp-item {
+      padding: 16px 0;
+      border-top: 1px solid #eee;
+    }
+    .exp-item:last-child { border-bottom: 1px solid #eee; }
+
+    .exp-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+    }
+    .exp-company {
+      font-size: 17px;
+      color: #1a1a1a;
+    }
+    .exp-right {
+      text-align: right;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #666;
+    }
+
+    /* Intuit sub-roles */
+    .intuit-roles {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .intuit-role {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      font-size: 13px;
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+    .intuit-role-left { flex: 1; }
+    .intuit-role-title { color: #1a1a1a; font-weight: 500; }
+    .intuit-role-desc {
+      font-size: 12.5px;
+      color: #767676;
+      margin-top: 5px;
+      line-height: 1.6;
+    }
+    .intuit-role-award {
+      font-size: 13px;
+      color: #1a1a1a;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .intuit-role-award-detail {
+      font-size: 13px;
+      color: #767676;
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+    .intuit-role-date {
+      font-size: 11px;
+      color: #767676;
+      white-space: nowrap;
+      padding-top: 1px;
+      width: 144px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    /* Earlier career footnote */
+    .exp-earlier-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #767676;
+      margin: 24px 0 10px;
+    }
+    .exp-item-footnote {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      padding: 9px 0;
+      border-top: 1px solid #f5f5f5;
+    }
+    .exp-item-footnote:last-child { border-bottom: 1px solid #f5f5f5; }
+    .exp-company-footnote { font-size: 13px; color: #767676; }
+    .exp-right-footnote {
+      text-align: right;
+      font-size: 11px;
+      line-height: 1.4;
+      color: #ccc;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 48px;
+      font-size: 12px;
+      color: rgba(244,237,226,0.55);
+    }
+    .footer .mark {
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+      font-size: 14px;
+      color: rgba(244,237,226,0.45);
+    }
+
+    /* ── Responsive ── */
+
+    /* Mobile line break — hidden on desktop, shown on mobile */
+    .mobile-br { display: none; }
+
+    /* Fluid hero title — scales from 40px on small mobile to 96px at desktop */
+
+    h2 { font-size: clamp(26px, 3.5vw, 38px); }
+
+    @media (max-width: 760px) {
+      .pv-inner { padding: 6px 0 120px; }
+      .card { padding: 56px 32px; box-shadow: none; }
+      .pv-inner > .card:first-child { box-shadow: 0 -1px 0 rgba(255,255,255,0.1); border-radius: 0; }
+
+      .hero { padding: 40px 32px 40px; margin: -6px 0 0; }
+
+      /* Work: single column */
+      .work-grid { grid-template-columns: 1fr; }
+
+      /* About: stack portrait below text */
+      .about-grid { grid-template-columns: 1fr; }
+      .portrait { width: 100%; height: 260px; }
+
+      /* Approach: single column with horizontal rules */
+      .altitude-grid { grid-template-columns: 1fr; gap: 0; }
+      .altitude-cell { padding: 28px 0; border-right: none; border-bottom: 1px solid #eee; }
+      .altitude-cell:last-child { border-bottom: none; padding-bottom: 0; }
+      .altitude-cell + .altitude-cell { padding-left: 0; }
+    }
+
+    @media (max-width: 520px) {
+      .pv-inner { padding: 4px 0 4px; }
+      .card { padding: 40px 20px; }
+
+      .hero { padding: 20px 20px 40px; margin: -4px 0 0; }
+
+      /* Hero title: scale down for mobile */
+      h1.hero-title { font-size: 44px; line-height: 1.05; }
+
+      /* Mobile line break: show between sentences */
+      .mobile-br { display: block; }
+
+      /* Eyebrow: drop the inline rule, let text sit cleanly */
+      .hero-eyebrow { font-size: 10px; letter-spacing: 0.12em; margin-bottom: 18px; display: block; }
+      .hero-eyebrow::before { display: none; }
+
+      /* Nav dot: hide on mobile */
+      .nav-dot { display: none; }
+
+      /* Experience: stack date above content */
+      .intuit-role { flex-direction: column-reverse; gap: 2px; }
+      .intuit-role-date { width: auto; text-align: left; padding-top: 0; }
+
+      /* Earlier career: stack */
+      .exp-row { grid-template-columns: 1fr; gap: 2px; }
+      .exp-right { text-align: left; }
+
+      /* Body text: consolidate to 16px/1.6 across sections */
+      .about-text p { font-size: 16px; line-height: 1.6; }
+      .altitude-body { font-size: 16px; line-height: 1.6; }
+      .intuit-role-desc { font-size: 16px; line-height: 1.6; }
+
+      /* Footer: pull out of fixed positioning on mobile */
+      .footer { position: relative; padding: 20px 20px; background: transparent; }
+      .footer .mark { display: none; }
+    }
+
+  </style>
+</head>
+<body>
+  <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
+  <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="work-cursor" id="work-cursor">↗ View</div>
+  <div class="nav" id="nav" role="banner">
+    <button class="nav-pill" id="nav-pill" aria-expanded="false" aria-controls="nav-menu">
+      <div class="avatar"><img src="assets/portrait.jpg" alt=""></div>
+      <span class="nav-name">Matt Kirkpatrick</span>
+    </button>
+    <div class="nav-menu" id="nav-menu" role="menu">
+      <a href="resume.html" class="nav-menu-item" target="_blank">Resume</a>
+      <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="nav-menu-item" target="_blank">LinkedIn</a>
+      <div class="nav-menu-item nav-menu-email">
+        <a href="mailto:m.k.kirkpatrick@icloud.com" class="nav-menu-email-link">m.k.kirkpatrick@icloud.com</a>
+        <button class="copy-btn" data-copy="m.k.kirkpatrick@icloud.com" title="Copy email">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
+            <path d="M2.5 9.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pv-inner" role="main">
+
+    <!-- ── Hero ── -->
+    <div class="hero">
+
+      <div class="hero-body">
+        <div>
+          <p class="hero-eyebrow">Principal Product Designer &nbsp;·&nbsp; TurboTax &nbsp;·&nbsp; Intuit</p>
+          <h1 class="hero-title">
+            Put me on the hardest problem.<br class="mobile-br"> I build the <em class="acc">/strategies</em><br class="mobile-br"> that solve it.
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Featured Work ── -->
+    <div class="card" id="work">
+      <h2>Work</h2>
+      <div class="work-grid">
+        <a href="business-tax.html" class="work-item">
+          <img src="assets/work-business-tax.jpg" alt="Business Tax">
+          <div class="work-overlay">
+            <div class="work-problem">How do you grow a product category most customers don't know exists?</div>
+            Business Tax
+          </div>
+        </a>
+        <a href="ae-tof.html" class="work-item">
+          <img src="assets/work-ae-tof.jpg" alt="Activate Experts TOF">
+          <div class="work-overlay">
+            <div class="work-problem">How do you build a front door that filters for the right customer, not just any customer?</div>
+            Activate Experts
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── About ── -->
+    <div class="card">
+      <h2>About</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>I've spent the last decade at Intuit building things that didn't have templates. TurboTax Full Service didn't exist when I joined. I helped design it from scratch alongside tax experts, service designers, operations, and delivery teams. I then ran design strategy for TurboTax Business, and I now own top-of-funnel acquisition for Assisted Tax: the surfaces that determine whether the right customer takes the first step toward filing with an expert.</p>
+          <p>I work at the intersection of design, strategy, and data, not as separate modes I shift between, but as concurrent tracks. I build frameworks that hold up under scrutiny, run controlled experiments, and push back when the data is being interpreted wrong. I can design the pixel, read the experiment result, and explain why a finding from one surface doesn't transfer to another.</p>
+          <p>AI is part of how I work every day. I use it to pressure-test ideas, accelerate synthesis, and sharpen my thinking before it goes into a room. Designers who aren't using these tools yet are leaving capability on the table.</p>
+          <ul class="tags" aria-label="Skills">
+            <li class="tag">Product design</li>
+            <li class="tag">AI experience strategy</li>
+            <li class="tag">Design systems</li>
+            <li class="tag">0→1</li>
+            <li class="tag">Design strategy</li>
+            <li class="tag">Data-informed design</li>
+            <li class="tag">Cross-functional leadership</li>
+          </ul>
+          <div class="about-speaking">
+            <span class="about-speaking-label">Speaking</span>
+            UX Speakeasy San Diego &nbsp;·&nbsp; How TurboTax reimagined the future of tax help &nbsp;·&nbsp; Apr 2026
+          </div>
+        </div>
+        <div class="portrait"><img src="assets/portrait.jpg" alt="Matt Kirkpatrick" style="width:100%;height:100%;object-fit:cover;"></div>
+      </div>
+    </div>
+
+    <!-- ── How I work ── -->
+    <div class="card">
+      <h2>Approach</h2>
+      <div class="altitude-grid">
+
+        <div class="altitude-cell">
+          <div class="altitude-eyebrow">Framing</div>
+          <div class="altitude-heading">The real problem is rarely the stated one.</div>
+          <div class="altitude-body">I work upstream of the brief. In Business Tax, the program was optimizing starts. I named the broken architecture causing them. A problem with no owner, no PRD, no prior framing. That reframe changed what got built, not just how it looked.</div>
+        </div>
+
+        <div class="altitude-cell">
+          <div class="altitude-eyebrow">Systems</div>
+          <div class="altitude-heading">Build what the next ten screens inherit from.</div>
+          <div class="altitude-body">Pattern libraries, diagnostics, test cascades designed to compound. I don't design a screen, I build the structure that makes the next ten faster and more coherent. Vision and execution in parallel, not in sequence.</div>
+        </div>
+
+        <div class="altitude-cell">
+          <div class="altitude-eyebrow">Fluency</div>
+          <div class="altitude-heading">Know what the data is actually saying.</div>
+          <div class="altitude-body">I track business outcomes, not just UX metrics. I read experiment results and know when a finding is real, when it transfers to another surface, and when a number is being asked to mean something it doesn't.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Experience ── -->
+    <div class="card">
+      <h2>Experience</h2>
+      <ul class="exp-list">
+
+        <li class="exp-item">
+          <div class="exp-row">
+            <span class="exp-company">Intuit</span>
+            <div class="exp-right">
+              <span>Principal Product Designer</span><br>
+              <span>2017—Today &nbsp;·&nbsp; 8+ yrs</span>
+            </div>
+          </div>
+          <div class="intuit-roles">
+            <div class="intuit-role">
+              <div class="intuit-role-left">
+                <div class="intuit-role-title">T6 &nbsp;·&nbsp; Activate Experts, AI-assisted acquisition strategy</div>
+                <div class="intuit-role-desc">I own the acquisition strategy and design for Assisted Tax entry points: organic, paid, storefront, and expert profile surfaces. Equal parts design and analysis. Central finding: not all CTAs work the same way on all surfaces. Some filter for the right customer. Others drive volume. Deploying the wrong one costs in both directions.</div>
+              </div>
+              <div class="intuit-role-date">Aug 2025—Today</div>
+            </div>
+            <div class="intuit-role">
+              <div class="intuit-role-left">
+                <div class="intuit-role-title">T6 &nbsp;·&nbsp; TurboTax Business, sole proprietor top-of-funnel</div>
+                <div class="intuit-role-desc">Strategic design lead on TurboTax Business, focused on the sole proprietor top-of-funnel. My read: the program's starts problem was a symptom. The product had been built around internal org structure, not around how the customer actually files. A four-test cascade shipped across the season. Breakout win: business tax revenue lifting ~18x in the affected cohort.</div>
+              </div>
+              <div class="intuit-role-date">Dec 2024—Aug 2025</div>
+            </div>
+            <div class="intuit-role">
+              <div class="intuit-role-left">
+                <div class="intuit-role-title">M3 &nbsp;·&nbsp; Full Service, design lead</div>
+                <div class="intuit-role-desc">Led design for consumer and expert experiences across Full Service. Managed a team through a high-volume season while maintaining quality and cross-functional alignment.</div>
+              </div>
+              <div class="intuit-role-date">2024</div>
+            </div>
+            <div class="intuit-role">
+              <div class="intuit-role-left">
+                <div class="intuit-role-title">T3–T6 &nbsp;·&nbsp; Full Service, built from the ground up</div>
+                <div class="intuit-role-desc">Lead designer across consumer and expert-facing experiences for TurboTax Full Service. Drove strategic design decisions across a complex end-to-end flow from customer entry through filing completion. Joined working on DIY tax, then moved to Full Service as it was being built, helping design the end-to-end experience from scratch, including consumer flows, expert tools, and the operational connective tissue between them.</div>
+                <div class="intuit-role-award">Scott Cook Innovation Award</div>
+                <div class="intuit-role-award-detail">Reduced average return completion time from 22 days to a few hours and increased same-day margin by 97%. In August 2022 it became the primary approach across all Full Service versions.</div>
+              </div>
+              <div class="intuit-role-date">2017—2024</div>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+
+      <div class="exp-earlier-label">Earlier career</div>
+      <ul class="exp-list">
+        <li class="exp-item-footnote">
+          <span class="exp-company-footnote">Mirum Agency</span>
+          <div class="exp-right-footnote">
+            Associate Design Director &nbsp;·&nbsp; 2013—2017
+          </div>
+        </li>
+        <li class="exp-item-footnote">
+          <span class="exp-company-footnote">StudioPMG</span>
+          <div class="exp-right-footnote">
+            Art Director &nbsp;·&nbsp; 2010—2013
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="thought-card" id="thought-card">
+    <div class="thought-eyebrow" id="thought-date"></div>
+    <div class="thought-text" id="thought-text"></div>
+  </div>
+
+  <footer class="footer">
+    <span>© 2026 Matt Kirkpatrick</span>
+    <span class="mark">Made with care.</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;">
+      m.k.kirkpatrick@icloud.com
+      <button class="copy-btn" data-copy="m.k.kirkpatrick@icloud.com" title="Copy email" style="color:rgba(244,237,226,0.3);">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M2.5 9.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </span>
+  </footer>
+
+  <script>
+  (function () {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Dynamic experience years (career start: 2010)
+    const yrs = new Date().getFullYear() - 2010;
+
+    // Speakeasy canvas — white stars + meteors, adapted for A2 dark hero
+    let stars = [], meteors = [], frame = 0, raf = null;
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = Math.max(window.innerHeight, window.screen.height);
+      // 180 stars, white, brighter twinkle (Speakeasy values)
+      stars = Array.from({ length: 180 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.1 + 0.2,
+        opacity: Math.random() * 0.35 + 0.05,
+        twinkleSpeed: Math.random() * 0.008 + 0.002,
+        twinkleOffset: Math.random() * Math.PI * 2,
+      }));
+      meteors = Array.from({ length: 28 }, () => makeMeteor(true));
+    }
+
+    function makeMeteor(immediate) {
+      const angle   = Math.PI / 8 + Math.random() * (Math.PI / 16);
+      const length  = Math.random() * 200 + 40;
+      const speed   = Math.random() * 1.0 + 0.3;
+      const opacity = Math.random() * 0.22 + 0.06;
+      const width   = Math.random() * 1.4 + 0.4;
+      // Right-biased spawn (Speakeasy style — full-width coverage)
+      const x = Math.random() * canvas.width * 1.4;
+      const y = immediate
+        ? Math.random() * canvas.height
+        : -length - Math.random() * canvas.height * 0.5;
+      return { x, y, length, speed, opacity, angle, width };
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // White stars with brighter twinkle (±0.08)
+      stars.forEach(s => {
+        const twinkle = Math.sin(frame * s.twinkleSpeed + s.twinkleOffset);
+        const op = s.opacity + twinkle * 0.08;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(0, op)})`;
+        ctx.fill();
+      });
+
+      frame++;
+
+      // White meteor trails
+      meteors.forEach((m, i) => {
+        const dx = Math.cos(m.angle) * m.length;
+        const dy = Math.sin(m.angle) * m.length;
+        const grad = ctx.createLinearGradient(m.x, m.y, m.x + dx, m.y + dy);
+        grad.addColorStop(0,   `rgba(255,255,255,0)`);
+        grad.addColorStop(0.2, `rgba(255,255,255,${m.opacity * 0.3})`);
+        grad.addColorStop(1,   `rgba(255,255,255,${m.opacity})`);
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(m.x + dx, m.y + dy);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = m.width;
+        ctx.stroke();
+
+        m.x += Math.cos(m.angle) * m.speed;
+        m.y += Math.sin(m.angle) * m.speed;
+        if (m.y > canvas.height + m.length || m.x > canvas.width + m.length) {
+          meteors[i] = makeMeteor(false);
+        }
+      });
+
+      raf = requestAnimationFrame(draw);
+    }
+
+    let resizeRaf = 0;
+    window.addEventListener('resize', () => {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => { resizeRaf = 0; resize(); });
+    });
+
+    resize();
+    draw();
+
+    // Pause when tab is hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
+      else if (!raf) draw();
+    });
+
+    // Respect reduced-motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      cancelAnimationFrame(raf);
+      raf = null;
+    }
+  })();
+
+  // Custom cursor + 3D tilt for work cards
+  (function () {
+    const cursor = document.getElementById('work-cursor');
+    const items  = document.querySelectorAll('.work-item');
+    const canHover = window.matchMedia('(hover: hover)').matches;
+
+    if (canHover) {
+      let cx = 0, cy = 0, tx = 0, ty = 0, raf = null;
+      const MAX_TILT = 7;
+
+      function lerp(a, b, t) { return a + (b - a) * t; }
+
+      function loop() {
+        cx = lerp(cx, tx, 0.14);
+        cy = lerp(cy, ty, 0.14);
+        cursor.style.left = cx + 'px';
+        cursor.style.top  = cy + 'px';
+        raf = requestAnimationFrame(loop);
+      }
+
+      document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+
+      items.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          cursor.classList.add('visible');
+          item.style.boxShadow = '0 0 0 6px rgba(255,255,255,0.85), 0 24px 52px rgba(0,0,0,0.38)';
+          if (!raf) loop();
+        });
+
+        item.addEventListener('mousemove', e => {
+          const r  = item.getBoundingClientRect();
+          const nx = (e.clientX - r.left)  / r.width  - 0.5;
+          const ny = (e.clientY - r.top)   / r.height - 0.5;
+          const rx = -ny * MAX_TILT;
+          const ry =  nx * MAX_TILT;
+          item.style.transition = 'transform 80ms ease, box-shadow 80ms ease';
+          item.style.transform  = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) scale(0.96)`;
+        });
+
+        item.addEventListener('mouseleave', () => {
+          cursor.classList.remove('visible');
+          cancelAnimationFrame(raf);
+          raf = null;
+          item.style.transition = 'transform 500ms ease, box-shadow 500ms ease';
+          item.style.transform  = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)';
+          item.style.boxShadow  = '';
+        });
+      });
+    } else {
+      // Touch: press state with scale + shadow, no cursor or tilt
+      cursor.style.display = 'none';
+      items.forEach(item => {
+        function pressOn() {
+          item.style.transition = 'transform 80ms ease, box-shadow 80ms ease';
+          item.style.transform  = 'scale(0.97)';
+          item.style.boxShadow  = '0 0 0 6px rgba(255,255,255,0.85), 0 24px 52px rgba(0,0,0,0.38)';
+        }
+        function pressOff() {
+          item.style.transition = 'transform 400ms ease, box-shadow 400ms ease';
+          item.style.transform  = 'scale(1)';
+          item.style.boxShadow  = '';
+        }
+        item.addEventListener('touchstart', pressOn,  { passive: true });
+        item.addEventListener('touchend',   pressOff, { passive: true });
+        item.addEventListener('touchcancel',pressOff, { passive: true });
+      });
+    }
+  })();
+
+  // Page transitions — content slides, background persists
+  (function () {
+    const inner = document.querySelector('.pv-inner');
+
+    // Arrive: slide up from below
+    inner.style.opacity = '0';
+    inner.style.transform = 'translateY(20px)';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      inner.style.transition = 'opacity 0.42s ease, transform 0.42s ease';
+      inner.style.opacity = '1';
+      inner.style.transform = 'translateY(0)';
+    }));
+
+    // Leave: slide down and out
+    document.querySelectorAll('.work-item').forEach(link => {
+      link.addEventListener('click', e => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+        e.preventDefault();
+        const href = link.href;
+        inner.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
+        inner.style.opacity = '0';
+        inner.style.transform = 'translateY(-16px)';
+        setTimeout(() => { location.href = href; }, 240);
+      });
+    });
+  })();
+
+  </script>
+
+  <script>
+  // ── Dot proximity scaling ──
+  (function () {
+    var dot = document.getElementById('nav-dot');
+    var MAX_DIST = 180;
+    var MAX_SCALE = 5;
+
+    document.addEventListener('mousemove', function (e) {
+      if (dot.classList.contains('active')) return;
+      var rect = dot.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dist = Math.sqrt(Math.pow(e.clientX - cx, 2) + Math.pow(e.clientY - cy, 2));
+
+      if (dist < MAX_DIST) {
+        var t = Math.pow(1 - dist / MAX_DIST, 1.8);
+        var scale = 1 + (MAX_SCALE - 1) * t;
+        dot.style.transform = 'scale(' + scale.toFixed(2) + ')';
+      } else {
+        dot.style.transform = '';
+      }
+    });
+  })();
+
+  // ── Daily thought ──
+  (function () {
+    var thoughts = [
+      "The brief is never the real problem. The real problem is what the brief was written around.",
+      "A test that wins on one surface is evidence, not strategy. Know what you're actually measuring before you ship the next variant.",
+      "Vision without a diagnostic is just taste. Name the friction points before you name the solution."
+    ];
+
+    var dot  = document.getElementById('nav-dot');
+    var card = document.getElementById('thought-card');
+    var textEl = document.getElementById('thought-text');
+    var dateEl = document.getElementById('thought-date');
+
+    var today = new Date();
+    var idx = Math.floor(today.getTime() / 86400000) % thoughts.length;
+    textEl.textContent = thoughts[idx];
+    dateEl.textContent = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+    var open = false;
+
+    function openCard() {
+      open = true;
+      dot.classList.add('active');
+      dot.setAttribute('aria-expanded', 'true');
+      card.style.transition = 'opacity 0.42s ease, transform 0.42s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+      card.style.pointerEvents = 'auto';
+    }
+
+    function closeCard() {
+      open = false;
+      dot.classList.remove('active');
+      dot.setAttribute('aria-expanded', 'false');
+      card.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(-8px)';
+      card.style.pointerEvents = 'none';
+    }
+
+    dot.addEventListener('click', function (e) {
+      e.stopPropagation();
+      open ? closeCard() : openCard();
+    });
+
+    document.addEventListener('click', function (e) {
+      if (open && !card.contains(e.target)) closeCard();
+    });
+  })();
+
+  // ── Background gradients expand toward the dwarf star ──
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var mx = -1, my = -1;
+    // Lerped gradient sizes (end stops, %)
+    var c1 = 55, c2 = 50, c3 = 46;
+    // Lerped gradient opacities
+    var o1 = 0.50, o2 = 0.44, o3 = 0.28;
+    var LERP = 0.06;
+
+    document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    var gradRaf = null;
+
+    function frame() {
+      var prox = 0;
+      if (mx >= 0) {
+        var dot = document.getElementById('nav-dot');
+        var r = dot.getBoundingClientRect();
+        var dx = mx - (r.left + r.width / 2);
+        var dy = my - (r.top + r.height / 2);
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var maxDist = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight);
+        prox = Math.max(0, 1 - dist / maxDist);
+        prox = prox * prox * prox;
+      }
+
+      c1 = lerp(c1, 55 + 12 * prox, LERP);
+      c2 = lerp(c2, 50 + 10 * prox, LERP);
+      c3 = lerp(c3, 46 + 8  * prox, LERP);
+      o1 = lerp(o1, 0.50 + 0.10 * prox, LERP);
+      o2 = lerp(o2, 0.44 + 0.10 * prox, LERP);
+      o3 = lerp(o3, 0.28 + 0.07 * prox, LERP);
+
+      document.body.style.backgroundImage = [
+        'radial-gradient(ellipse at 85% 15%, rgba(110,35,155,' + o1.toFixed(3) + ') 0%, transparent ' + c1.toFixed(1) + '%)',
+        'radial-gradient(ellipse at 90% 85%, rgba(185,22,38,' + o2.toFixed(3) + ') 0%, transparent ' + c2.toFixed(1) + '%)',
+        'radial-gradient(ellipse at 10% 50%, rgba(70,18,110,' + o3.toFixed(3) + ') 0%, transparent ' + c3.toFixed(1) + '%)'
+      ].join(', ');
+
+      gradRaf = requestAnimationFrame(frame);
+    }
+    frame();
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { cancelAnimationFrame(gradRaf); gradRaf = null; }
+      else if (!gradRaf) frame();
+    });
+  })();
+  </script>
+
+  <script>
+  (function () {
+    var words = ['/strategies', '/products', '/patterns', '/frameworks', '/systems'];
+    var h1  = document.querySelector('h1.hero-title');
+    var TYPE = 35;
+    var HOLD = 600;
+
+    var PREFIX1 = 'Put me on the hardest problem.';
+    var PREFIX2 = ' I build the';
+    var SUFFIX = ' that solve it.';
+
+    // Skip animation when reduced-motion is preferred — render full text statically
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      while (h1.firstChild) h1.removeChild(h1.firstChild);
+      h1.appendChild(document.createTextNode(PREFIX1));
+      var br = document.createElement('br'); br.className = 'mobile-br'; h1.appendChild(br);
+      h1.appendChild(document.createTextNode(PREFIX2 + ' '));
+      words.forEach(function (word, i) {
+        var tag = document.createElement('em');
+        tag.className = 'acc';
+        tag.textContent = word;
+        h1.appendChild(tag);
+        if (i < words.length - 1) h1.appendChild(document.createTextNode(' '));
+      });
+      var br2 = document.createElement('br'); br2.className = 'mobile-br'; h1.appendChild(br2);
+      h1.appendChild(document.createTextNode(SUFFIX));
+      return;
+    }
+
+    // Clear h1, build with prefix + suffix text nodes + mobile line break
+    var prefixNode1 = document.createTextNode('');
+    var mobileBr = document.createElement('br'); mobileBr.className = 'mobile-br';
+    var prefixNode2 = document.createTextNode('');
+    var suffixNode = document.createTextNode('');
+    while (h1.firstChild) h1.removeChild(h1.firstChild);
+    h1.appendChild(prefixNode1);
+    h1.appendChild(mobileBr);
+    h1.appendChild(prefixNode2);
+    h1.appendChild(suffixNode);
+
+    function typeNode(node, text, cb) {
+      var i = 0;
+      (function step() {
+        if (i >= text.length) { cb(); return; }
+        node.nodeValue += text[i++];
+        setTimeout(step, TYPE);
+      })();
+    }
+
+    function addWord(word, cb) {
+      var space = document.createTextNode(' ');
+      var tag = document.createElement('em');
+      tag.className = 'acc';
+      h1.insertBefore(space, suffixNode);
+      h1.insertBefore(tag, suffixNode);
+      var i = 0;
+      (function step() {
+        if (i >= word.length) { cb(); return; }
+        tag.textContent += word[i++];
+        setTimeout(step, TYPE);
+      })();
+    }
+
+    function chain(idx) {
+      if (idx >= words.length) return;
+      setTimeout(function () {
+        addWord(words[idx], function () {
+          chain(idx + 1);
+        });
+      }, idx === 0 ? 0 : HOLD);
+    }
+
+    // Intro: type prefix1, then prefix2, then chain all words, then suffix
+    typeNode(prefixNode1, PREFIX1, function () {
+      typeNode(prefixNode2, PREFIX2, function () {
+        chain(0);
+        var totalWordTime = words.reduce(function(t, w) { return t + w.length * TYPE + HOLD; }, 0);
+        setTimeout(function () {
+          var mobileBr2 = document.createElement('br'); mobileBr2.className = 'mobile-br';
+          h1.insertBefore(mobileBr2, suffixNode);
+          typeNode(suffixNode, SUFFIX, function () {});
+        }, totalWordTime);
+      });
+    });
+  })();
+  </script>
+  <script>
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+  (function () {
+    var nav     = document.getElementById('nav');
+    var pill    = document.getElementById('nav-pill');
+    var menu    = document.getElementById('nav-menu');
+    var open    = false;
+
+    // Scroll → pill background
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 40) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }, { passive: true });
+
+    function openMenu() {
+      open = true;
+      pill.setAttribute('aria-expanded', 'true');
+      menu.style.transition = 'opacity 0.42s ease, transform 0.42s ease';
+      menu.style.opacity = '1';
+      menu.style.transform = 'translateY(0)';
+      menu.style.pointerEvents = 'auto';
+      var firstItem = document.querySelector('#nav-menu .nav-menu-item');
+      if (firstItem) firstItem.focus();
+    }
+
+    function closeMenu() {
+      open = false;
+      pill.setAttribute('aria-expanded', 'false');
+      menu.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
+      menu.style.opacity = '0';
+      menu.style.transform = 'translateY(-8px)';
+      menu.style.pointerEvents = 'none';
+      pill.focus();
+    }
+
+    // Toggle menu
+    pill.addEventListener('click', function (e) {
+      e.stopPropagation();
+      open ? closeMenu() : openMenu();
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.copy-btn')) closeMenu();
+    });
+
+    menu.addEventListener('click', function (e) { e.stopPropagation(); });
+  })();
+  </script>
+  <script>
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    var text = btn.dataset.copy;
+
+    function showCopied() {
+      var orig = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.style.display = 'inline-flex';
+      btn.style.alignItems = 'center';
+      btn.style.gap = '4px';
+      btn.style.whiteSpace = 'nowrap';
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:11px;font-family:inherit;letter-spacing:0.04em;">Copied</span>';
+      setTimeout(function () {
+        btn.classList.remove('copied');
+        btn.style.display = '';
+        btn.style.alignItems = '';
+        btn.style.gap = '';
+        btn.style.whiteSpace = '';
+        btn.innerHTML = orig;
+      }, 2000);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(function () {
+        fallbackCopy(text);
+        showCopied();
+      });
+    } else {
+      fallbackCopy(text);
+      showCopied();
+    }
+  }, true);
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+  </script>
+</body>
+</html>

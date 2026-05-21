@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matt Kirkpatrick Resume</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Figtree:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1a1a;
+      --mid: #555;
+      --faint: #999;
+      --rule: #e0e0e0;
+      --accent: #c0202e;
+      --page-w: 760px;
+    }
+
+    body {
+      font-family: 'Figtree', -apple-system, sans-serif;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: #f5f5f3;
+    }
+
+    .page {
+      max-width: var(--page-w);
+      margin: 40px auto;
+      background: #fff;
+      padding: 56px 60px 64px;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.10);
+    }
+
+    /* ── Header ── */
+    .r-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      border-bottom: 1.5px solid var(--ink);
+      margin-bottom: 32px;
+      gap: 24px;
+    }
+
+    .r-name {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 38px;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .r-contact {
+      text-align: right;
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.7;
+    }
+
+    .r-contact a {
+      color: var(--mid);
+      text-decoration: none;
+    }
+
+    .r-contact a:hover { color: var(--accent); }
+
+    /* ── Section ── */
+    .r-section {
+      margin-bottom: 28px;
+    }
+
+    .r-section-label {
+      font-size: 9.5px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--faint);
+      margin-bottom: 14px;
+    }
+
+    /* ── Summary ── */
+    .r-summary {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--mid);
+      max-width: 580px;
+    }
+
+    /* ── Experience ── */
+    .r-role {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .r-role:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .r-role-date {
+      font-size: 11px;
+      color: var(--faint);
+      white-space: nowrap;
+      padding-top: 2px;
+      width: 128px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .r-role-body { flex: 1; }
+
+    .r-role-company {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      color: var(--faint);
+      margin-bottom: 3px;
+    }
+
+    .r-role-title {
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 5px;
+    }
+    .r-level {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--faint);
+      margin-right: 6px;
+    }
+
+    .r-role-desc {
+      font-size: 13px;
+      color: var(--mid);
+      line-height: 1.58;
+    }
+
+    .r-award {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .r-award-name {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 3px;
+    }
+
+    .r-award-detail {
+      display: block;
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.55;
+    }
+
+    /* ── Earlier career (two-column) ── */
+    .r-earlier {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .r-earlier-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .r-earlier-date {
+      font-size: 11px;
+      color: var(--faint);
+      white-space: nowrap;
+      width: 128px;
+      flex-shrink: 0;
+      text-align: right;
+      padding-top: 1px;
+    }
+
+    .r-earlier-body {
+      flex: 1;
+      font-size: 13px;
+      color: var(--mid);
+    }
+
+    .r-earlier-body strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* ── Skills ── */
+    .r-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .r-skill {
+      font-size: 12px;
+      color: var(--mid);
+      background: #f3f3f1;
+      border-radius: 4px;
+      padding: 3px 10px;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; }
+      .page {
+        margin: 0;
+        padding: 36px 48px 48px;
+        box-shadow: none;
+        max-width: 100%;
+      }
+    }
+
+    @page {
+      size: letter;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <header class="r-header">
+      <div class="r-name">Matt Kirkpatrick</div>
+      <div class="r-contact">
+        m.k.kirkpatrick@icloud.com<br>
+        <a href="https://www.linkedin.com/in/mattkkirkpatrick/" target="_blank">linkedin.com/in/mattkkirkpatrick</a><br>
+        San Diego, CA
+      </div>
+    </header>
+
+    <!-- Summary -->
+    <div class="r-section">
+      <div class="r-section-label">About</div>
+      <div class="r-summary">
+        16 years designing products at the intersection of AI, strategy, and systems. I work best on hard, ambiguous problems, the kind where the design work and the strategic work are the same work. Scott Cook Award winner (Intuit's highest individual contributor&nbsp;recognition).
+      </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="r-section">
+      <div class="r-section-label">Experience</div>
+
+      <!-- Intuit header -->
+      <div class="r-role" style="padding-bottom: 12px; margin-bottom: 12px;">
+        <div class="r-role-date">2017—Today</div>
+        <div class="r-role-body">
+          <div class="r-role-company">Intuit &nbsp;·&nbsp; Principal Product Designer</div>
+        </div>
+      </div>
+
+      <div class="r-role">
+        <div class="r-role-date">Aug 2025—Today</div>
+        <div class="r-role-body">
+          <div class="r-role-title"><span class="r-level">T6 &nbsp;·&nbsp;</span>Activate Experts: AI-assisted acquisition strategy</div>
+          <div class="r-role-desc">Own the acquisition strategy and design for Assisted Tax entry points: organic, paid, storefront, and expert profile surfaces. Equal parts design and analysis. Central finding: not all CTAs work the same way on all surfaces. Some filter for the right customer. Others drive volume. Deploying the wrong one costs in both directions.</div>
+        </div>
+      </div>
+
+      <div class="r-role">
+        <div class="r-role-date">Dec 2024—Aug 2025</div>
+        <div class="r-role-body">
+          <div class="r-role-title"><span class="r-level">T6 &nbsp;·&nbsp;</span>TurboTax Business: sole proprietor top-of-funnel</div>
+          <div class="r-role-desc">Strategic design lead on TurboTax Business, focused on the sole proprietor top-of-funnel. The program's starts problem was a symptom. The product had been built around internal org structure, not around how the customer actually files. A four-test cascade shipped across the season. Breakout win: business tax revenue lifting ~18x in the affected cohort.</div>
+        </div>
+      </div>
+
+      <div class="r-role">
+        <div class="r-role-date">2024</div>
+        <div class="r-role-body">
+          <div class="r-role-title"><span class="r-level">M3 &nbsp;·&nbsp;</span>TurboTax Full Service: design lead</div>
+          <div class="r-role-desc">Led design for consumer and expert experiences across Full Service. Managed a team through a high-volume season while maintaining quality and cross-functional&nbsp;alignment.</div>
+        </div>
+      </div>
+
+      <div class="r-role">
+        <div class="r-role-date">2017—2024</div>
+        <div class="r-role-body">
+          <div class="r-role-title"><span class="r-level">T3–T6 &nbsp;·&nbsp;</span>TurboTax Full Service: built from the ground up</div>
+          <div class="r-role-desc">Lead designer across consumer and expert-facing experiences as Full Service was being built from scratch: consumer flows, expert tools, and the operational connective tissue between them. Drove strategic design decisions across a complex end-to-end flow from customer entry through filing completion.</div>
+          <div class="r-award">
+            <span class="r-award-name">Scott Cook Innovation Award</span>
+            <span class="r-award-detail">Reduced average return completion time from 22 days to a few hours. Same-day margin increased 97%. By August 2022, the primary approach across all Full Service versions.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earlier career -->
+    <div class="r-section">
+      <div class="r-section-label">Earlier career</div>
+      <div class="r-earlier">
+        <div class="r-earlier-row">
+          <div class="r-earlier-date">2013—2017</div>
+          <div class="r-earlier-body"><strong>Mirum Agency</strong> &nbsp;·&nbsp; Associate Design Director</div>
+        </div>
+        <div class="r-earlier-row">
+          <div class="r-earlier-date">2010—2013</div>
+          <div class="r-earlier-body"><strong>StudioPMG</strong> &nbsp;·&nbsp; Art Director</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="r-section" style="margin-bottom: 0;">
+      <div class="r-section-label">Craft</div>
+      <div class="r-skills">
+        <span class="r-skill">AI product design</span>
+        <span class="r-skill">Design systems</span>
+        <span class="r-skill">0→1 product work</span>
+        <span class="r-skill">Design strategy</span>
+        <span class="r-skill">Cross-functional leadership</span>
+        <span class="r-skill">Interaction design</span>
+        <span class="r-skill">Figma</span>
+        <span class="r-skill">Prototyping</span>
+        <span class="r-skill">Research synthesis</span>
+        <span class="r-skill">A/B testing</span>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
