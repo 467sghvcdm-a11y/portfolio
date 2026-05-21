@@ -24,6 +24,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       background-attachment: fixed;
       --accent: #d92638;
       --card-radius: 14px;
+      --card-h: max(64px, calc((100vw - 16px - 1000px) / 2));
     }
 
     .pv-inner {
@@ -39,7 +40,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     .card {
       background: #fff;
       border-radius: var(--card-radius);
-      padding: 56px 64px 72px;
+      padding: 56px var(--card-h) 72px;
       position: relative;
       box-shadow: 0 -8px 40px rgba(0,0,0,0.22);
     }
@@ -477,7 +478,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
 
     @media (max-width: 760px) {
       .pv-inner { padding: 6px 0 120px; }
-      .card { padding: 48px 40px 64px; box-shadow: none; }
+      .card { --card-h: 40px; padding: 48px var(--card-h) 64px; box-shadow: none; }
       .hero { padding: 40px 40px 48px; margin: -6px 0 0; }
       .hero-body { margin-top: 56px; }
       .hero-foot { flex-wrap: wrap; gap: 16px 40px; }
@@ -487,7 +488,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
 
     @media (max-width: 520px) {
       .pv-inner { padding: 4px 0 120px; }
-      .card { padding: 40px 20px 56px; }
+      .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
       .cs-title { font-size: 44px; }

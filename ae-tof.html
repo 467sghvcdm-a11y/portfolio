@@ -24,6 +24,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       background-attachment: fixed;
       --accent: #d92638;
       --card-radius: 14px;
+      --card-h: max(64px, calc((100vw - 16px - 1000px) / 2));
     }
 
     .pv-inner {
@@ -47,7 +48,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     .card {
       background: #fff;
       border-radius: var(--card-radius);
-      padding: 56px 64px 80px;
+      padding: 56px var(--card-h) 80px;
       position: relative;
       box-shadow: 0 -8px 40px rgba(0,0,0,0.22);
       overflow: hidden;
@@ -335,6 +336,10 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     /* ── Images ── */
     figure { margin: 36px 0; }
     figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
+    .card figure {
+      margin: 36px min(0px, 40px - var(--card-h));
+      width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
+    }
     figcaption { font-size: 13px; color: #767676; margin-top: 10px; font-style: italic; }
 
     /* ── Recipe pairs ── */
@@ -410,7 +415,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
 
     @media (max-width: 520px) {
       .pv-inner { padding: 4px 0 120px; }
-      .card { padding: 40px 20px 56px; }
+      .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
       .cs-title { font-size: 44px; }
