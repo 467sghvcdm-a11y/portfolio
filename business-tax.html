@@ -378,6 +378,15 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       color: #767676;
     }
 
+    /* ── Images ── */
+    figure { margin: 36px 0; }
+    figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
+    figcaption { font-size: 13px; color: #767676; margin-top: 10px; font-style: italic; }
+    .card figure {
+      margin: 36px min(0px, 40px - var(--card-h));
+      width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
+    }
+
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
 
