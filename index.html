@@ -29,6 +29,7 @@
       background-repeat: no-repeat;
       --accent: #d92638;
       --card-radius: 20px;
+      --card-h: max(40px, calc((100vw - 16px - 1000px) / 2));
     }
 
     .pv-inner {
@@ -44,12 +45,9 @@
     .card {
       background: #fff;
       border-radius: var(--card-radius);
-      padding: 80px 40px;
+      padding: 80px var(--card-h);
       position: relative;
       box-shadow: 0 -8px 40px rgba(0,0,0,0.22);
-      max-width: 1000px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     .pv-inner > .card:first-child {
@@ -681,7 +679,7 @@
 
     @media (max-width: 760px) {
       .pv-inner { padding: 6px 0 120px; }
-      .card { padding: 56px 32px; box-shadow: none; }
+      .card { --card-h: 32px; padding: 56px var(--card-h); box-shadow: none; }
       .pv-inner > .card:first-child { box-shadow: 0 -1px 0 rgba(255,255,255,0.1); border-radius: 0; }
 
       .hero { padding: 40px 32px 40px; margin: -6px 0 0; }
@@ -702,7 +700,7 @@
 
     @media (max-width: 520px) {
       .pv-inner { padding: 4px 0 4px; }
-      .card { padding: 40px 20px; }
+      .card { --card-h: 20px; padding: 40px var(--card-h); }
 
       .hero { padding: 20px 20px 40px; margin: -4px 0 0; }
 
