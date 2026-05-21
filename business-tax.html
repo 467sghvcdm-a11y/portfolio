@@ -391,8 +391,8 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     .cs-chapter, .card { scroll-margin-top: 72px; }
 
     .cs-chapter {
-      margin: 64px -64px 0;
-      padding: 44px 64px;
+      margin: 64px calc(-1 * var(--card-h)) 0;
+      padding: 44px var(--card-h);
       background: #f8f8f6;
       border-top: 1px solid #eee;
       border-bottom: 1px solid #eee;
@@ -491,7 +491,6 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       .hero { padding: 40px 40px 48px; margin: -6px 0 0; }
       .hero-body { margin-top: 56px; }
       .hero-foot { flex-wrap: wrap; gap: 16px 40px; }
-      .cs-chapter { margin-left: -40px; margin-right: -40px; padding-left: 40px; padding-right: 40px; }
       .cs-metrics-3, .cs-metrics-4 { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -509,7 +508,6 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       .cs-chap-nav.on-light { background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
       .cs-chap-nav.on-light .cs-chap-link { color: rgba(0,0,0,0.4); }
       .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(0,0,0,0.8); background: rgba(0,0,0,0.08); }
-      .cs-chapter { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
       .cs-altitude-grid { grid-template-columns: 1fr; }
       .cs-metrics-2, .cs-metrics-3, .cs-metrics-4 { grid-template-columns: 1fr; }
       .cs-metric-val { font-size: 48px; }
