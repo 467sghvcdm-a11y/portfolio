@@ -6,15 +6,12 @@
   <title>Business Tax · Matt Kirkpatrick</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Figtree:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
+    html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
 
     body {
-      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
       min-height: 100dvh;
       background-color: #000000;
       background-image:
@@ -60,7 +57,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       background: transparent;
       color: #f4ede2;
       min-height: 68vh;
-      padding: 36px 48px 56px;
+      padding: 36px 80px 56px;
       display: flex;
       flex-direction: column;
       margin: -8px -8px 0;
@@ -85,9 +82,6 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       white-space: nowrap;
     }
     .cs-chap-link {
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.5;
       color: rgba(244,237,226,0.72);
       text-decoration: none;
       padding: 5px 14px;
@@ -102,11 +96,8 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       top: 16px;
       left: 16px;
       z-index: 100;
-      font-size: 14px;
-      font-weight: 500;
       color: rgba(244,237,226,0.6);
       text-decoration: none;
-      letter-spacing: 0.04em;
       background: rgba(10,10,10,0.65);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -128,10 +119,6 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     }
 
     .hero-eyebrow {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
       color: var(--accent);
       margin-bottom: 20px;
       display: flex;
@@ -148,11 +135,8 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     .cs-title {
       font-family: 'Fraunces', Georgia, serif;
       font-size: 64px;
-      line-height: 1.0;
-      font-weight: 300;
-      letter-spacing: -0.02em;
-      color: #f4ede2;
-      max-width: 800px;
+      color: var(--c-cream);
+      max-width: 1000px;
     }
 
     .hero-foot {
@@ -161,51 +145,22 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       margin-top: 48px;
       padding-top: 22px;
       border-top: 1px solid rgba(255,255,255,0.1);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: #767676;
     }
     .hero-foot b {
       display: block;
       font-family: 'Fraunces', Georgia, serif;
-      font-weight: 380;
       font-size: 28px;
-      color: #f4ede2;
+      font-weight: 380;
+      color: var(--c-cream);
       margin-top: 6px;
-      letter-spacing: -0.02em;
       text-transform: none;
       white-space: nowrap;
-      line-height: 1.0;
     }
 
     /* ── Body ── */
-    p {
-      font-size: 16px;
-      line-height: 1.5;
-      color: #1a1a1a;
-      margin-bottom: 16px;
-    }
-    p:last-child { margin-bottom: 0; }
+    h3 { font-size: 28px; margin-bottom: 20px; }
 
-    h3 {
-      font-family: 'Fraunces', Georgia, serif;
-      font-size: 28px;
-      line-height: 1.0;
-      font-weight: 380;
-      letter-spacing: -0.02em;
-      color: #1a1a1a;
-      margin-bottom: 20px;
-    }
-
-    h4 {
-      font-size: 13px;
-      font-weight: 500;
-      text-transform: uppercase;
-      line-height: 1.5;
-      color: #1a1a1a;
-      margin: 40px 0 14px;
-    }
+    h4 { font-size: 20px; margin: 40px 0 14px; }
 
     .cs-section {
       margin-top: 64px;
@@ -220,7 +175,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       font-weight: 300;
       font-style: italic;
       color: #1a1a1a;
-      line-height: 1.4;
+      line-height: 1.0;
       padding: 24px 28px;
       border-left: 3px solid var(--accent);
       background: #fafafa;
@@ -229,75 +184,60 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     }
 
     /* ── Inline annotation ── */
-    .cs-annotation {
-      font-style: italic;
-      color: var(--accent);
-      font-size: 14px;
-    }
+    .cs-annotation { color: var(--c-secondary); }
 
     /* ── Metrics table ── */
     .cs-metrics-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
       margin: 28px 0;
     }
     .cs-metrics-table th {
-      text-align: left;
-      font-size: 11px;
+      font-size: 12px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #767676;
-      font-weight: 500;
+      color: var(--c-secondary);
+      text-align: left;
       padding: 0 20px 12px 0;
       border-bottom: 1px solid #eee;
     }
     .cs-metrics-table td {
       padding: 11px 20px 11px 0;
       border-bottom: 1px solid #f5f5f5;
-      color: #767676;
-      font-size: 13px;
+      color: var(--c-secondary);
     }
     .cs-metrics-table td:first-child { color: #767676; }
-    .cs-win { color: #1a1a1a !important; font-weight: 500; }
+    .cs-win { color: #1a1a1a !important; }
     .cs-itc {
-      font-size: 11px;
+      font-size: 12px;
       color: #767676;
-      font-weight: 400;
       margin-left: 6px;
     }
 
-    /* ── Distribution bars ── */
+    /* ── Distribution ── */
     .cs-dist {
       margin: 24px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .cs-dist-row {
       display: grid;
-      grid-template-columns: 52px 1fr 1fr;
-      align-items: center;
-      gap: 20px;
-      font-size: 13px;
-      color: #767676;
+      grid-template-columns: auto 1fr;
+      column-gap: 20px;
+      row-gap: 8px;
+      align-items: baseline;
     }
-    .cs-dist-row.dominant { color: #1a1a1a; }
+    .cs-dist-row { display: contents; }
     .cs-dist-pct {
-      font-family: 'Figtree', -apple-system, sans-serif;
-      font-weight: 400;
-      font-size: 13px;
-      color: #767676;
+      font-size: 14px;
+      color: var(--c-secondary);
       text-align: right;
       white-space: nowrap;
+      font-variant-numeric: tabular-nums;
     }
     .cs-dist-row.dominant .cs-dist-pct {
-      font-size: 36px;
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 300;
+      font-size: 24px;
       color: var(--accent);
     }
-    .cs-dist-bar { background: #f0f0f0; height: 4px; border-radius: 2px; }
-    .cs-dist-bar-fill { height: 100%; border-radius: 2px; background: #e0e0e0; }
-    .cs-dist-row.dominant .cs-dist-bar-fill { background: var(--accent); }
+    .cs-dist-bar { display: none; }
 
     /* ── Provocation list ── */
     .cs-provocation-list {
@@ -311,19 +251,11 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       align-items: start;
       padding: 22px 0;
       border-top: 1px solid #eee;
-      font-size: 15px;
-      line-height: 1.7;
-      color: #767676;
+      color: var(--c-secondary);
     }
     .cs-provocation-list li:first-child { border-top: none; }
     .cs-provocation-list li:last-child { border-bottom: none; }
-    .cs-provocation-num {
-      font-family: 'Fraunces', Georgia, serif;
-      font-size: 20px;
-      font-weight: 300;
-      color: #767676;
-      line-height: 1.4;
-    }
+    .cs-provocation-num { font-family: 'Fraunces', Georgia, serif; font-size: 20px; color: var(--c-secondary); }
 
     /* ── Artifact list ── */
     .cs-artifact-list {
@@ -333,9 +265,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     .cs-artifact-list li {
       padding: 13px 0;
       border-top: 1px solid #f0f0f0;
-      font-size: 13px;
-      color: #767676;
-      line-height: 1.5;
+      color: var(--c-secondary);
       display: flex;
       gap: 12px;
     }
@@ -357,31 +287,13 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       overflow: hidden;
     }
     .cs-altitude { background: #fafafa; padding: 28px 32px; }
-    .cs-altitude-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-    .cs-altitude-title {
-      font-family: 'Fraunces', Georgia, serif;
-      font-size: 20px;
-      font-weight: 300;
-      color: #1a1a1a;
-      margin-bottom: 12px;
-      line-height: 1.2;
-    }
-    .cs-altitude-desc {
-      font-size: 13px;
-      line-height: 1.65;
-      color: #767676;
-    }
+    .cs-altitude-label { color: var(--accent); margin-bottom: 10px; }
+    .cs-altitude-title { font-family: 'Fraunces', Georgia, serif; font-size: 20px; margin-bottom: 12px; }
+    .cs-altitude-desc { color: var(--c-secondary); }
 
     /* ── Images ── */
     figure { margin: 36px 0; }
     figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
-    figcaption { font-size: 13px; color: #767676; margin-top: 10px; font-style: italic; }
     .card figure {
       margin: 36px min(0px, 40px - var(--card-h));
       width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
@@ -398,9 +310,6 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       border-bottom: 1px solid #eee;
     }
     .cs-chapter-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
       color: var(--accent);
       margin-bottom: 14px;
       display: flex;
@@ -408,16 +317,8 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       gap: 10px;
     }
     .cs-chapter-label::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); }
-    .cs-chapter-title {
-      font-family: 'Fraunces', Georgia, serif;
-      font-size: 36px;
-      font-weight: 300;
-      letter-spacing: -0.02em;
-      color: #1a1a1a;
-      line-height: 1.0;
-      margin-bottom: 10px;
-    }
-    .cs-chapter-sub { font-size: 15px; color: #767676; max-width: 58ch; }
+    .cs-chapter-title { font-size: 36px; margin-bottom: 10px; }
+    .cs-chapter-sub { font-size: 16px; line-height: 1.5; color: #767676; max-width: 58ch; }
 
     /* ── Metric grids ── */
     .cs-metrics { display: grid; gap: 24px; margin: 28px 0; }
@@ -442,20 +343,20 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     .cs-metric-val.win { color: #007A66; }
     .cs-metric-val.neg { color: var(--accent); }
     .cs-metric-sup { font-family: 'Figtree', sans-serif; font-size: 12px; color: #767676; font-weight: 400; margin-left: 4px; letter-spacing: 0.04em; }
-    .cs-metric-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: #767676; margin-top: 10px; }
-    .cs-metric-ctx { font-size: 13px; color: #767676; margin-top: 6px; line-height: 1.5; }
+    .cs-metric-lbl { margin-top: 10px; }
+    .cs-metric-ctx { color: var(--c-secondary); margin-top: 6px; }
 
     /* ── Takeaway ── */
     .cs-takeaway { margin-top: 72px; padding-top: 56px; }
-    .cs-takeaway-text { font-family: 'Fraunces', Georgia, serif; font-size: 32px; font-weight: 300; font-style: italic; color: #1a1a1a; line-height: 1.0; max-width: 22ch; margin-bottom: 20px; letter-spacing: -0.02em; }
+    .cs-takeaway-text { font-family: 'Fraunces', Georgia, serif; font-size: 32px; font-style: italic; max-width: 38ch; margin-bottom: 20px; }
     .cs-takeaway-sub { font-size: 16px; color: #1a1a1a; max-width: 55ch; line-height: 1.5; }
 
     /* ── Next project ── */
     .cs-next { display: block; margin-top: 80px; padding-top: 32px; border-top: 1px solid #eee; text-decoration: none; color: inherit; }
     .cs-next:hover .cs-next-title { color: var(--accent); }
     .cs-next:hover .cs-next-arrow { transform: translateX(4px); color: var(--accent); }
-    .cs-next-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #767676; margin-bottom: 8px; }
-    .cs-next-title { font-family: 'Fraunces', Georgia, serif; font-size: 28px; font-weight: 380; color: #1a1a1a; letter-spacing: -0.02em; transition: color 200ms ease; display: inline; }
+    .cs-next-label { margin-bottom: 8px; }
+    .cs-next-title { font-family: 'Fraunces', Georgia, serif; font-size: 28px; font-weight: 380; transition: color 200ms ease; display: inline; }
     .cs-next-arrow { font-size: 20px; color: #767676; transition: transform 200ms ease, color 200ms ease; display: inline-block; margin-left: 8px; vertical-align: middle; }
 
     /* ── Footer ── */
@@ -511,7 +412,6 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       .cs-altitude-grid { grid-template-columns: 1fr; }
       .cs-metrics-2, .cs-metrics-3, .cs-metrics-4 { grid-template-columns: 1fr; }
       .cs-metric-val { font-size: 44px; }
-      p { font-size: 16px; line-height: 1.6; }
       .footer { position: relative; padding: 20px 20px; background: transparent; }
       .footer .mark { display: none; }
     }
@@ -519,12 +419,12 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
 </head>
 <body>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
-  <a href="index.html" class="cs-back">← Work</a>
+  <a href="index.html" class="cs-back caption">← Work</a>
   <nav class="cs-chap-nav" id="cs-chap-nav">
-    <a class="cs-chap-link" href="#intro" aria-current="false">Overview</a>
-    <a class="cs-chap-link" href="#ch1" aria-current="false">The cascade</a>
-    <a class="cs-chap-link" href="#ch2" aria-current="false">The bigger picture</a>
-    <a class="cs-chap-link" href="#ch3" aria-current="false">What I learned</a>
+    <a class="cs-chap-link caption" href="#intro" aria-current="false">Overview</a>
+    <a class="cs-chap-link caption" href="#ch1" aria-current="false">The cascade</a>
+    <a class="cs-chap-link caption" href="#ch2" aria-current="false">The bigger picture</a>
+    <a class="cs-chap-link caption" href="#ch3" aria-current="false">What I learned</a>
   </nav>
   <div class="pv-inner" role="main">
 
@@ -532,10 +432,10 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
     <div class="hero">
       <div class="hero-body">
         <div>
-          <p class="hero-eyebrow">TurboTax Business Tax</p>
+          <p class="hero-eyebrow label">TurboTax Business Tax</p>
           <h1 class="cs-title">The Product Was Broken Before They Got There</h1>
         </div>
-        <div class="hero-foot">
+        <div class="hero-foot label">
           <span>Role<b>Design Lead</b></span>
           <span>Year<b>2025</b></span>
         </div>
@@ -564,8 +464,8 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       </div>
 
       <div class="cs-chapter" id="ch1">
-        <div class="cs-chapter-label">Chapter 1 &nbsp;·&nbsp; The cascade</div>
-        <div class="cs-chapter-title">The tests that bought time.</div>
+        <div class="cs-chapter-label label">Chapter 1 &nbsp;·&nbsp; The cascade</div>
+        <h2 class="cs-chapter-title">The tests that bought time.</h2>
         <div class="cs-chapter-sub">Four wins. One breakout. One honest loss that led to a structural reframe.</div>
       </div>
 
@@ -591,22 +491,22 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
         <div class="cs-metrics cs-metrics-4">
           <div class="cs-metric win">
             <div class="cs-metric-val win">29,178</div>
-            <div class="cs-metric-lbl">Business Tax Auths</div>
-            <div class="cs-metric-ctx">from 1,548</div>
+            <div class="cs-metric-lbl label">Business Tax Auths</div>
+            <div class="cs-metric-ctx caption">from 1,548</div>
           </div>
           <div class="cs-metric win">
             <div class="cs-metric-val win">4,724</div>
-            <div class="cs-metric-lbl">Business Tax Starts</div>
-            <div class="cs-metric-ctx">from 170</div>
+            <div class="cs-metric-lbl label">Business Tax Starts</div>
+            <div class="cs-metric-ctx caption">from 170</div>
           </div>
           <div class="cs-metric win">
             <div class="cs-metric-val win">$762K</div>
-            <div class="cs-metric-lbl">Franchise Revenue</div>
-            <div class="cs-metric-ctx">from $42K</div>
+            <div class="cs-metric-lbl label">Franchise Revenue</div>
+            <div class="cs-metric-ctx caption">from $42K</div>
           </div>
           <div class="cs-metric win">
             <div class="cs-metric-val win">+66%</div>
-            <div class="cs-metric-lbl">Completion rate</div>
+            <div class="cs-metric-lbl label">Completion rate</div>
           </div>
         </div>
 
@@ -638,7 +538,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
           </div>
           <div class="cs-dist-row">
             <span class="cs-dist-pct">10%</span>
-            <span>"I'm not sure" &nbsp;·&nbsp; 90% of those didn't start</span>
+            <span>"I'm not sure"</span>
             <div class="cs-dist-bar"><div class="cs-dist-bar-fill" style="width:17%"></div></div>
           </div>
           <div class="cs-dist-row">
@@ -662,18 +562,18 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
         <div class="cs-metrics cs-metrics-3">
           <div class="cs-metric win">
             <div class="cs-metric-val win">+10%</div>
-            <div class="cs-metric-lbl">Start rate</div>
-            <div class="cs-metric-ctx">38.65% vs. 35.22% control</div>
+            <div class="cs-metric-lbl label">Start rate</div>
+            <div class="cs-metric-ctx caption">38.65% vs. 35.22% control</div>
           </div>
           <div class="cs-metric win">
             <div class="cs-metric-val win">+24%</div>
-            <div class="cs-metric-lbl">Complete rate</div>
-            <div class="cs-metric-ctx">5.49% vs. 4.41% control</div>
+            <div class="cs-metric-lbl label">Complete rate</div>
+            <div class="cs-metric-ctx caption">5.49% vs. 4.41% control</div>
           </div>
           <div class="cs-metric win">
             <div class="cs-metric-val win">+20%</div>
-            <div class="cs-metric-lbl">Revenue per visitor</div>
-            <div class="cs-metric-ctx">$16.01 vs. $13.30 control</div>
+            <div class="cs-metric-lbl label">Revenue per visitor</div>
+            <div class="cs-metric-ctx caption">$16.01 vs. $13.30 control</div>
           </div>
         </div>
 
@@ -681,8 +581,8 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       </div>
 
       <div class="cs-chapter" id="ch2">
-        <div class="cs-chapter-label">Chapter 2 &nbsp;·&nbsp; The bigger picture</div>
-        <div class="cs-chapter-title">Running two tracks simultaneously.</div>
+        <div class="cs-chapter-label label">Chapter 2 &nbsp;·&nbsp; The bigger picture</div>
+        <h2 class="cs-chapter-title">Running two tracks simultaneously.</h2>
         <div class="cs-chapter-sub">While the tests were moving metrics, a patterns library, a diagnostic, and a product vision were being built in parallel.</div>
       </div>
 
@@ -762,8 +662,8 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       </div>
 
       <div class="cs-chapter" id="ch3">
-        <div class="cs-chapter-label">Chapter 3 &nbsp;·&nbsp; What I learned</div>
-        <div class="cs-chapter-title">Three altitudes. One season.</div>
+        <div class="cs-chapter-label label">Chapter 3 &nbsp;·&nbsp; What I learned</div>
+        <h2 class="cs-chapter-title">Three altitudes. One season.</h2>
         <div class="cs-chapter-sub">Vision, diagnostic, and execution: running in parallel, and connected.</div>
       </div>
 
@@ -771,19 +671,19 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
 
         <div class="cs-altitude-grid">
           <div class="cs-altitude">
-            <div class="cs-altitude-label">Vision</div>
+            <div class="cs-altitude-label label">Vision</div>
             <div class="cs-altitude-title">Complete product redesign</div>
-            <div class="cs-altitude-desc">Principles, provocations, a wayfaring architecture across six customer entry paths, and production-quality comps for every design move. The strategic argument for what this product should become.</div>
+            <div class="cs-altitude-desc caption">Principles, provocations, a wayfaring architecture across six customer entry paths, and production-quality comps for every design move. The strategic argument for what this product should become.</div>
           </div>
           <div class="cs-altitude">
-            <div class="cs-altitude-label">Target state</div>
+            <div class="cs-altitude-label label">Target state</div>
             <div class="cs-altitude-title">Diagnostic + design questions</div>
-            <div class="cs-altitude-desc">Every stage of the customer journey mapped, every friction point named, every question reframed as a design opportunity. The bridge between the vision and the tests.</div>
+            <div class="cs-altitude-desc caption">Every stage of the customer journey mapped, every friction point named, every question reframed as a design opportunity. The bridge between the vision and the tests.</div>
           </div>
           <div class="cs-altitude">
-            <div class="cs-altitude-label">Execution</div>
+            <div class="cs-altitude-label label">Execution</div>
             <div class="cs-altitude-title">Shipped test cascade</div>
-            <div class="cs-altitude-desc">Dual Auth at 2× the control rate, Reductive GTKMB R2 at 10% above control, a patterns library built from January through April, five screen template categories handed off as ready for dev.</div>
+            <div class="cs-altitude-desc caption">Dual Auth at 2× the control rate, Reductive GTKMB R2 at 10% above control, a patterns library built from January through April, five screen template categories handed off as ready for dev.</div>
           </div>
         </div>
 
@@ -796,7 +696,7 @@ html { scroll-behavior: smooth; min-height: 100dvh; background-color: #000000; }
       </div>
 
       <a href="ae-tof.html" class="cs-next">
-        <div class="cs-next-label">Also in this portfolio</div>
+        <div class="cs-next-label label">Also in this portfolio</div>
         <span class="cs-next-title">Activate Experts: reimagining the front door for expert tax help</span><span class="cs-next-arrow" aria-hidden="true">→</span>
       </a>
 

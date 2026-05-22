@@ -7,18 +7,15 @@
   <title>A2 Preview · Matt Kirkpatrick</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Figtree:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Figtree:wght@400;600;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html {
       min-height: 100dvh;
       background-color: #000000;
     }
 
     body {
-      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
       min-height: 100dvh;
       background-color: #000000;
       background-image:
@@ -60,7 +57,7 @@
       background: transparent;
       color: #f4ede2;
       min-height: calc(100vh - 200px);
-      padding: 70px 48px 48px;
+      padding: 20px 80px 48px;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -130,7 +127,7 @@
       align-items: center;
       gap: 10px;
       padding: 10px 12px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 400;
       color: rgba(244,237,226,0.85);
       text-decoration: none;
@@ -138,18 +135,7 @@
       transition: background 150ms, color 150ms;
     }
     .nav-menu-item:hover { background: rgba(255,255,255,0.08); color: #f4ede2; }
-    .nav-menu-email {
-      cursor: default;
-    }
-    .nav-menu-email:hover { background: none; }
-    .nav-menu-email span {
-      flex: 1;
-      font-size: 13px;
-      color: rgba(244,237,226,0.5);
-      font-family: 'JetBrains Mono', monospace;
-      letter-spacing: -0.01em;
-    }
-    .nav-menu-email-link { color: inherit; text-decoration: none; flex: 1; font-size: 13px; font-family: 'JetBrains Mono', monospace; letter-spacing: -0.01em; }
+    .nav-menu-email-link { color: inherit; text-decoration: none; }
     .nav-menu-email-link:hover { text-decoration: underline; }
     .copy-btn {
       background: none;
@@ -179,7 +165,7 @@
     .nav-name {
       font-family: 'Figtree', sans-serif;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 400;
       color: #f4ede2;
       letter-spacing: 0.04em;
     }
@@ -253,21 +239,14 @@
       pointer-events: none;
       transition: opacity 0.42s ease, transform 0.42s ease;
     }
-    .thought-eyebrow {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
+    .thought-eyebrow { color: var(--accent); margin-bottom: 12px; }
     .thought-text {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 15px;
+      font-size: 20px;
       font-weight: 300;
       font-style: italic;
       color: rgba(244,237,226,0.88);
-      line-height: 1.65;
+      line-height: 1.3;
     }
 
     /* ── Hero body ── */
@@ -282,11 +261,7 @@
     }
 
     .hero-eyebrow {
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: #f4ede2;
+      color: var(--c-cream);
       margin-bottom: 24px;
       display: flex;
       align-items: center;
@@ -300,13 +275,9 @@
     }
 
     h1.hero-title {
-      font-family: 'Fraunces', Georgia, serif;
       font-size: 96px;
-      line-height: 1.0;
-      font-weight: 300;
-      letter-spacing: -0.02em;
-      color: #f4ede2;
-      max-width: 900px;
+      color: var(--c-cream);
+      max-width: 1000px;
     }
     h1.hero-title b  { font-weight: 600; color: #fff; }
     h1.hero-title em.acc {
@@ -343,10 +314,6 @@
     }
     .altitude-cell + .altitude-cell { padding-left: 32px; }
     .altitude-eyebrow {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
       color: var(--accent);
       margin-bottom: 12px;
       display: flex;
@@ -361,23 +328,16 @@
     }
     .altitude-heading {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 20px;
       font-weight: 300;
-      color: #1a1a1a;
-      line-height: 1.2;
-      letter-spacing: -0.01em;
+      font-size: 20px;
       margin-bottom: 12px;
     }
-    .altitude-body {
-      font-size: 14px;
-      color: #767676;
-      line-height: 1.7;
-    }
+    .altitude-body { color: var(--c-secondary); }
 
     /* ── Hero breadcrumb ── */
     .hero-breadcrumb {
       margin-top: 24px;
-      font-size: 18px;
+      font-size: 16px;
       letter-spacing: 0.01em;
       text-transform: none;
       color: rgba(244,237,226,1);
@@ -395,33 +355,11 @@
       border-left: 1px solid #e8e8e8;
     }
     .systems-stat:last-child { padding-right: 0; }
-    .systems-num {
-      font-family: 'Fraunces', Georgia, serif;
-      font-size: 36px;
-      font-weight: 300;
-      letter-spacing: -0.025em;
-      color: #1a1a1a;
-      line-height: 1;
-    }
-    .systems-label {
-      margin-top: 6px;
-      font-size: 11px;
-      color: #767676;
-      line-height: 1.4;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
+    .systems-num { font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 36px; }
+    .systems-label { margin-top: 6px; }
 
     /* ── Section headings ── */
-    h2 {
-      font-family: 'Fraunces', Georgia, serif;
-      font-size: 38px;
-      font-weight: 300;
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-      margin-bottom: 20px;
-      color: #1a1a1a;
-    }
+    h2 { font-size: 38px; margin-bottom: 20px; }
 
     /* ── Work ── */
     .work-grid {
@@ -476,8 +414,7 @@
       display: flex;
       align-items: flex-end;
       padding: 24px;
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
+      font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.12em;
       color: rgba(0,0,0,0.35);
@@ -488,8 +425,7 @@
       padding: 60px 18px 18px;
       background: linear-gradient(to top, rgba(20,20,20,0.85), transparent);
       color: #fff;
-      font-family: 'Figtree', sans-serif;
-      font-size: 22px;
+      font-size: 16px;
       letter-spacing: -0.01em;
     }
     .work-problem {
@@ -501,10 +437,6 @@
       font-style: normal;
     }
     .work-overlay .meta {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
       color: var(--accent);
       margin-bottom: 4px;
     }
@@ -515,12 +447,6 @@
       grid-template-columns: 1fr 280px;
       gap: 36px;
       align-items: start;
-    }
-    .about-text p {
-      font-size: 16px;
-      line-height: 1.75;
-      color: #1a1a1a;
-      margin-bottom: 16px;
     }
     .about-text p:last-of-type { margin-bottom: 20px; }
     .portrait {
@@ -534,7 +460,7 @@
     .tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; }
     .about-speaking {
       margin-top: 20px;
-      font-size: 13px;
+      font-size: 14px;
       color: #767676;
       line-height: 1.5;
     }
@@ -567,7 +493,7 @@
       align-items: baseline;
     }
     .exp-company {
-      font-size: 17px;
+      font-size: 16px;
       color: #1a1a1a;
     }
     .exp-right {
@@ -589,32 +515,31 @@
       justify-content: space-between;
       align-items: flex-start;
       gap: 24px;
-      font-size: 13px;
+      font-size: 14px;
       color: #1a1a1a;
       line-height: 1.4;
     }
     .intuit-role-left { flex: 1; }
-    .intuit-role-title { color: #1a1a1a; font-weight: 500; }
+    .intuit-role-title { color: #1a1a1a; }
     .intuit-role-desc {
-      font-size: 12.5px;
+      font-size: 14px;
       color: #767676;
       margin-top: 5px;
       line-height: 1.6;
     }
     .intuit-role-award {
-      font-size: 13px;
+      font-size: 14px;
       color: #1a1a1a;
-      font-weight: 600;
       margin-top: 8px;
     }
     .intuit-role-award-detail {
-      font-size: 13px;
+      font-size: 14px;
       color: #767676;
       margin-top: 2px;
       line-height: 1.5;
     }
     .intuit-role-date {
-      font-size: 11px;
+      font-size: 12px;
       color: #767676;
       white-space: nowrap;
       padding-top: 1px;
@@ -624,13 +549,7 @@
     }
 
     /* Earlier career footnote */
-    .exp-earlier-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: #767676;
-      margin: 24px 0 10px;
-    }
+    .exp-earlier-label { margin: 24px 0 10px; }
     .exp-item-footnote {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -639,10 +558,10 @@
       border-top: 1px solid #f5f5f5;
     }
     .exp-item-footnote:last-child { border-bottom: 1px solid #f5f5f5; }
-    .exp-company-footnote { font-size: 13px; color: #767676; }
+    .exp-company-footnote { font-size: 14px; color: #767676; }
     .exp-right-footnote {
       text-align: right;
-      font-size: 11px;
+      font-size: 12px;
       line-height: 1.4;
       color: #ccc;
     }
@@ -663,6 +582,7 @@
     }
     .footer .mark {
       font-family: 'Fraunces', Georgia, serif;
+      font-weight: 300;
       font-style: italic;
       font-size: 14px;
       color: rgba(244,237,226,0.45);
@@ -675,7 +595,7 @@
 
     /* Fluid hero title — scales from 40px on small mobile to 96px at desktop */
 
-    h2 { font-size: clamp(26px, 3.5vw, 38px); }
+    h2 { font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 20px; }
 
     @media (max-width: 760px) {
       .pv-inner { padding: 6px 0 120px; }
@@ -711,7 +631,7 @@
       .mobile-br { display: block; }
 
       /* Eyebrow: drop the inline rule, let text sit cleanly */
-      .hero-eyebrow { font-size: 10px; letter-spacing: 0.12em; margin-bottom: 18px; display: block; }
+      .hero-eyebrow { margin-bottom: 18px; display: block; }
       .hero-eyebrow::before { display: none; }
 
       /* Nav dot: hide on mobile */
@@ -725,10 +645,8 @@
       .exp-row { grid-template-columns: 1fr; gap: 2px; }
       .exp-right { text-align: left; }
 
-      /* Body text: consolidate to 16px/1.6 across sections */
-      .about-text p { font-size: 16px; line-height: 1.6; }
-      .altitude-body { font-size: 16px; line-height: 1.6; }
-      .intuit-role-desc { font-size: 16px; line-height: 1.6; }
+      /* Body text: slightly looser on mobile */
+      body { line-height: 1.6; }
 
       /* Footer: pull out of fixed positioning on mobile */
       .footer { position: relative; padding: 20px 20px; background: transparent; }
@@ -768,7 +686,7 @@
 
       <div class="hero-body">
         <div>
-          <p class="hero-eyebrow">Principal Product Designer &nbsp;·&nbsp; TurboTax &nbsp;·&nbsp; Intuit</p>
+          <p class="hero-eyebrow label">Principal Product Designer &nbsp;·&nbsp; TurboTax &nbsp;·&nbsp; Intuit</p>
           <h1 class="hero-title">
             Put me on the hardest problem.<br class="mobile-br"> I build the <em class="acc">/strategies</em><br class="mobile-br"> that solve it.
           </h1>
@@ -829,21 +747,21 @@
       <div class="altitude-grid">
 
         <div class="altitude-cell">
-          <div class="altitude-eyebrow">Framing</div>
+          <div class="altitude-eyebrow label">Framing</div>
           <div class="altitude-heading">The real problem is rarely the stated one.</div>
-          <div class="altitude-body">I work upstream of the brief. In Business Tax, the program was optimizing starts. I named the broken architecture causing them. A problem with no owner, no PRD, no prior framing. That reframe changed what got built, not just how it looked.</div>
+          <div class="altitude-body caption">I work upstream of the brief. In Business Tax, the program was optimizing starts. I named the broken architecture causing them. A problem with no owner, no PRD, no prior framing. That reframe changed what got built, not just how it looked.</div>
         </div>
 
         <div class="altitude-cell">
-          <div class="altitude-eyebrow">Systems</div>
+          <div class="altitude-eyebrow label">Systems</div>
           <div class="altitude-heading">Build what the next ten screens inherit from.</div>
-          <div class="altitude-body">Pattern libraries, diagnostics, test cascades designed to compound. I don't design a screen, I build the structure that makes the next ten faster and more coherent. Vision and execution in parallel, not in sequence.</div>
+          <div class="altitude-body caption">Pattern libraries, diagnostics, test cascades designed to compound. I don't design a screen, I build the structure that makes the next ten faster and more coherent. Vision and execution in parallel, not in sequence.</div>
         </div>
 
         <div class="altitude-cell">
-          <div class="altitude-eyebrow">Fluency</div>
+          <div class="altitude-eyebrow label">Fluency</div>
           <div class="altitude-heading">Know what the data is actually saying.</div>
-          <div class="altitude-body">I track business outcomes, not just UX metrics. I read experiment results and know when a finding is real, when it transfers to another surface, and when a number is being asked to mean something it doesn't.</div>
+          <div class="altitude-body caption">I track business outcomes, not just UX metrics. I read experiment results and know when a finding is real, when it transfers to another surface, and when a number is being asked to mean something it doesn't.</div>
         </div>
 
       </div>
@@ -898,7 +816,7 @@
 
       </ul>
 
-      <div class="exp-earlier-label">Earlier career</div>
+      <div class="exp-earlier-label label">Earlier career</div>
       <ul class="exp-list">
         <li class="exp-item-footnote">
           <span class="exp-company-footnote">Mirum Agency</span>
@@ -919,7 +837,7 @@
 
   <!-- ── Footer ── -->
   <div class="thought-card" id="thought-card">
-    <div class="thought-eyebrow" id="thought-date"></div>
+    <div class="thought-eyebrow label" id="thought-date"></div>
     <div class="thought-text" id="thought-text"></div>
   </div>
 

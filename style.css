@@ -1,705 +1,110 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&display=swap');
-
+/* ─────────────────────────────────────
+   Reset
+───────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* ─────────────────────────────────────
+   Color tokens
+───────────────────────────────────── */
 :root {
-  --bg: #262626;
-  --card: #ffffff;
-  --text: #1a1a1a;
-  --text-muted: #666;
-  --radius: 20px;
-  --gap: 8px;
-  --max-width: 720px;
-
-  /* Type scale — matched to Framer */
-  --h1: 48px;
-  --h2: 44px;
-  --h3: 38px;
-  --h4: 24px;
-  --h5: 18px;
-  --h6: 16px;
-  --body-l: 18px;
-  --body-m: 16px;
-  --body-s: 15px;
-  --body-xs: 14px;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: var(--body-m);
-  line-height: 1.6;
-  padding: 8px 8px 60px;
-}
-
-.hero-text,
-.work-card h2,
-.about-text h2,
-.experience-card h2,
-.cs-title,
-.cs-section h3,
-.cs-section h4 {
-  font-family: 'Fraunces', Georgia, serif;
-}
-
-/* ── Layout ── */
-
-.container {
-  max-width: 100%;
-  padding: 0 8px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
-
-.card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 36px 40px;
-}
-
-/* ── Nav ── */
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 40px;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #ccc;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.nav-name {
-  font-size: var(--body-s);
-  font-family: 'Inter', sans-serif;
-  color: var(--text);
-}
-
-/* ── Hero ── */
-
-.hero-card {
-  min-height: calc(100vh - 48px);
-  padding: 40px 60px 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-
-#meteor-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.hero-card .nav,
-.hero-card .hero-text {
-  position: relative;
-  z-index: 1;
-}
-
-.hero-text {
-  font-size: var(--h1);
-  line-height: 1.2;
-  text-align: center;
-  max-width: 520px;
-  margin: 0 auto;
-}
-
-.hero-text strong {
-  font-weight: 700;
-}
-
-/* ── Featured Work ── */
-
-.work-card h2 {
-  font-size: var(--h3);
-  font-weight: 400;
-  line-height: 1.2;
-  margin-bottom: 20px;
-}
-
-.work-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.work-item {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
-  aspect-ratio: 3/4;
-  background: #d0d0d0;
-}
-
-.work-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.work-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #c8c8c8 0%, #b0b0b0 100%);
-}
-
-.work-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 60px 20px 20px;
-  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
-  color: white;
-}
-
-.work-overlay p {
-  font-family: 'Inter', sans-serif;
-  font-size: var(--h4);
-  line-height: 1.4;
-  font-weight: 400;
-}
-
-/* ── About ── */
-
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 40px;
-  align-items: start;
-}
-
-.about-text h2 {
-  font-size: var(--h3);
-  font-weight: 400;
-  line-height: 1.2;
-  margin-bottom: 16px;
-}
-
-.about-text p {
-  font-size: var(--body-m);
-  line-height: 1.7;
-  color: var(--text-muted);
-  margin-bottom: 14px;
-}
-
-.about-text p:last-of-type {
-  margin-bottom: 20px;
-}
-
-.portrait {
-  width: 200px;
-  height: 240px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #d5d5d5;
-  flex-shrink: 0;
-}
-
-.portrait img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.portrait-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(160deg, #c5c5c5, #a8a8a8);
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tag {
-  font-family: 'Inter', sans-serif;
-  font-size: var(--body-xs);
-  line-height: 1.2;
-  padding: 5px 12px;
-  border: 1px solid #d0d0d0;
-  border-radius: 100px;
-  color: var(--text);
-}
-
-/* ── Experience ── */
-
-.experience-card h2 {
-  font-size: var(--h3);
-  font-weight: 400;
-  line-height: 1.2;
-  font-family: 'Fraunces', Georgia, serif;
-  margin-bottom: 28px;
-}
-
-.experience-list {
-  list-style: none;
-}
-
-.experience-item {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: baseline;
-  padding: 14px 0;
-  border-top: 1px solid #eee;
-}
-
-.experience-item:last-child {
-  border-bottom: 1px solid #eee;
-}
-
-.exp-company {
-  font-size: var(--h5);
-  line-height: 1.4;
-}
-
-.exp-right {
-  text-align: right;
-  font-family: 'Inter', sans-serif;
-  font-size: var(--body-xs);
-  line-height: 1.2;
-  color: var(--text-muted);
-}
-
-.exp-role {
-  display: block;
-}
-
-.exp-years {
-  display: block;
+  --c-primary:   #1a1a1a;
+  --c-secondary: #767676;
+  --c-cream:     #f4ede2;
+  --c-teal:      #007A66;
+  --c-forest:    #005C4E;
+  --c-crimson:   #d92638;
 }
 
 /* ─────────────────────────────────────
-   Case Study Pages
+   Base
 ───────────────────────────────────── */
-
-body.cs-page .cs-body {
-  gap: var(--gap);
+body {
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-primary);
 }
 
+/* Fraunces heading base — family, weight, rhythm shared across all levels.
+   Font sizes and any overrides (italic, color, margin) are set per context. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--c-primary);
+}
 
-.cs-back {
+h3, h4, h5, h6 { line-height: normal; }
+
+p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-primary);
+  margin-bottom: 16px;
+}
+p:last-child { margin-bottom: 0; }
+
+strong { font-weight: 600; }
+
+figcaption {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--c-secondary);
+  margin-top: 10px;
+}
+
+/* ─────────────────────────────────────
+   Type tokens
+───────────────────────────────────── */
+
+/* caption — 14px body-weight text; default primary, secondary via .t-secondary */
+.caption {
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--c-primary);
+}
+
+/* label — 12px all-caps utility label; default secondary, overrides via color modifier */
+.label {
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--c-secondary);
+}
+
+/* badge — result/status chip; always forest on teal tint */
+.badge {
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-family: 'Inter', sans-serif;
-  font-size: var(--body-xs);
-  font-weight: 500;
-  color: #fff;
-  text-decoration: none;
-  background: var(--text);
-  padding: 8px 16px;
-  border-radius: 100px;
-  margin-bottom: 24px;
-  width: fit-content;
-}
-
-.cs-back:hover {
-  opacity: 0.75;
-}
-
-.cs-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 100px 48px;
-}
-
-.cs-header .cs-back {
-  align-self: flex-start;
-}
-
-.cs-year {
-  font-family: 'Inter', sans-serif;
-  font-size: var(--body-xs);
-  line-height: 1.2;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.cs-title {
-  font-size: var(--h2);
-  font-weight: 400;
-  line-height: 1.1;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.cs-hero-image {
-  border-radius: 12px;
-  overflow: hidden;
-  aspect-ratio: 16/9;
-  background: #c8c8c8;
-  width: 100%;
-  margin-top: 32px;
-}
-
-.cs-hero-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.cs-image-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
-}
-
-.cs-body {
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-}
-
-.cs-section {
-  font-size: var(--body-l);
-  line-height: 1.6;
-  color: var(--text-muted);
-}
-
-.cs-section h3 {
-  font-size: var(--h3);
-  font-weight: 400;
-  line-height: 1.2;
-  color: var(--text);
-  margin-bottom: 20px;
-}
-
-.cs-section h4 {
-  font-size: var(--h5);
-  font-weight: 700;
-  line-height: 1.4;
-  color: var(--text);
-  margin-bottom: 6px;
-  margin-top: 24px;
-}
-
-.cs-section h4:first-child {
-  margin-top: 0;
-}
-
-.cs-section p {
-  font-size: var(--body-m);
-  margin-bottom: 14px;
-}
-
-.cs-section p:last-child {
-  margin-bottom: 0;
-}
-
-.cs-section ul {
-  padding-left: 20px;
-  margin-bottom: 14px;
-  font-size: var(--body-m);
-}
-
-.cs-section ul li {
-  margin-bottom: 8px;
-}
-
-.cs-inline-image {
-  border-radius: 12px;
-  overflow: hidden;
-  aspect-ratio: 16/9;
-  background: #c8c8c8;
-  margin-top: 8px;
-}
-
-.cs-inline-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* ── Case study components ── */
-
-.cs-stat-row {
-  display: flex;
-  gap: 0;
-  margin-bottom: 32px;
-  padding-bottom: 28px;
-  border-bottom: 1px solid #eee;
-}
-.cs-stat {
-  flex: 1;
-  padding-right: 24px;
-}
-.cs-stat + .cs-stat {
-  padding-left: 24px;
-  border-left: 1px solid #eee;
-}
-.cs-stat-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: #aaa;
-  margin-bottom: 6px;
-}
-.cs-stat-value {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: 22px;
-  font-weight: 400;
-  color: #1a1a1a;
-  line-height: 1.1;
-}
-
-.cs-callout {
-  background: #f5f5f5;
-  border-left: 3px solid #1a1a1a;
-  padding: 18px 24px;
-  border-radius: 0 8px 8px 0;
-  margin: 24px 0;
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: 22px;
-  font-weight: 400;
-  color: #1a1a1a;
-  line-height: 1.3;
-}
-
-.cs-metrics-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 14px;
-}
-.cs-metrics-table th {
-  text-align: left;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: #aaa;
-  padding: 8px 16px 8px 0;
-  border-bottom: 1px solid #eee;
-  font-weight: 500;
-}
-.cs-metrics-table td {
-  padding: 10px 16px 10px 0;
-  border-bottom: 1px solid #f2f2f2;
-  color: #1a1a1a;
-  vertical-align: top;
-  font-variant-numeric: tabular-nums;
-}
-.cs-metrics-table tr:last-child td {
-  border-bottom: none;
-}
-.cs-win {
-  color: #1a7a40;
-  font-weight: 500;
-}
-.cs-itc {
-  font-size: 11px;
-  color: #aaa;
-  margin-left: 3px;
-  font-weight: 400;
-}
-.cs-annotation {
-  display: inline-block;
-  font-style: italic;
-  font-size: 13px;
-  color: #d92638;
-  margin-top: 6px;
-}
-
-.cs-dist {
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.cs-dist-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.cs-dist-pct {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: 18px;
-  font-weight: 400;
-  min-width: 44px;
-  color: #1a1a1a;
-  line-height: 1;
-}
-.cs-dist-pct.large {
-  font-size: 26px;
-  color: #d92638;
-}
-.cs-dist-label {
-  font-size: 14px;
-  color: #444;
-  flex: 1;
-}
-.cs-dist-bar {
-  width: 80px;
-  height: 3px;
-  background: #eee;
-  border-radius: 2px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.cs-dist-bar-fill {
-  height: 100%;
-  background: #ccc;
-  border-radius: 2px;
-}
-.cs-dist-row.dominant .cs-dist-bar-fill {
-  background: #d92638;
-}
-
-.cs-provocation-list {
-  list-style: none;
-  margin: 16px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.cs-provocation-list li {
-  display: flex;
-  gap: 14px;
-  align-items: baseline;
-}
-.cs-provocation-num {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: 15px;
-  color: #aaa;
-  flex-shrink: 0;
-  width: 20px;
-}
-.cs-provocation-text {
-  font-size: 15px;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
   line-height: 1.5;
-  color: #1a1a1a;
-}
-
-.cs-altitude-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 24px;
-}
-.cs-altitude {
-  padding: 20px;
-  background: #f8f8f8;
-  border-radius: 10px;
-}
-.cs-altitude-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: #aaa;
-  margin-bottom: 8px;
-}
-.cs-altitude-title {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: 17px;
-  font-weight: 400;
-  color: #1a1a1a;
-  margin-bottom: 8px;
-  line-height: 1.2;
-}
-.cs-altitude-desc {
-  font-size: 13px;
-  color: #666;
-  line-height: 1.55;
+  color: var(--c-forest);
+  background: rgba(0, 122, 102, 0.10);
+  border: 1px solid rgba(0, 122, 102, 0.25);
+  border-radius: 6px;
+  padding: 6px 12px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 /* ─────────────────────────────────────
-   Responsive
+   Color modifiers
 ───────────────────────────────────── */
-
-@media (max-width: 760px) {
-  body {
-    padding: 12px 10px 48px;
-  }
-
-  .card {
-    padding: 28px 24px;
-  }
-
-  .hero-card {
-    min-height: 85vh;
-    padding: 32px 24px 60px;
-  }
-
-  .hero-text {
-    font-size: 28px;
-  }
-
-  .work-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .work-item {
-    aspect-ratio: 4/3;
-  }
-
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .portrait {
-    width: 100%;
-    height: 240px;
-    order: -1;
-  }
-
-  .cs-header {
-    padding: 32px 24px 28px;
-  }
-
-  .cs-title {
-    font-size: 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-text {
-    font-size: 24px;
-  }
-
-  .experience-item {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-
-  .exp-right {
-    text-align: left;
-  }
-}
+.t-primary   { color: var(--c-primary); }
+.t-secondary { color: var(--c-secondary); }
+.t-cream     { color: var(--c-cream); }
+.t-teal      { color: var(--c-teal); }
+.t-forest    { color: var(--c-forest); }
+.t-crimson   { color: var(--c-crimson); }
