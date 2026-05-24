@@ -28,7 +28,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 8px 8px 24px;
+      padding: 8px 12px 24px;
       position: relative;
       z-index: 1;
     }
@@ -100,7 +100,7 @@
       background: rgba(10,10,10,0.65);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 100px;
       padding: 8px 16px;
       transition: color 200ms, background 200ms, border-color 200ms;
@@ -167,7 +167,7 @@
 
     h4 { font-size: 20px; margin: 36px 0 12px; }
 
-    .cs-result { margin: 32px 0 12px; }
+    .cs-result { margin: 32px 0 12px; display: flex; align-items: center; gap: 10px; }
     .cs-result::before {
       content: '';
       width: 6px;
@@ -487,7 +487,7 @@
     <a class="cs-chap-link caption" href="#ch4" aria-current="false">Strategy</a>
     <a class="cs-chap-link caption" href="#ch5" aria-current="false">Outcomes</a>
   </nav>
-  <div class="pv-inner" role="main" style="padding: 8px 12px 24px">
+  <div class="pv-inner" role="main">
 
     <div class="hero" style="min-height: 0">
       <div class="hero-body" style="gap: 8px">
@@ -551,8 +551,6 @@
           <figcaption>13+ AE page templates.</figcaption>
         </figure>
 
-        <div class="cs-callout">Before we could optimize the front door, we needed to understand what happened after customers walked through it. What we found changed how we thought about everything.</div>
-
         <h3>The goal was not to persuade. It was to not break the decision already forming.</h3>
         <p>Our target customer wants human expertise with digital speed. They've already decided they want a tax expert. They're not comparison shopping. They're looking for confirmation they're in the right place.</p>
         <p>The page serves two personas at once: the delegator seeking validation that the right expert is available, and the autonomous shopper seeking agency over how to proceed. Every design decision was made in service of that dual psychology.</p>
@@ -590,7 +588,6 @@
         <p><strong>02 · A dead end with no exit.</strong> In certain post-auth paths, there was no self-service exit. Users who entered had no way forward without an expert manually intervening. A critical failure invisible from the TOF.</p>
         <p><strong>03 · Time to start (T2S) as a structurally composite metric.</strong> Starts are captured far downstream, across experiences owned by multiple teams. Optimizing a TOF CTA for T2S alone is structurally flawed. The metric is real. The attribution is not direct. That finding restructured how every test hypothesis that followed was framed.</p>
 
-        <div class="cs-callout">The program had been optimizing against a metric it didn't fully control. No one had named that. Naming it changed the test strategy.</div>
       </div>
 
       <div class="cs-chapter" id="ch3">
@@ -667,8 +664,6 @@
           </div>
         </div>
 
-        <div class="cs-callout">There is no single winning CTA strategy. There are two tools for two business objectives.</div>
-
       <div class="cs-section">
         <h3>Test 5012: Localization</h3>
         <p>The assumption: local content plus Match should be additive. If customers respond to expertise, they respond more when that expertise feels like it belongs to their specific market.</p>
@@ -692,7 +687,7 @@
           </div>
         </div>
 
-        <div class="cs-callout">On the storefront, Match works because the customer arrived with expert intent already formed. On the category landing page (CLP), the customer is still orienting. Match asks for a commitment the page has not yet earned.</div>
+        <p>On the storefront, Match works because the customer arrived with expert intent already formed. On a category landing page, the customer is still orienting. Match asks for a commitment the page has not yet earned.</p>
       </div>
 
       <div class="cs-section">
@@ -791,7 +786,6 @@
           </div>
         </div>
 
-        <div class="cs-callout">Match held when the condition it was designed for was exactly what the surface faced.</div>
       </div>
 
       <div class="cs-section">
@@ -844,7 +838,6 @@
           </div>
         </div>
 
-        <div class="cs-callout">The framework's job was never to bring more people in. It was to convert the right people once they were here.</div>
       </div>
 
       <div class="cs-subsection-label label">Principles</div>
@@ -889,8 +882,6 @@
             </tr>
           </tbody>
         </table>
-
-        <div class="cs-callout">Front-loading human expertise is not a feature. It is a trust architecture.</div>
 
         <h3>Three principles that came out of the season</h3>
         <ul class="cs-provocation-list">
@@ -982,14 +973,10 @@
 
   <footer class="footer">
     <span>© 2026 Matt Kirkpatrick</span>
-    <span class="footer-email">
-      m.k.kirkpatrick@icloud.com
-      <button class="copy-btn" data-copy="m.k.kirkpatrick@icloud.com" title="Copy email">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
-          <path d="M2.5 9.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-        </svg>
-      </button>
+    <span class="footer-links">
+      <a href="resume.html" class="footer-link" target="_blank">Resume</a>
+      <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="footer-link" target="_blank">LinkedIn</a>
+      <a href="mailto:m.k.kirkpatrick@icloud.com" class="footer-link">Email →</a>
     </span>
   </footer>
 
