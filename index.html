@@ -79,67 +79,50 @@
     .nav {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       position: fixed;
       top: 16px;
       left: 16px;
       right: 16px;
       z-index: 100;
     }
-    .nav-pill {
+    .nav-identity {
       display: flex;
       align-items: center;
       gap: 8px;
-      cursor: pointer;
       padding: 7px 16px 7px 10px;
       border-radius: 100px;
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(10,10,10,0.65);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      transition: background 220ms, border-color 220ms;
-      text-align: left;
     }
-    .nav-pill:focus { outline: none; }
-    .nav-pill:focus-visible { outline: 2px solid rgba(255,255,255,0.35); outline-offset: 3px; }
-    .nav-pill:hover {
-      background: rgba(10,10,10,0.85);
-      border-color: rgba(255,255,255,0.14);
-    }
-    .nav-pill:hover .nav-name { color: #ffffff; }
-    .nav-menu {
-      position: fixed;
-      top: 66px;
-      left: 16px;
-      background: rgba(10,10,10,0.82);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      padding: 8px;
-      min-width: 220px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-8px);
-      transition: opacity 0.42s ease, transform 0.42s ease;
-    }
-    .nav-menu-item {
+    .nav-links {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
+      gap: 2px;
+      padding: 3px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,10,10,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-family: 'Figtree', sans-serif;
       font-size: 14px;
       font-weight: 400;
-      color: rgba(244,237,226,0.85);
+      color: rgba(244,237,226,0.72);
       text-decoration: none;
-      border-radius: 6px;
-      transition: background 150ms, color 150ms;
+      transition: color 150ms, background 150ms;
     }
-    .nav-menu-item:hover { background: rgba(255,255,255,0.08); color: #f4ede2; }
-    .nav-menu-email-link { color: inherit; text-decoration: none; }
-    .nav-menu-email-link:hover { text-decoration: underline; }
+    .nav-link:hover { color: #f4ede2; background: rgba(255,255,255,0.1); }
+    .nav-link:focus { outline: none; }
+    .nav-link:focus-visible { outline: 2px solid rgba(255,255,255,0.35); outline-offset: 3px; }
     .copy-btn {
       background: none;
       border: none;
@@ -262,6 +245,24 @@
       position: relative;
       z-index: 2;
     }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 40px;
+      padding: 10px 22px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.15);
+      font-family: 'Figtree', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(244,237,226,0.72);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 150ms, border-color 150ms, background 150ms;
+      align-self: flex-start;
+    }
+    .hero-cta:hover { color: #f4ede2; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.06); }
 
     .hero-eyebrow {
       color: var(--c-cream);
@@ -748,8 +749,9 @@
       .hero-eyebrow { margin-bottom: 18px; display: block; }
       .hero-eyebrow::before { display: none; }
 
-      /* Nav dot: hide on mobile */
+      /* Nav dot + nav links: hide on mobile */
       .nav-dot { display: none; }
+      .nav-links { display: none; }
 
       /* Experience: stack date above content */
       .intuit-role { flex-direction: column-reverse; gap: 2px; }
@@ -782,25 +784,17 @@
   </script>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
-  <div class="nav" id="nav" role="banner">
-    <button class="nav-pill" id="nav-pill" aria-expanded="false" aria-controls="nav-menu">
+  <nav class="nav" id="nav">
+    <div class="nav-identity">
       <div class="avatar"><img src="assets/portrait.jpg" alt="" width="513" height="513"></div>
       <span class="nav-name">Matt Kirkpatrick</span>
-    </button>
-    <div class="nav-menu" id="nav-menu" role="menu">
-      <a href="resume.html" class="nav-menu-item" target="_blank">Resume</a>
-      <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="nav-menu-item" target="_blank">LinkedIn</a>
-      <div class="nav-menu-item nav-menu-email">
-        <a href="mailto:m.k.kirkpatrick@icloud.com" class="nav-menu-email-link">m.k.kirkpatrick@icloud.com</a>
-        <button class="copy-btn" data-copy="m.k.kirkpatrick@icloud.com" title="Copy email">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
-            <path d="M2.5 9.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
     </div>
-  </div>
+    <div class="nav-links">
+      <a href="resume.html" class="nav-link" target="_blank">Resume</a>
+      <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="nav-link" target="_blank">LinkedIn</a>
+      <a href="mailto:m.k.kirkpatrick@icloud.com" class="nav-link">Get in touch</a>
+    </div>
+  </nav>
 
   <div class="pv-inner" role="main">
 
@@ -814,6 +808,7 @@
             Put me on the hardest problem.<br class="mobile-br"> I build the <em class="acc">/strategies</em><br class="mobile-br"> that solve it.
           </h1>
         </div>
+        <a href="mailto:m.k.kirkpatrick@icloud.com" class="hero-cta">Get in touch →</a>
       </div>
     </div>
 
@@ -1398,50 +1393,11 @@
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
   (function () {
-    var nav     = document.getElementById('nav');
-    var pill    = document.getElementById('nav-pill');
-    var menu    = document.getElementById('nav-menu');
-    var open    = false;
-
-    // Scroll → pill background
+    var nav = document.getElementById('nav');
     window.addEventListener('scroll', function () {
       if (window.scrollY > 40) nav.classList.add('scrolled');
       else nav.classList.remove('scrolled');
     }, { passive: true });
-
-    function openMenu() {
-      open = true;
-      pill.setAttribute('aria-expanded', 'true');
-      menu.style.transition = 'opacity 0.42s ease, transform 0.42s ease';
-      menu.style.opacity = '1';
-      menu.style.transform = 'translateY(0)';
-      menu.style.pointerEvents = 'auto';
-      var firstItem = document.querySelector('#nav-menu .nav-menu-item');
-      if (firstItem) firstItem.focus();
-    }
-
-    function closeMenu() {
-      open = false;
-      pill.setAttribute('aria-expanded', 'false');
-      menu.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
-      menu.style.opacity = '0';
-      menu.style.transform = 'translateY(-8px)';
-      menu.style.pointerEvents = 'none';
-      pill.focus();
-    }
-
-    // Toggle menu
-    pill.addEventListener('click', function (e) {
-      e.stopPropagation();
-      open ? closeMenu() : openMenu();
-    });
-
-    // Close on outside click
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('.copy-btn')) closeMenu();
-    });
-
-    menu.addEventListener('click', function (e) { e.stopPropagation(); });
   })();
   </script>
   <script>

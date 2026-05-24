@@ -110,6 +110,37 @@
     .cs-back.on-light { color: rgba(0,0,0,0.5); background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
     .cs-back.on-light:hover { color: rgba(0,0,0,0.85); background: rgba(255,255,255,0.96); }
 
+    .cs-nav-links {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 3px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,10,10,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .cs-nav-link {
+      display: flex;
+      align-items: center;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-family: 'Figtree', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(244,237,226,0.72);
+      text-decoration: none;
+      transition: color 150ms, background 150ms;
+    }
+    .cs-nav-link:hover { color: #f4ede2; background: rgba(255,255,255,0.1); }
+    .cs-nav-link:focus { outline: none; }
+    .cs-nav-link:focus-visible { outline: 2px solid rgba(255,255,255,0.35); outline-offset: 3px; }
+
     .hero-body {
       flex: 1;
       display: flex;
@@ -462,6 +493,7 @@
     }
 
     @media (max-width: 520px) {
+      .cs-nav-links { display: none; }
       .pv-inner { padding: 4px 0 24px; }
       .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
@@ -485,6 +517,11 @@
 <body>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
   <a href="index.html" class="cs-back caption">← Work</a>
+  <div class="cs-nav-links">
+    <a href="resume.html" class="cs-nav-link" target="_blank">Resume</a>
+    <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="cs-nav-link" target="_blank">LinkedIn</a>
+    <a href="mailto:m.k.kirkpatrick@icloud.com" class="cs-nav-link">Get in touch</a>
+  </div>
   <nav class="cs-chap-nav" id="cs-chap-nav">
     <a class="cs-chap-link caption" href="#intro" aria-current="false">Overview</a>
     <a class="cs-chap-link caption" href="#ch1" aria-current="false">The cascade</a>
