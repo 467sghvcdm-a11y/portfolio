@@ -19,11 +19,12 @@
       min-height: 100dvh;
       background-color: #000000;
       background-image:
-        radial-gradient(ellipse at 85% 15%, rgba(110,35,155,0.50) 0%, transparent 55%),
-        radial-gradient(ellipse at 90% 85%, rgba(185,22,38,0.44) 0%, transparent 50%),
-        radial-gradient(ellipse at 10% 50%, rgba(70,18,110,0.28) 0%, transparent 46%);
+        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
       background-size: 100% 100dvh;
       background-repeat: no-repeat;
+      background-attachment: fixed;
       --accent: #d92638;
       --card-radius: 20px;
       --card-h: max(40px, calc((100vw - 16px - 1000px) / 2));
@@ -33,7 +34,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 8px 8px 120px;
+      padding: 8px 8px 24px;
       position: relative;
       z-index: 1;
     }
@@ -280,6 +281,7 @@
       max-width: 1000px;
     }
     h1.hero-title b  { font-weight: 600; color: #fff; }
+    /* ── Accent voice: code-tag (default) ── */
     h1.hero-title em.acc {
       font-style: normal;
       font-family: 'JetBrains Mono', monospace;
@@ -295,6 +297,46 @@
       vertical-align: middle;
       position: relative;
       top: -2px;
+    }
+
+    /* ── Accent voice: italic (editorial) ── */
+    body[data-acc="italic"] h1.hero-title em.acc {
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1em;
+      color: var(--accent);
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      top: 0;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Accent voice: bracket (technical) ── */
+    body[data-acc="bracket"] h1.hero-title em.acc {
+      font-family: 'JetBrains Mono', monospace;
+      font-style: normal;
+      font-size: 0.72em;
+      font-weight: 400;
+      color: var(--accent);
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      top: -4px;
+      letter-spacing: 0.02em;
+    }
+    body[data-acc="bracket"] h1.hero-title em.acc::before {
+      content: '[';
+      opacity: 0.55;
+      margin-right: 1px;
+    }
+    body[data-acc="bracket"] h1.hero-title em.acc::after {
+      content: ']';
+      opacity: 0.55;
+      margin-left: 1px;
     }
 
     /* ── Altitude grid ── */
@@ -332,7 +374,7 @@
       font-size: 20px;
       margin-bottom: 12px;
     }
-    .altitude-body { color: var(--c-secondary); }
+    .altitude-body { /* inherits body 17px / primary */ }
 
     /* ── Hero breadcrumb ── */
     .hero-breadcrumb {
@@ -378,35 +420,19 @@
       background: linear-gradient(135deg, #c8c8c8 0%, #b0b0b0 100%);
       margin: 8px;
       box-shadow: 0 0 0 6px rgba(255,255,255,0.85);
-      transition: box-shadow 150ms ease;
-      transform-style: preserve-3d;
-      transform-origin: center center;
-      will-change: transform;
+      transition: box-shadow 220ms ease, transform 220ms ease;
     }
-    @media (hover: hover) { .work-item:hover { cursor: none; } }
-    .work-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .work-cursor {
-      position: fixed;
-      background: rgba(10,10,10,0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: rgba(244,237,226,0.6);
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      padding: 7px 16px;
-      border-radius: 100px;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.85);
-      transition: opacity 180ms ease, transform 180ms ease;
-      white-space: nowrap;
+    .work-item img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 600ms cubic-bezier(0.2, 0.6, 0.2, 1);
     }
-    .work-cursor.visible {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
+    @media (hover: hover) {
+      .work-item:hover {
+        box-shadow: 0 0 0 6px rgba(255,255,255,0.85), 0 20px 44px rgba(0,0,0,0.22);
+      }
+      .work-item:hover img { transform: scale(1.03); }
+      .work-item:active { transform: scale(0.99); transition-duration: 80ms; }
     }
     .work-placeholder {
       width: 100%;
@@ -422,16 +448,16 @@
     .work-overlay {
       position: absolute;
       inset: auto 0 0 0;
-      padding: 60px 18px 18px;
-      background: linear-gradient(to top, rgba(20,20,20,0.85), transparent);
+      padding: 64px 18px 18px;
+      background: linear-gradient(to top, rgba(15,15,15,0.92), rgba(15,15,15,0.4) 55%, transparent);
       color: #fff;
       font-size: 16px;
       letter-spacing: -0.01em;
     }
     .work-problem {
       font-family: 'Figtree', sans-serif;
-      font-size: 12px;
-      line-height: 1.5;
+      font-size: 13px;
+      line-height: 1.55;
       color: rgba(255,255,255,1);
       margin-bottom: 8px;
       font-style: normal;
@@ -449,6 +475,7 @@
       align-items: start;
     }
     .about-text p:last-of-type { margin-bottom: 20px; }
+    .about-text { max-width: 680px; }
     .portrait {
       width: 280px;
       height: 280px;
@@ -457,17 +484,15 @@
       overflow: hidden;
       box-shadow: 0 0 0 6px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.1);
     }
+    .portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; }
     .about-speaking {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #767676;
-      line-height: 1.5;
-    }
-    .about-speaking-label {
-      font-weight: 600;
-      color: #1a1a1a;
-      margin-right: 8px;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--c-rule, rgba(255,255,255,0.08));
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     .tag {
       font-size: 12px;
@@ -479,7 +504,7 @@
     }
 
     /* ── Experience ── */
-    .exp-list { list-style: none; }
+    .exp-list { list-style: none; max-width: 680px; }
 
     .exp-item {
       padding: 16px 0;
@@ -488,90 +513,52 @@
     .exp-item:last-child { border-bottom: 1px solid #eee; }
 
     .exp-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: baseline;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .exp-company {
-      font-size: 16px;
-      color: #1a1a1a;
-    }
-    .exp-right {
-      text-align: right;
-      font-size: 12px;
-      line-height: 1.5;
-      color: #666;
-    }
+    .exp-company { /* inherits body 17px / primary */ }
+    .exp-right { /* uses .caption .t-secondary ramp tokens in markup */ }
 
     /* Intuit sub-roles */
     .intuit-roles {
       margin-top: 14px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 40px;
     }
     .intuit-role {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 24px;
-      font-size: 14px;
-      color: #1a1a1a;
-      line-height: 1.4;
+      flex-direction: column-reverse;
+      gap: 6px;
     }
     .intuit-role-left { flex: 1; }
-    .intuit-role-title { color: #1a1a1a; }
-    .intuit-role-desc {
-      font-size: 14px;
-      color: #767676;
+    .intuit-role-title { /* uses .caption .t-primary ramp tokens in markup */ }
+    .intuit-role-desc { /* inherits body */
       margin-top: 5px;
-      line-height: 1.6;
     }
-    .intuit-role-award {
-      font-size: 14px;
-      color: #1a1a1a;
+    .intuit-role-award { /* uses .caption ramp token in markup */
       margin-top: 8px;
     }
-    .intuit-role-award-detail {
-      font-size: 14px;
-      color: #767676;
+    .intuit-role-award-detail { /* uses .caption .t-secondary ramp tokens in markup */
       margin-top: 2px;
-      line-height: 1.5;
     }
-    .intuit-role-date {
-      font-size: 12px;
-      color: #767676;
-      white-space: nowrap;
-      padding-top: 1px;
-      width: 144px;
-      flex-shrink: 0;
-      text-align: right;
-    }
+    .intuit-role-date { /* uses .caption .t-secondary ramp tokens in markup */ }
 
     /* Earlier career footnote */
     .exp-earlier-label { margin: 24px 0 10px; }
     .exp-item-footnote {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: baseline;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
       padding: 9px 0;
       border-top: 1px solid #f5f5f5;
     }
     .exp-item-footnote:last-child { border-bottom: 1px solid #f5f5f5; }
-    .exp-company-footnote { font-size: 14px; color: #767676; }
-    .exp-right-footnote {
-      text-align: right;
-      font-size: 12px;
-      line-height: 1.4;
-      color: #ccc;
-    }
 
     /* ── Footer ── */
     .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      position: relative;
       z-index: 10;
       display: flex;
       justify-content: space-between;
@@ -579,13 +566,6 @@
       padding: 32px 48px;
       font-size: 12px;
       color: rgba(244,237,226,0.55);
-    }
-    .footer .mark {
-      font-family: 'Fraunces', Georgia, serif;
-      font-weight: 300;
-      font-style: italic;
-      font-size: 14px;
-      color: rgba(244,237,226,0.45);
     }
 
     /* ── Responsive ── */
@@ -598,7 +578,7 @@
     h2 { font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 20px; }
 
     @media (max-width: 760px) {
-      .pv-inner { padding: 6px 0 120px; }
+      .pv-inner { padding: 6px 0 24px; }
       .card { --card-h: 32px; padding: 56px var(--card-h); box-shadow: none; }
       .pv-inner > .card:first-child { box-shadow: 0 -1px 0 rgba(255,255,255,0.1); border-radius: 0; }
 
@@ -616,6 +596,138 @@
       .altitude-cell { padding: 28px 0; border-right: none; border-bottom: 1px solid #eee; }
       .altitude-cell:last-child { border-bottom: none; padding-bottom: 0; }
       .altitude-cell + .altitude-cell { padding-left: 0; }
+    }
+
+    /* ──────────────────────────────────────
+       Tweaks panel
+    ────────────────────────────────────── */
+    .twk-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 64px;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px 9px 12px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(10,10,10,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: rgba(244,237,226,0.85);
+      font-family: 'Figtree', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 220ms, border-color 220ms, color 220ms, opacity 240ms ease, transform 240ms ease;
+    }
+    .twk-btn:hover { background: rgba(10,10,10,0.85); border-color: rgba(255,255,255,0.14); color: #f4ede2; }
+    .twk-btn-glyph {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px 1px rgba(180,40,30,0.45);
+    }
+    .twk-btn.is-open { opacity: 0; pointer-events: none; transform: translateY(8px); }
+
+    .twk-panel {
+      position: fixed;
+      right: 20px;
+      bottom: 64px;
+      z-index: 9999;
+      width: 320px;
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 18px 18px 16px;
+      color: rgba(244,237,226,0.88);
+      font-family: 'Figtree', sans-serif;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 0.32s ease, transform 0.32s ease;
+    }
+    .twk-panel.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    .twk-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .twk-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 18px;
+      color: #f4ede2;
+      letter-spacing: -0.01em;
+    }
+    .twk-x {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      margin: -6px;
+      border-radius: 4px;
+      color: rgba(244,237,226,0.5);
+      display: flex;
+      align-items: center;
+      transition: color 150ms, background 150ms;
+    }
+    .twk-x:hover { color: rgba(244,237,226,0.95); background: rgba(255,255,255,0.06); }
+
+    .twk-row { padding: 10px 0; }
+    .twk-row + .twk-row { border-top: 1px solid rgba(255,255,255,0.06); }
+    .twk-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(244,237,226,0.45);
+      margin-bottom: 9px;
+      display: block;
+    }
+    .twk-seg {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 3px;
+    }
+    .twk-seg button {
+      background: transparent;
+      border: none;
+      color: rgba(244,237,226,0.62);
+      font-family: 'Figtree', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      padding: 8px 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 180ms, color 180ms;
+    }
+    .twk-seg button:hover { color: rgba(244,237,226,0.92); }
+    .twk-seg button.active {
+      background: rgba(244,237,226,0.92);
+      color: #141414;
+      font-weight: 500;
+    }
+    .twk-seg button.active:hover { color: #141414; }
+
+    @media (max-width: 520px) {
+      .twk-btn { right: 12px; bottom: 80px; }
+      .twk-panel { right: 12px; left: 12px; bottom: 80px; width: auto; }
     }
 
     @media (max-width: 520px) {
@@ -650,18 +762,27 @@
 
       /* Footer: pull out of fixed positioning on mobile */
       .footer { position: relative; padding: 20px 20px; background: transparent; }
-      .footer .mark { display: none; }
     }
 
   </style>
 </head>
 <body>
+  <script>
+    // ── Tweaks bootstrap (must run before canvas/gradient IIFEs) ──
+    window.__TWEAKS = /*EDITMODE-BEGIN*/{
+      "mood": "aurora",
+      "acc": "code",
+      "atmos": "meteors"
+    }/*EDITMODE-END*/;
+    document.body.dataset.mood  = window.__TWEAKS.mood;
+    document.body.dataset.acc   = window.__TWEAKS.acc;
+    document.body.dataset.atmos = window.__TWEAKS.atmos;
+  </script>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
-  <div class="work-cursor" id="work-cursor">↗ View</div>
   <div class="nav" id="nav" role="banner">
     <button class="nav-pill" id="nav-pill" aria-expanded="false" aria-controls="nav-menu">
-      <div class="avatar"><img src="assets/portrait.jpg" alt=""></div>
+      <div class="avatar"><img src="assets/portrait.jpg" alt="" width="513" height="513"></div>
       <span class="nav-name">Matt Kirkpatrick</span>
     </button>
     <div class="nav-menu" id="nav-menu" role="menu">
@@ -679,10 +800,10 @@
     </div>
   </div>
 
-  <div class="pv-inner" role="main">
+  <div class="pv-inner" role="main" style="gap: 24px; padding: 8px 11px 24px 12px">
 
     <!-- ── Hero ── -->
-    <div class="hero">
+    <div class="hero" style="margin: -8px -8px 0px">
 
       <div class="hero-body">
         <div>
@@ -699,14 +820,14 @@
       <h2>Work</h2>
       <div class="work-grid">
         <a href="business-tax.html" class="work-item">
-          <img src="assets/work-business-tax.jpg" alt="Business Tax">
+          <img src="assets/work-business-tax.jpg" alt="Business Tax" width="2048" height="784" loading="lazy" decoding="async">
           <div class="work-overlay">
             <div class="work-problem">How do you grow a product category most customers don't know exists?</div>
             Business Tax
           </div>
         </a>
         <a href="ae-tof.html" class="work-item">
-          <img src="assets/work-ae-tof.jpg" alt="Activate Experts TOF">
+          <img src="assets/work-ae-tof.jpg" alt="Activate Experts TOF" width="2127" height="824" loading="lazy" decoding="async">
           <div class="work-overlay">
             <div class="work-problem">How do you build a front door that filters for the right customer, not just any customer?</div>
             Activate Experts
@@ -723,21 +844,13 @@
           <p>I've spent the last decade at Intuit building things that didn't have templates. TurboTax Full Service didn't exist when I joined. I helped design it from scratch alongside tax experts, service designers, operations, and delivery teams. I then ran design strategy for TurboTax Business, and I now own top-of-funnel acquisition for Assisted Tax: the surfaces that determine whether the right customer takes the first step toward filing with an expert.</p>
           <p>I work at the intersection of design, strategy, and data, not as separate modes I shift between, but as concurrent tracks. I build frameworks that hold up under scrutiny, run controlled experiments, and push back when the data is being interpreted wrong. I can design the pixel, read the experiment result, and explain why a finding from one surface doesn't transfer to another.</p>
           <p>AI is part of how I work every day. I use it to pressure-test ideas, accelerate synthesis, and sharpen my thinking before it goes into a room. Designers who aren't using these tools yet are leaving capability on the table.</p>
-          <ul class="tags" aria-label="Skills">
-            <li class="tag">Product design</li>
-            <li class="tag">AI experience strategy</li>
-            <li class="tag">Design systems</li>
-            <li class="tag">0→1</li>
-            <li class="tag">Design strategy</li>
-            <li class="tag">Data-informed design</li>
-            <li class="tag">Cross-functional leadership</li>
-          </ul>
           <div class="about-speaking">
-            <span class="about-speaking-label">Speaking</span>
-            UX Speakeasy San Diego &nbsp;·&nbsp; How TurboTax reimagined the future of tax help &nbsp;·&nbsp; Apr 2026
+            <span class="label">Recent talk</span>
+            <span>How TurboTax reimagined the future of tax help</span>
+            <span class="caption t-secondary">UX Speakeasy San Diego · Apr 2026</span>
           </div>
         </div>
-        <div class="portrait"><img src="assets/portrait.jpg" alt="Matt Kirkpatrick" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="portrait"><img src="assets/portrait.jpg" alt="Matt Kirkpatrick" width="513" height="513" loading="lazy" decoding="async"></div>
       </div>
     </div>
 
@@ -749,19 +862,19 @@
         <div class="altitude-cell">
           <div class="altitude-eyebrow label">Framing</div>
           <div class="altitude-heading">The real problem is rarely the stated one.</div>
-          <div class="altitude-body caption">I work upstream of the brief. In Business Tax, the program was optimizing starts. I named the broken architecture causing them. A problem with no owner, no PRD, no prior framing. That reframe changed what got built, not just how it looked.</div>
+          <div class="altitude-body">I work upstream of the brief. In Business Tax, the program was optimizing starts. I named the broken architecture causing them. A problem with no owner, no PRD, no prior framing. That reframe changed what got built, not just how it looked.</div>
         </div>
 
         <div class="altitude-cell">
           <div class="altitude-eyebrow label">Systems</div>
           <div class="altitude-heading">Build what the next ten screens inherit from.</div>
-          <div class="altitude-body caption">Pattern libraries, diagnostics, test cascades designed to compound. I don't design a screen, I build the structure that makes the next ten faster and more coherent. Vision and execution in parallel, not in sequence.</div>
+          <div class="altitude-body">Pattern libraries, diagnostics, test cascades designed to compound. I don't design a screen, I build the structure that makes the next ten faster and more coherent. Vision and execution in parallel, not in sequence.</div>
         </div>
 
         <div class="altitude-cell">
           <div class="altitude-eyebrow label">Fluency</div>
           <div class="altitude-heading">Know what the data is actually saying.</div>
-          <div class="altitude-body caption">I track business outcomes, not just UX metrics. I read experiment results and know when a finding is real, when it transfers to another surface, and when a number is being asked to mean something it doesn't.</div>
+          <div class="altitude-body">I track business outcomes, not just UX metrics. I read experiment results and know when a finding is real, when it transfers to another surface, and when a number is being asked to mean something it doesn't.</div>
         </div>
 
       </div>
@@ -775,7 +888,7 @@
         <li class="exp-item">
           <div class="exp-row">
             <span class="exp-company">Intuit</span>
-            <div class="exp-right">
+            <div class="exp-right caption t-secondary">
               <span>Principal Product Designer</span><br>
               <span>2017—Today &nbsp;·&nbsp; 8+ yrs</span>
             </div>
@@ -783,33 +896,33 @@
           <div class="intuit-roles">
             <div class="intuit-role">
               <div class="intuit-role-left">
-                <div class="intuit-role-title">T6 &nbsp;·&nbsp; Activate Experts, AI-assisted acquisition strategy</div>
+                <div class="intuit-role-title caption">T6 &nbsp;·&nbsp; Activate Experts, AI-assisted acquisition strategy</div>
                 <div class="intuit-role-desc">I own the acquisition strategy and design for Assisted Tax entry points: organic, paid, storefront, and expert profile surfaces. Equal parts design and analysis. Central finding: not all CTAs work the same way on all surfaces. Some filter for the right customer. Others drive volume. Deploying the wrong one costs in both directions.</div>
               </div>
-              <div class="intuit-role-date">Aug 2025—Today</div>
+              <div class="intuit-role-date caption t-secondary">Aug 2025—Today</div>
             </div>
             <div class="intuit-role">
               <div class="intuit-role-left">
-                <div class="intuit-role-title">T6 &nbsp;·&nbsp; TurboTax Business, sole proprietor top-of-funnel</div>
+                <div class="intuit-role-title caption">T6 &nbsp;·&nbsp; TurboTax Business, sole proprietor top-of-funnel</div>
                 <div class="intuit-role-desc">Strategic design lead on TurboTax Business, focused on the sole proprietor top-of-funnel. My read: the program's starts problem was a symptom. The product had been built around internal org structure, not around how the customer actually files. A four-test cascade shipped across the season. Breakout win: business tax revenue lifting ~18x in the affected cohort.</div>
               </div>
-              <div class="intuit-role-date">Dec 2024—Aug 2025</div>
+              <div class="intuit-role-date caption t-secondary">Dec 2024—Aug 2025</div>
             </div>
             <div class="intuit-role">
               <div class="intuit-role-left">
-                <div class="intuit-role-title">M3 &nbsp;·&nbsp; Full Service, design lead</div>
+                <div class="intuit-role-title caption">M3 &nbsp;·&nbsp; Full Service, design lead</div>
                 <div class="intuit-role-desc">Led design for consumer and expert experiences across Full Service. Managed a team through a high-volume season while maintaining quality and cross-functional alignment.</div>
               </div>
-              <div class="intuit-role-date">2024</div>
+              <div class="intuit-role-date caption t-secondary">2024</div>
             </div>
             <div class="intuit-role">
               <div class="intuit-role-left">
-                <div class="intuit-role-title">T3–T6 &nbsp;·&nbsp; Full Service, built from the ground up</div>
+                <div class="intuit-role-title caption">T3–T6 &nbsp;·&nbsp; Full Service, built from the ground up</div>
                 <div class="intuit-role-desc">Lead designer across consumer and expert-facing experiences for TurboTax Full Service. Drove strategic design decisions across a complex end-to-end flow from customer entry through filing completion. Joined working on DIY tax, then moved to Full Service as it was being built, helping design the end-to-end experience from scratch, including consumer flows, expert tools, and the operational connective tissue between them.</div>
-                <div class="intuit-role-award">Scott Cook Innovation Award</div>
-                <div class="intuit-role-award-detail">Reduced average return completion time from 22 days to a few hours and increased same-day margin by 97%. In August 2022 it became the primary approach across all Full Service versions.</div>
+                <div class="intuit-role-award caption">Scott Cook Innovation Award</div>
+                <div class="intuit-role-award-detail caption t-secondary">Reduced average return completion time from 22 days to a few hours and increased same-day margin by 97%. In August 2022 it became the primary approach across all Full Service versions.</div>
               </div>
-              <div class="intuit-role-date">2017—2024</div>
+              <div class="intuit-role-date caption t-secondary">2017—2024</div>
             </div>
           </div>
         </li>
@@ -819,14 +932,14 @@
       <div class="exp-earlier-label label">Earlier career</div>
       <ul class="exp-list">
         <li class="exp-item-footnote">
-          <span class="exp-company-footnote">Mirum Agency</span>
-          <div class="exp-right-footnote">
+          <span class="exp-company-footnote caption t-secondary">Mirum Agency</span>
+          <div class="exp-right-footnote caption t-secondary">
             Associate Design Director &nbsp;·&nbsp; 2013—2017
           </div>
         </li>
         <li class="exp-item-footnote">
-          <span class="exp-company-footnote">StudioPMG</span>
-          <div class="exp-right-footnote">
+          <span class="exp-company-footnote caption t-secondary">StudioPMG</span>
+          <div class="exp-right-footnote caption t-secondary">
             Art Director &nbsp;·&nbsp; 2010—2013
           </div>
         </li>
@@ -843,8 +956,7 @@
 
   <footer class="footer">
     <span>© 2026 Matt Kirkpatrick</span>
-    <span class="mark">Made with care.</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;">
+    <span class="footer-email">
       m.k.kirkpatrick@icloud.com
       <button class="copy-btn" data-copy="m.k.kirkpatrick@icloud.com" title="Copy email" style="color:rgba(244,237,226,0.3);">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -863,14 +975,16 @@
     // Dynamic experience years (career start: 2010)
     const yrs = new Date().getFullYear() - 2010;
 
-    // Speakeasy canvas — white stars + meteors, adapted for A2 dark hero
-    let stars = [], meteors = [], frame = 0, raf = null;
+    // Speakeasy canvas — adapts to atmosphere mode (meteors / drift / silence)
+    let stars = [], meteors = [], drifts = [], frame = 0, raf = null;
+    let mode = (document.body.dataset.atmos || 'meteors');
 
     function resize() {
       canvas.width  = window.innerWidth;
-      canvas.height = Math.max(window.innerHeight, window.screen.height);
-      // 180 stars, white, brighter twinkle (Speakeasy values)
-      stars = Array.from({ length: 180 }, () => ({
+      canvas.height = window.innerHeight;
+      // Star field count varies by mode
+      const starCount = mode === 'drift' ? 240 : 180;
+      stars = Array.from({ length: starCount }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         r: Math.random() * 1.1 + 0.2,
@@ -879,6 +993,7 @@
         twinkleOffset: Math.random() * Math.PI * 2,
       }));
       meteors = Array.from({ length: 28 }, () => makeMeteor(true));
+      drifts = Array.from({ length: 40 }, () => makeDrift(true));
     }
 
     function makeMeteor(immediate) {
@@ -893,6 +1008,21 @@
         ? Math.random() * canvas.height
         : -length - Math.random() * canvas.height * 0.5;
       return { x, y, length, speed, opacity, angle, width };
+    }
+
+    function makeDrift(immediate) {
+      // Slow ambient motes — vertical drift, gentle horizontal sway
+      const r = Math.random() * 1.6 + 0.4;
+      return {
+        x: Math.random() * canvas.width,
+        y: immediate ? Math.random() * canvas.height : canvas.height + Math.random() * 60,
+        r,
+        speed: Math.random() * 0.18 + 0.06,
+        swayAmp: Math.random() * 14 + 4,
+        swaySpeed: Math.random() * 0.008 + 0.003,
+        swayOffset: Math.random() * Math.PI * 2,
+        opacity: Math.random() * 0.28 + 0.06,
+      };
     }
 
     function draw() {
@@ -910,27 +1040,43 @@
 
       frame++;
 
-      // White meteor trails
-      meteors.forEach((m, i) => {
-        const dx = Math.cos(m.angle) * m.length;
-        const dy = Math.sin(m.angle) * m.length;
-        const grad = ctx.createLinearGradient(m.x, m.y, m.x + dx, m.y + dy);
-        grad.addColorStop(0,   `rgba(255,255,255,0)`);
-        grad.addColorStop(0.2, `rgba(255,255,255,${m.opacity * 0.3})`);
-        grad.addColorStop(1,   `rgba(255,255,255,${m.opacity})`);
-        ctx.beginPath();
-        ctx.moveTo(m.x, m.y);
-        ctx.lineTo(m.x + dx, m.y + dy);
-        ctx.strokeStyle = grad;
-        ctx.lineWidth   = m.width;
-        ctx.stroke();
+      if (mode === 'meteors') {
+        // White meteor trails
+        meteors.forEach((m, i) => {
+          const dx = Math.cos(m.angle) * m.length;
+          const dy = Math.sin(m.angle) * m.length;
+          const grad = ctx.createLinearGradient(m.x, m.y, m.x + dx, m.y + dy);
+          grad.addColorStop(0,   `rgba(255,255,255,0)`);
+          grad.addColorStop(0.2, `rgba(255,255,255,${m.opacity * 0.3})`);
+          grad.addColorStop(1,   `rgba(255,255,255,${m.opacity})`);
+          ctx.beginPath();
+          ctx.moveTo(m.x, m.y);
+          ctx.lineTo(m.x + dx, m.y + dy);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth   = m.width;
+          ctx.stroke();
 
-        m.x += Math.cos(m.angle) * m.speed;
-        m.y += Math.sin(m.angle) * m.speed;
-        if (m.y > canvas.height + m.length || m.x > canvas.width + m.length) {
-          meteors[i] = makeMeteor(false);
-        }
-      });
+          m.x += Math.cos(m.angle) * m.speed;
+          m.y += Math.sin(m.angle) * m.speed;
+          if (m.y > canvas.height + m.length || m.x > canvas.width + m.length) {
+            meteors[i] = makeMeteor(false);
+          }
+        });
+      } else if (mode === 'drift') {
+        // Slow upward-drifting motes — calm, ambient
+        drifts.forEach((d, i) => {
+          const sway = Math.sin(frame * d.swaySpeed + d.swayOffset) * d.swayAmp;
+          ctx.beginPath();
+          ctx.arc(d.x + sway, d.y, d.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${d.opacity})`;
+          ctx.fill();
+          d.y -= d.speed;
+          if (d.y < -8) drifts[i] = makeDrift(false);
+        });
+      }
+      // mode === 'silence' → only stars render (silence still keeps the field
+      // so the page isn't pure black; users who want true silence get the void
+      // mood paired with this)
 
       raf = requestAnimationFrame(draw);
     }
@@ -955,75 +1101,16 @@
       cancelAnimationFrame(raf);
       raf = null;
     }
-  })();
 
-  // Custom cursor + 3D tilt for work cards
-  (function () {
-    const cursor = document.getElementById('work-cursor');
-    const items  = document.querySelectorAll('.work-item');
-    const canHover = window.matchMedia('(hover: hover)').matches;
-
-    if (canHover) {
-      let cx = 0, cy = 0, tx = 0, ty = 0, raf = null;
-      const MAX_TILT = 7;
-
-      function lerp(a, b, t) { return a + (b - a) * t; }
-
-      function loop() {
-        cx = lerp(cx, tx, 0.14);
-        cy = lerp(cy, ty, 0.14);
-        cursor.style.left = cx + 'px';
-        cursor.style.top  = cy + 'px';
-        raf = requestAnimationFrame(loop);
-      }
-
-      document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
-
-      items.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-          cursor.classList.add('visible');
-          item.style.boxShadow = '0 0 0 6px rgba(255,255,255,0.85), 0 24px 52px rgba(0,0,0,0.38)';
-          if (!raf) loop();
-        });
-
-        item.addEventListener('mousemove', e => {
-          const r  = item.getBoundingClientRect();
-          const nx = (e.clientX - r.left)  / r.width  - 0.5;
-          const ny = (e.clientY - r.top)   / r.height - 0.5;
-          const rx = -ny * MAX_TILT;
-          const ry =  nx * MAX_TILT;
-          item.style.transition = 'transform 80ms ease, box-shadow 80ms ease';
-          item.style.transform  = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) scale(0.96)`;
-        });
-
-        item.addEventListener('mouseleave', () => {
-          cursor.classList.remove('visible');
-          cancelAnimationFrame(raf);
-          raf = null;
-          item.style.transition = 'transform 500ms ease, box-shadow 500ms ease';
-          item.style.transform  = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)';
-          item.style.boxShadow  = '';
-        });
-      });
-    } else {
-      // Touch: press state with scale + shadow, no cursor or tilt
-      cursor.style.display = 'none';
-      items.forEach(item => {
-        function pressOn() {
-          item.style.transition = 'transform 80ms ease, box-shadow 80ms ease';
-          item.style.transform  = 'scale(0.97)';
-          item.style.boxShadow  = '0 0 0 6px rgba(255,255,255,0.85), 0 24px 52px rgba(0,0,0,0.38)';
-        }
-        function pressOff() {
-          item.style.transition = 'transform 400ms ease, box-shadow 400ms ease';
-          item.style.transform  = 'scale(1)';
-          item.style.boxShadow  = '';
-        }
-        item.addEventListener('touchstart', pressOn,  { passive: true });
-        item.addEventListener('touchend',   pressOff, { passive: true });
-        item.addEventListener('touchcancel',pressOff, { passive: true });
-      });
-    }
+    // Expose controller for the Tweaks panel
+    window.__heroAtmos = {
+      setMode(m) {
+        if (m === mode) return;
+        mode = m;
+        // Reseed populations so the new mode looks intentional immediately
+        resize();
+      },
+    };
   })();
 
   // Page transitions — content slides, background persists
@@ -1139,6 +1226,24 @@
     var o1 = 0.50, o2 = 0.44, o3 = 0.28;
     var LERP = 0.06;
 
+    // Mood palettes — three RGB triplets + their three anchor positions.
+    // Nebula = current; Aurora = cobalt/teal; Solar = amber/rose.
+    var PALETTES = {
+      nebula: {
+        rgb: ['110,35,155', '185,22,38', '70,18,110'],
+        pos: ['85% 15%',    '90% 85%',   '10% 50%'],
+      },
+      aurora: {
+        rgb: ['30,85,200',  '15,135,135', '50,40,165'],
+        pos: ['85% 15%',    '90% 85%',    '10% 50%'],
+      },
+      solar: {
+        rgb: ['225,140,45', '205,55,80', '160,80,30'],
+        pos: ['85% 15%',    '90% 85%',   '10% 50%'],
+      },
+    };
+    var palette = PALETTES[document.body.dataset.mood] || PALETTES.nebula;
+
     document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
 
     function lerp(a, b, t) { return a + (b - a) * t; }
@@ -1166,9 +1271,9 @@
       o3 = lerp(o3, 0.28 + 0.07 * prox, LERP);
 
       document.body.style.backgroundImage = [
-        'radial-gradient(ellipse at 85% 15%, rgba(110,35,155,' + o1.toFixed(3) + ') 0%, transparent ' + c1.toFixed(1) + '%)',
-        'radial-gradient(ellipse at 90% 85%, rgba(185,22,38,' + o2.toFixed(3) + ') 0%, transparent ' + c2.toFixed(1) + '%)',
-        'radial-gradient(ellipse at 10% 50%, rgba(70,18,110,' + o3.toFixed(3) + ') 0%, transparent ' + c3.toFixed(1) + '%)'
+        'radial-gradient(ellipse at ' + palette.pos[0] + ', rgba(' + palette.rgb[0] + ',' + o1.toFixed(3) + ') 0%, transparent ' + c1.toFixed(1) + '%)',
+        'radial-gradient(ellipse at ' + palette.pos[1] + ', rgba(' + palette.rgb[1] + ',' + o2.toFixed(3) + ') 0%, transparent ' + c2.toFixed(1) + '%)',
+        'radial-gradient(ellipse at ' + palette.pos[2] + ', rgba(' + palette.rgb[2] + ',' + o3.toFixed(3) + ') 0%, transparent ' + c3.toFixed(1) + '%)'
       ].join(', ');
 
       gradRaf = requestAnimationFrame(frame);
@@ -1179,6 +1284,13 @@
       if (document.hidden) { cancelAnimationFrame(gradRaf); gradRaf = null; }
       else if (!gradRaf) frame();
     });
+
+    // Expose controller for the Tweaks panel
+    window.__bgMood = {
+      setMood: function (m) {
+        palette = PALETTES[m] || PALETTES.nebula;
+      },
+    };
   })();
   </script>
 
@@ -1193,8 +1305,11 @@
     var PREFIX2 = ' I build the';
     var SUFFIX = ' that solve it.';
 
-    // Skip animation when reduced-motion is preferred — render full text statically
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var STORAGE_KEY = 'mk-typewriter-seen';
+    var hasSeen = false;
+    try { hasSeen = localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) {}
+
+    function renderStatic() {
       while (h1.firstChild) h1.removeChild(h1.firstChild);
       h1.appendChild(document.createTextNode(PREFIX1));
       var br = document.createElement('br'); br.className = 'mobile-br'; h1.appendChild(br);
@@ -1208,6 +1323,12 @@
       });
       var br2 = document.createElement('br'); br2.className = 'mobile-br'; h1.appendChild(br2);
       h1.appendChild(document.createTextNode(SUFFIX));
+    }
+
+    // Skip animation when reduced-motion is preferred, or when this visitor
+    // has already seen the intro typewriter on this device
+    if (hasSeen || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      renderStatic();
       return;
     }
 
@@ -1262,7 +1383,10 @@
         setTimeout(function () {
           var mobileBr2 = document.createElement('br'); mobileBr2.className = 'mobile-br';
           h1.insertBefore(mobileBr2, suffixNode);
-          typeNode(suffixNode, SUFFIX, function () {});
+          typeNode(suffixNode, SUFFIX, function () {
+            // Mark intro as seen so it doesn't replay on revisits
+            try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
+          });
         }, totalWordTime);
       });
     });
@@ -1331,7 +1455,7 @@
       btn.style.alignItems = 'center';
       btn.style.gap = '4px';
       btn.style.whiteSpace = 'nowrap';
-      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:11px;font-family:inherit;letter-spacing:0.04em;">Copied</span>';
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="label">Copied</span>';
       setTimeout(function () {
         btn.classList.remove('copied');
         btn.style.display = '';
@@ -1362,6 +1486,141 @@
     try { document.execCommand('copy'); } catch(e) {}
     document.body.removeChild(ta);
   }
+  </script>
+
+  <!-- ────────────────────────────────────────
+       Tweaks panel — three expressive controls
+  ──────────────────────────────────────── -->
+  <button class="twk-btn" id="twk-btn" aria-label="Open tweaks" aria-expanded="false" aria-controls="twk-panel">
+    <span class="twk-btn-glyph" aria-hidden="true"></span>
+    <span>Tweaks</span>
+  </button>
+  <div class="twk-panel" id="twk-panel" role="dialog" aria-label="Tweaks">
+    <div class="twk-hd">
+      <span class="twk-title">Tweaks</span>
+      <button class="twk-x" id="twk-x" aria-label="Close tweaks">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 2 L10 10 M10 2 L2 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="twk-row">
+      <span class="twk-label">Stage mood</span>
+      <div class="twk-seg" data-key="mood">
+        <button data-value="nebula">Nebula</button>
+        <button data-value="aurora">Aurora</button>
+        <button data-value="solar">Solar</button>
+      </div>
+    </div>
+    <div class="twk-row">
+      <span class="twk-label">Accent voice</span>
+      <div class="twk-seg" data-key="acc">
+        <button data-value="code">Code</button>
+        <button data-value="italic">Italic</button>
+        <button data-value="bracket">Bracket</button>
+      </div>
+    </div>
+    <div class="twk-row">
+      <span class="twk-label">Atmosphere</span>
+      <div class="twk-seg" data-key="atmos">
+        <button data-value="meteors">Meteors</button>
+        <button data-value="drift">Drift</button>
+        <button data-value="silence">Silence</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    // Tweaks panel is dev-only — gate behind ?tweaks=1
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('tweaks') !== '1') {
+      var fab = document.getElementById('twk-btn');
+      var pnl = document.getElementById('twk-panel');
+      if (fab) fab.remove();
+      if (pnl) pnl.remove();
+      return;
+    }
+
+    var t = window.__TWEAKS;
+    var btn = document.getElementById('twk-btn');
+    var panel = document.getElementById('twk-panel');
+    var closeBtn = document.getElementById('twk-x');
+
+    // ── Apply a tweak value to the page ──
+    function apply(key, value) {
+      t[key] = value;
+      document.body.dataset[key] = value;
+      if (key === 'mood' && window.__bgMood)    window.__bgMood.setMood(value);
+      if (key === 'atmos' && window.__heroAtmos) window.__heroAtmos.setMode(value);
+      // 'acc' is pure CSS (body[data-acc=…])
+      updateActive();
+    }
+
+    // ── Reflect active state in the segmented controls ──
+    function updateActive() {
+      panel.querySelectorAll('.twk-seg').forEach(function (seg) {
+        var key = seg.dataset.key;
+        seg.querySelectorAll('button').forEach(function (b) {
+          if (b.dataset.value === t[key]) b.classList.add('active');
+          else b.classList.remove('active');
+        });
+      });
+    }
+
+    // ── Wire segmented controls ──
+    panel.querySelectorAll('.twk-seg').forEach(function (seg) {
+      seg.addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-value]');
+        if (!b) return;
+        var key = seg.dataset.key;
+        var value = b.dataset.value;
+        if (t[key] === value) return;
+        apply(key, value);
+        // Persist via host
+        var edit = {};
+        edit[key] = value;
+        try {
+          window.parent.postMessage({ type: '__edit_mode_set_keys', edits: edit }, '*');
+        } catch (err) {}
+      });
+    });
+
+    // ── Open / close ──
+    var open = false;
+    function openPanel() {
+      open = true;
+      btn.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      panel.classList.add('is-open');
+    }
+    function closePanel() {
+      open = false;
+      btn.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      panel.classList.remove('is-open');
+      try {
+        window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+      } catch (err) {}
+    }
+    btn.addEventListener('click', function () { open ? closePanel() : openPanel(); });
+    closeBtn.addEventListener('click', closePanel);
+
+    // ── Host edit-mode protocol ──
+    window.addEventListener('message', function (e) {
+      var d = e.data;
+      if (!d || typeof d !== 'object') return;
+      if (d.type === '__activate_edit_mode')   openPanel();
+      if (d.type === '__deactivate_edit_mode') closePanel();
+    });
+    // Announce availability AFTER the listener is registered
+    try {
+      window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    } catch (err) {}
+
+    // Initial paint
+    updateActive();
+  })();
   </script>
 </body>
 </html>

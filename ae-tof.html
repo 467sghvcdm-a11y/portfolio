@@ -15,20 +15,20 @@
       min-height: 100dvh;
       background-color: #000000;
       background-image:
-        radial-gradient(ellipse at 85% 15%, rgba(110,35,155,0.50) 0%, transparent 55%),
-        radial-gradient(ellipse at 90% 85%, rgba(185,22,38,0.44) 0%, transparent 50%),
-        radial-gradient(ellipse at 10% 50%, rgba(70,18,110,0.28) 0%, transparent 46%);
+        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
       background-attachment: fixed;
       --accent: #d92638;
-      --card-radius: 14px;
+      --card-radius: 20px;
       --card-h: max(64px, calc((100vw - 16px - 1000px) / 2));
     }
 
     .pv-inner {
       display: flex;
       flex-direction: column;
-      gap: 0;
-      padding: 8px 8px 120px;
+      gap: 8px;
+      padding: 8px 8px 24px;
       position: relative;
       z-index: 1;
     }
@@ -177,40 +177,115 @@
       flex-shrink: 0;
     }
 
-    .cs-section { margin-top: 56px; padding-top: 48px; border-top: 1px solid #eee; }
+    .cs-section {
+      margin-top: 96px;
+      padding-top: 48px;
+      border-top: 1px solid #e8e3d4;
+      position: relative;
+    }
+    .cs-section::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+    }
+    /* First section in a card: no margin/padding/border/tab */
+    .card > .cs-section:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+    .card > .cs-section:first-child::before { display: none; }
+    /* And its first child element drops its own top margin */
+    .card > .cs-section:first-child > *:first-child { margin-top: 0; }
     .cs-subsection-label {
       display: flex;
       align-items: center;
       gap: 12px;
       margin-top: 64px;
-      padding-top: 32px;
-      border-top: 1px solid #eee;
       margin-bottom: 32px;
+    }
+    .card > .cs-subsection-label:first-child { margin-top: 40px; }
+
+    /* ── Reading column cap inside cards ──
+       Paragraphs, headings, and inline lists pin to ~680px (~70ch) for
+       comfortable line length. Figures, metric grids, tables, recipe pairs,
+       and split lists keep full card width. */
+    .card :is(p, h3, h4, .cs-callout, .cs-provocation-list, .cs-inline-stats) {
+      max-width: 680px;
     }
 
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
 
+    .pv-inner { counter-reset: chapter; }
+
+    /* Chapter intermissions sit OUTSIDE cards, on the nebula background.
+       Cream type. Generous top padding pushes the band away from the previous
+       card; tighter bottom padding brings it close to the card it introduces. */
     .cs-chapter {
-      margin: 64px calc(-1 * var(--card-h)) 0;
-      padding: 44px var(--card-h);
-      background: #f8f8f6;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
+      counter-increment: chapter;
+      background: transparent;
+      color: var(--c-cream);
+      padding: 88px var(--card-h) 36px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 32px;
+      align-items: start;
+      position: relative;
+    }
+    /* Pin label/title/sub to the right column, stacked */
+    .cs-chapter > * { grid-column: 2; }
+    /* Massive numeral, cream on nebula */
+    .cs-chapter::before {
+      content: counter(chapter, decimal-leading-zero);
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 300;
+      font-size: 140px;
+      line-height: 0.82;
+      letter-spacing: -0.04em;
+      color: var(--c-cream);
+      font-feature-settings: 'lnum';
+      text-shadow: 0 0 36px rgba(217,38,56,0.18);
+      grid-column: 1;
+      grid-row: 1 / 4;
     }
     .cs-chapter-label {
+      /* Inherits .label (12px Figtree 600 uppercase + tracking) — override color + layout */
       color: var(--accent);
-      margin-bottom: 14px;
+      margin-bottom: 22px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
-    .cs-chapter-label::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); }
+    .cs-chapter-label::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
     .cs-chapter-title {
-      font-size: 36px;
-      margin-bottom: 10px;
+      /* Inherits global h2: Fraunces 300, letter-spacing -0.02em */
+      font-size: clamp(38px, 3.8vw, 52px);
+      line-height: 1.04;
+      color: var(--c-cream);
+      margin-bottom: 22px;
+      text-wrap: balance;
     }
-    .cs-chapter-sub { font-size: 16px; color: #767676; max-width: 58ch; line-height: 1.5; }
+    .cs-chapter-sub {
+      /* Inherits body Figtree 16px / 1.5 — override color + width */
+      color: var(--c-cream);
+      max-width: 56ch;
+    }
+
+    /* When a takeaway leads a card (final closing card), drop its leading space */
+    .card > .cs-takeaway:first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
 
     /* ── Callout ── */
     .cs-callout {
@@ -256,6 +331,15 @@
     .cs-metric-lbl { margin-top: 10px; }
     .cs-metric-ctx { color: var(--c-secondary); margin-top: 6px; }
 
+    /* ── Compact metric variant ── used when a single metric block contains
+       a heading label + a row of two smaller paired values + a caption. */
+    .cs-metric-head { margin-top: 0; margin-bottom: 12px; }
+    .cs-metric-row { display: flex; gap: 20px; margin-bottom: 10px; }
+    .cs-metric-val.sm { font-size: 28px; }
+
+    /* Small caption tag tied to a metric row (e.g. cohort label) */
+    .cs-metric-tag { margin-top: -8px; margin-bottom: 20px; }
+
     /* ── Inline stats ── */
     .cs-inline-stats { display: flex; gap: 36px; flex-wrap: wrap; margin: 20px 0 28px; }
     .cs-inline-stat { color: var(--c-secondary); }
@@ -281,7 +365,7 @@
     .cs-recipe-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
     .cs-recipe-label { margin-bottom: 10px; }
     .cs-recipe-label .accent { color: var(--c-primary); text-transform: none; font-size: 14px; font-weight: 400; margin-left: 8px; }
-    .cs-recipe img { width: 100%; border-radius: 8px; }
+    .cs-recipe img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
     /* ── Principles matrix ── */
     .cs-matrix { width: 100%; border-collapse: collapse; font-size: 14px; margin: 28px 0; }
@@ -331,8 +415,16 @@
     .cs-next-arrow { font-size: 20px; color: #767676; transition: transform 200ms ease, color 200ms ease; display: inline-block; margin-left: 8px; vertical-align: middle; }
 
     /* ── Footer ── */
-    .footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; padding: 32px 48px; font-size: 12px; color: rgba(244,237,226,0.55); }
-    .footer .mark { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 14px; color: rgba(244,237,226,0.45); }
+    .footer {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 48px;
+      font-size: 12px;
+      color: rgba(244,237,226,0.55);
+    }
     .copy-btn { background: none; border: none; cursor: pointer; padding: 15px; margin: -15px; border-radius: 4px; color: rgba(244,237,226,0.3); display: flex; align-items: center; transition: color 150ms, background 150ms; flex-shrink: 0; }
     .copy-btn:hover { color: rgba(244,237,226,0.9); background: rgba(255,255,255,0.08); }
     .copy-btn.copied { color: #4ade80; }
@@ -341,20 +433,33 @@
     /* ── Responsive ── */
 
     @media (max-width: 760px) {
-      .pv-inner { padding: 6px 0 120px; }
+      .pv-inner { padding: 6px 0 24px; }
       .card { --card-h: 40px; padding: 48px var(--card-h) 64px; box-shadow: none; }
       .hero { padding: 40px 40px 48px; margin: -6px 0 0; }
       .hero-body { margin-top: 56px; }
       .hero-foot { flex-wrap: wrap; gap: 16px 40px; }
       .cs-metrics-3, .cs-metrics-4 { grid-template-columns: repeat(2, 1fr); }
+      /* Chapter intermissions: stack numeral above content */
+      .cs-chapter {
+        grid-template-columns: 1fr;
+        row-gap: 28px;
+        padding: 72px var(--card-h) 32px;
+      }
+      .cs-chapter > *,
+      .cs-chapter::before { grid-column: 1; }
+      .cs-chapter::before { grid-row: auto; font-size: 96px; }
+      .cs-chapter-title { font-size: 40px; }
     }
 
     @media (max-width: 520px) {
-      .pv-inner { padding: 4px 0 120px; }
+      .pv-inner { padding: 4px 0 24px; }
       .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
       .cs-title { font-size: 44px; }
+      .cs-chapter { padding: 56px var(--card-h) 24px; row-gap: 20px; }
+      .cs-chapter::before { font-size: 72px; }
+      .cs-chapter-title { font-size: 30px; }
       .cs-chap-nav { left: 116px; right: 16px; transform: none; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
       .cs-chap-nav::-webkit-scrollbar { display: none; }
       .cs-chap-nav.nav-scrolled { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); }
@@ -368,7 +473,6 @@
       .cs-split { grid-template-columns: 1fr; }
       .cs-metric-val { font-size: 44px; }
       .footer { position: relative; padding: 20px 20px; background: transparent; }
-      .footer .mark { display: none; }
     }
   </style>
 </head>
@@ -383,17 +487,14 @@
     <a class="cs-chap-link caption" href="#ch4" aria-current="false">Strategy</a>
     <a class="cs-chap-link caption" href="#ch5" aria-current="false">Outcomes</a>
   </nav>
-  <div class="pv-inner" role="main">
+  <div class="pv-inner" role="main" style="padding: 8px 12px 24px">
 
-    <div class="hero">
-      <div class="hero-body">
+    <div class="hero" style="min-height: 0">
+      <div class="hero-body" style="gap: 8px">
         <div>
           <p class="hero-eyebrow label">Activate Experts</p>
           <h1 class="cs-title">How TurboTax reimagined the front door for expert tax help</h1>
         </div>
-        <figure class="hero-img">
-          <img src="assets/ae-tof/page-templates.jpg" alt="AE page templates">
-        </figure>
         <div class="hero-foot label">
           <span>Role<b>Design Lead</b></span>
           <span>Year<b>2026</b></span>
@@ -420,28 +521,33 @@
         </div>
       </div>
 
+      <figure>
+        <img width="2048" height="784" decoding="async" fetchpriority="high" src="assets/ae-tof/page-templates.jpg" alt="AE page templates">
+      </figure>
+
       <p>As the design lead for the AE front door, I was responsible for the entry experience of over half a million weekly visitors. Every CTA, every flow, every surface decision has direct downstream revenue consequences. Design as a precision instrument, not a finish.</p>
       <p>This case study covers one tax season. One measurement audit that changed what the program was optimizing for. Seven tests built on that foundation. And one failure test that made everything else more credible.</p>
+    </div>
 
-      <div class="cs-chapter" id="ch1">
-        <div class="cs-chapter-label label">Chapter 1 &nbsp;·&nbsp; Foundation</div>
+    <div class="cs-chapter" id="ch1">
+        <div class="cs-chapter-label label">Foundation</div>
         <h2 class="cs-chapter-title">Building for scale and velocity.</h2>
         <div class="cs-chapter-sub">Before any test could run, the program needed infrastructure it didn't have.</div>
       </div>
 
-      <div style="margin-top:48px;">
+      <div class="card">
         <h3>A modular system built for velocity</h3>
         <p>To achieve the velocity required for peak season, we had to stop building individual pages and start building a modular system. I architected the first AE component library: a single unified source of truth across every AE surface.</p>
         <p>This wasn't aesthetic consistency. It was operational leverage. Recipe pivots that used to take weeks took days.</p>
         <figure>
-          <img src="assets/ae-tof/infrastructure.png" alt="AE infrastructure overview">
+          <img width="3366" height="808" loading="lazy" decoding="async" src="assets/ae-tof/infrastructure.png" alt="AE infrastructure overview">
           <figcaption>13+ standardized components across 6 page types. The platform that made a seven-test season possible.</figcaption>
         </figure>
 
         <h3>Driving the AE front door</h3>
         <p>With the system built, we spent the final weeks before peak standardizing the entire top-of-funnel ecosystem, from PPC landing pages to the store locator. A consistent brand promise of local expertise across every touchpoint.</p>
         <figure>
-          <img src="assets/ae-tof/page-templates.jpg" alt="AE page templates">
+          <img width="2048" height="784" loading="lazy" decoding="async" src="assets/ae-tof/page-templates.jpg" alt="AE page templates">
           <figcaption>13+ AE page templates.</figcaption>
         </figure>
 
@@ -451,18 +557,18 @@
         <p>Our target customer wants human expertise with digital speed. They've already decided they want a tax expert. They're not comparison shopping. They're looking for confirmation they're in the right place.</p>
         <p>The page serves two personas at once: the delegator seeking validation that the right expert is available, and the autonomous shopper seeking agency over how to proceed. Every design decision was made in service of that dual psychology.</p>
         <figure>
-          <img src="assets/ae-tof/customer.jpg" alt="Target customer archetype">
+          <img width="2048" height="519" loading="lazy" decoding="async" src="assets/ae-tof/customer.jpg" alt="Target customer archetype">
           <figcaption>The efficiency value seeker: already decided, looking for confirmation. Not comparison shopping.</figcaption>
         </figure>
       </div>
 
       <div class="cs-chapter" id="ch2">
-        <div class="cs-chapter-label label">Chapter 2 &nbsp;·&nbsp; Preseason</div>
+        <div class="cs-chapter-label label">Preseason</div>
         <h2 class="cs-chapter-title">What we were actually measuring.</h2>
         <div class="cs-chapter-sub">The top-of-funnel (TOF) pages were being judged by the outcome of a journey they don't fully control.</div>
       </div>
 
-      <div style="margin-top:48px;">
+      <div class="card">
         <h3>Mapping every path from page to start</h3>
         <p>Before writing a single test hypothesis, I mapped every path a customer could take from an AE TOF page to a start.</p>
 
@@ -473,7 +579,7 @@
         </div>
 
         <figure>
-          <img src="assets/ae-tof/t2s.png" alt="Time to start audit map">
+          <img width="1184" height="1850" loading="lazy" decoding="async" src="assets/ae-tof/t2s.png" alt="Time to start audit map">
           <figcaption>The visual complexity is intentional. The mess is the point. Optimizing a single TOF metric against this surface area is structurally flawed.</figcaption>
         </figure>
 
@@ -488,12 +594,12 @@
       </div>
 
       <div class="cs-chapter" id="ch3">
-        <div class="cs-chapter-label label">Chapter 3 &nbsp;·&nbsp; Scale</div>
+        <div class="cs-chapter-label label">Scale</div>
         <h2 class="cs-chapter-title">Field-testing choice architecture.</h2>
         <div class="cs-chapter-sub">With infrastructure built, a clear customer, and honest measurement, we were ready to move.</div>
       </div>
 
-      <div style="margin-top:48px;">
+      <div class="card">
         <h3>Test 1: Storefront</h3>
         <p>Our customers had already decided they wanted an expert. So why were we making them schedule a meeting to prove it?</p>
         <p>The assumption: the primary barrier wasn't the product, it was process ambiguity. Appointment scheduling requires commitment to a specific time, person, and location before the customer knows who they're committing to. The hypothesis: replacing the high-friction scheduling CTA with an immediate expert-matching experience would unlock latent demand from customers who wanted expert help but were stopped by appointment friction.</p>
@@ -501,11 +607,11 @@
         <div class="cs-recipe-pair">
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe B <span class="accent">Match for free now</span></div>
-            <img src="assets/ae-tof/storefrontOptimizationB.png" alt="Recipe B: storefront with prominent free match CTA and expert matching entry point">
+            <img width="1882" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/storefrontOptimizationB.png" alt="Recipe B: storefront with prominent free match CTA and expert matching entry point">
           </div>
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe C <span class="accent">Schedule appointment</span></div>
-            <img src="assets/ae-tof/storefrontOptimizationC.png" alt="Recipe C: storefront with schedule appointment CTA as primary action">
+            <img width="1882" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/storefrontOptimizationC.png" alt="Recipe C: storefront with schedule appointment CTA as primary action">
           </div>
         </div>
 
@@ -528,12 +634,12 @@
       </div>
 
       <div class="cs-chapter" id="ch4">
-        <div class="cs-chapter-label label">Chapter 4 &nbsp;·&nbsp; Strategy</div>
+        <div class="cs-chapter-label label">Strategy</div>
         <h2 class="cs-chapter-title">Four tests. One principle.</h2>
         <div class="cs-chapter-sub">Match worked on the storefront. Would it work on traffic that hadn't already decided?</div>
       </div>
 
-      <div style="margin-top:48px;">
+      <div class="card">
         <h3>Test 5023: Organic LP, dual-engine discovery</h3>
         <p>We ran what looked like the same test on a different surface and got a different answer. That contradiction was the finding. The Storefront worked because intent was already named. The Organic LP is a different moment. We weren't testing two recipes. We were measuring two engines built for two different objectives.</p>
 
@@ -553,16 +659,15 @@
         <div class="cs-recipe-pair">
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe B <span class="accent">Match · precision filter</span></div>
-            <img src="assets/ae-tof/organicLPoptimizationB.png" alt="Recipe B: organic landing page with expert match CTA as precision filter for high-intent customers">
+            <img width="1856" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/organicLPoptimizationB.png" alt="Recipe B: organic landing page with expert match CTA as precision filter for high-intent customers">
           </div>
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe C <span class="accent">Modular auth · volume throttle</span></div>
-            <img src="assets/ae-tof/organicLPoptimizationC.png" alt="Recipe C: organic landing page with modular auth flow as volume throttle for broad franchise traffic">
+            <img width="1856" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/organicLPoptimizationC.png" alt="Recipe C: organic landing page with modular auth flow as volume throttle for broad franchise traffic">
           </div>
         </div>
 
         <div class="cs-callout">There is no single winning CTA strategy. There are two tools for two business objectives.</div>
-      </div>
 
       <div class="cs-section">
         <h3>Test 5012: Localization</h3>
@@ -574,16 +679,16 @@
           <div class="cs-metric win"><div class="cs-metric-val win">+77%</div><div class="cs-metric-lbl label">Revenue per visitor</div></div>
           <div class="cs-metric win"><div class="cs-metric-val win">+643%</div><div class="cs-metric-lbl label">Full Service mix</div></div>
         </div>
-        <p style="font-size:12px;color:#767676;text-transform:uppercase;letter-spacing:0.1em;margin-top:-8px;margin-bottom:20px;">New York · Recipe B winner</p>
+        <p class="label t-secondary cs-metric-tag">New York · Recipe B winner</p>
 
         <div class="cs-recipe-pair">
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe B <span class="accent">Localized content only · Winner</span></div>
-            <img src="assets/ae-tof/localizationB.png" alt="Recipe B: localized content only landing page with market-specific expert messaging, winner">
+            <img width="1882" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/localizationB.png" alt="Recipe B: localized content only landing page with market-specific expert messaging, winner">
           </div>
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe C <span class="accent">Localized content + Match</span></div>
-            <img src="assets/ae-tof/localizationC.png" alt="Recipe C: localized content combined with expert match CTA, underperformed localized content alone">
+            <img width="1882" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/localizationC.png" alt="Recipe C: localized content combined with expert match CTA, underperformed localized content alone">
           </div>
         </div>
 
@@ -614,18 +719,18 @@
 
         <div class="cs-metrics cs-metrics-2">
           <div class="cs-metric win">
-            <div class="cs-metric-lbl label" style="margin-top:0;margin-bottom:12px;">Stationary · Winner: Recipe C</div>
-            <div style="display:flex;gap:20px;margin-bottom:10px;">
-              <div><div class="cs-metric-val win" style="font-size:28px;">+7%</div><div class="cs-metric-lbl label">Starts</div></div>
-              <div><div class="cs-metric-val win" style="font-size:28px;">+6%</div><div class="cs-metric-lbl label">Revenue per visitor</div></div>
+            <div class="cs-metric-lbl label cs-metric-head">Stationary · Winner: Recipe C</div>
+            <div class="cs-metric-row">
+              <div><div class="cs-metric-val win sm">+7%</div><div class="cs-metric-lbl label">Starts</div></div>
+              <div><div class="cs-metric-val win sm">+6%</div><div class="cs-metric-lbl label">Revenue per visitor</div></div>
             </div>
             <div class="cs-metric-ctx caption">77% of starts. Higher-intent context. Post-auth modular flow wins.</div>
           </div>
           <div class="cs-metric hi">
-            <div class="cs-metric-lbl label" style="margin-top:0;margin-bottom:12px;">Mobile · Winner: Recipe D</div>
-            <div style="display:flex;gap:20px;margin-bottom:10px;">
-              <div><div class="cs-metric-val hi" style="font-size:28px;">+37%</div><div class="cs-metric-lbl label">Completions</div></div>
-              <div><div class="cs-metric-val hi" style="font-size:28px;">+63%</div><div class="cs-metric-lbl label">Revenue per visitor</div></div>
+            <div class="cs-metric-lbl label cs-metric-head">Mobile · Winner: Recipe D</div>
+            <div class="cs-metric-row">
+              <div><div class="cs-metric-val hi sm">+37%</div><div class="cs-metric-lbl label">Completions</div></div>
+              <div><div class="cs-metric-val hi sm">+63%</div><div class="cs-metric-lbl label">Revenue per visitor</div></div>
             </div>
             <div class="cs-metric-ctx caption">Lower friction tolerance. Lighter entry wins. ~$760K scaling estimate.</div>
           </div>
@@ -639,11 +744,11 @@
         <div class="cs-recipe-pair">
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe B <span class="accent">Direct route to FS flow</span></div>
-            <img src="assets/ae-tof/FSroutingB.png" alt="Recipe B: page variant routing visitors directly to full service flow, bypassing CTA filtering step">
+            <img width="997" height="824" loading="lazy" decoding="async" src="assets/ae-tof/FSroutingB.png" alt="Recipe B: page variant routing visitors directly to full service flow, bypassing CTA filtering step">
           </div>
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe C <span class="accent">Direct route with variation</span></div>
-            <img src="assets/ae-tof/FSroutingC.png" alt="Recipe C: page variant with direct route variation to full service flow, both recipes missed on revenue per visitor">
+            <img width="997" height="824" loading="lazy" decoding="async" src="assets/ae-tof/FSroutingC.png" alt="Recipe C: page variant with direct route variation to full service flow, both recipes missed on revenue per visitor">
           </div>
         </div>
 
@@ -653,14 +758,16 @@
 
         <p><span class="cs-annotation caption">The test that failed clearly validated the framework more convincingly than any win did. A test designed to find the edges of a principle is worth more than another replication of the same finding.</span></p>
       </div>
+      </div>
 
       <div class="cs-chapter" id="ch5">
-        <div class="cs-chapter-label label">Chapter 5 &nbsp;·&nbsp; Outcomes</div>
+        <div class="cs-chapter-label label">Outcomes</div>
         <h2 class="cs-chapter-title">Framework to deployment to principle.</h2>
         <div class="cs-chapter-sub">How it shipped, what it proved, and what it leaves behind.</div>
       </div>
 
-      <div class="cs-subsection-label label" style="margin-top:40px;border-top:none;padding-top:0;">Deployment</div>
+      <div class="card">
+      <div class="cs-subsection-label label">Deployment</div>
 
       <div>
         <h3>End-of-season PPC: when the appointment door closes, does Match still hold?</h3>
@@ -676,11 +783,11 @@
         <div class="cs-recipe-pair">
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe B <span class="accent">Match for free</span></div>
-            <img src="assets/ae-tof/EOSPPCb.png" alt="Recipe B: end-of-season PPC page with match for free as primary CTA, stat-sig winner on revenue per visitor">
+            <img width="1882" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/EOSPPCb.png" alt="Recipe B: end-of-season PPC page with match for free as primary CTA, stat-sig winner on revenue per visitor">
           </div>
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe C <span class="accent">Match + Do It With Me (DIWM) pod</span></div>
-            <img src="assets/ae-tof/EOSPPCc.png" alt="Recipe C: end-of-season PPC page with match combined with DIWM pod entry point">
+            <img width="1882" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/EOSPPCc.png" alt="Recipe C: end-of-season PPC page with match combined with DIWM pod entry point">
           </div>
         </div>
 
@@ -704,7 +811,7 @@
         </table>
 
         <figure class="cs-figure">
-          <img src="assets/ae-tof/secondpeak.jpg" alt="Second peak surface-by-surface deployment">
+          <img width="2127" height="824" loading="lazy" decoding="async" src="assets/ae-tof/secondpeak.jpg" alt="Second peak surface-by-surface deployment">
         </figure>
 
         <p>Scale signal: AE CTA returned <strong>$308 ARPC, $1.04M revenue, 3,371 units</strong>. Non-AE CTA on the same surface: $105 ARPC, $309K revenue, 2,936 units. Three times the ARPC from the same traffic.</p>
@@ -740,7 +847,7 @@
         <div class="cs-callout">The framework's job was never to bring more people in. It was to convert the right people once they were here.</div>
       </div>
 
-      <div class="cs-subsection-label label" style="border-top:none;padding-top:0;">Principles</div>
+      <div class="cs-subsection-label label">Principles</div>
 
       <div>
         <h3>The Responsive Intent Architecture</h3>
@@ -802,7 +909,7 @@
         </ul>
       </div>
 
-      <div class="cs-subsection-label label" style="border-top:none;padding-top:0;">Forward</div>
+      <div class="cs-subsection-label label">Forward</div>
 
       <div>
         <h3>A capability built, waiting on an investment decision</h3>
@@ -856,7 +963,9 @@
           </li>
         </ul>
       </div>
+      </div>
 
+      <div class="card">
       <div class="cs-takeaway">
         <div class="cs-takeaway-text">The most strategic thing a designer can do is name the problems the system has no incentive to surface.</div>
         <div class="cs-takeaway-sub">Build the foundation. Map the actual measurement. Name what is being optimized and what it costs. Then move fast, because you know what you're looking at.</div>
@@ -873,8 +982,7 @@
 
   <footer class="footer">
     <span>© 2026 Matt Kirkpatrick</span>
-    <span class="mark">Made with care.</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;">
+    <span class="footer-email">
       m.k.kirkpatrick@icloud.com
       <button class="copy-btn" data-copy="m.k.kirkpatrick@icloud.com" title="Copy email">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -993,7 +1101,7 @@
       btn.style.alignItems = 'center';
       btn.style.gap = '4px';
       btn.style.whiteSpace = 'nowrap';
-      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:11px;font-family:inherit;letter-spacing:0.04em;">Copied</span>';
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="label">Copied</span>';
       setTimeout(function () {
         btn.classList.remove('copied');
         btn.style.display = '';

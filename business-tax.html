@@ -15,20 +15,20 @@
       min-height: 100dvh;
       background-color: #000000;
       background-image:
-        radial-gradient(ellipse at 85% 15%, rgba(110,35,155,0.50) 0%, transparent 55%),
-        radial-gradient(ellipse at 90% 85%, rgba(185,22,38,0.44) 0%, transparent 50%),
-        radial-gradient(ellipse at 10% 50%, rgba(70,18,110,0.28) 0%, transparent 46%);
+        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
       background-attachment: fixed;
       --accent: #d92638;
-      --card-radius: 14px;
+      --card-radius: 20px;
       --card-h: max(64px, calc((100vw - 16px - 1000px) / 2));
     }
 
     .pv-inner {
       display: flex;
       flex-direction: column;
-      gap: 0;
-      padding: 8px 8px 120px;
+      gap: 8px;
+      padding: 8px 8px 24px;
       position: relative;
       z-index: 1;
     }
@@ -163,9 +163,36 @@
     h4 { font-size: 20px; margin: 40px 0 14px; }
 
     .cs-section {
-      margin-top: 64px;
-      padding-top: 56px;
-      border-top: 1px solid #eee;
+      margin-top: 96px;
+      padding-top: 48px;
+      border-top: 1px solid #e8e3d4;
+      position: relative;
+    }
+    .cs-section::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+    }
+    /* First section in a card: no margin/padding/border/tab */
+    .card > .cs-section:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+    .card > .cs-section:first-child::before { display: none; }
+    /* And its first child element drops its own top margin */
+    .card > .cs-section:first-child > *:first-child { margin-top: 0; }
+
+    /* ── Reading column cap inside cards ──
+       Pin paragraphs, headings, and inline lists to ~680px (~70ch) for
+       comfortable line length. Figures, metric grids, tables, recipe pairs
+       keep full card width. */
+    .card :is(p, h3, h4, .cs-callout, .cs-provocation-list, .cs-inline-stats) {
+      max-width: 680px;
     }
 
     /* ── Callout ── */
@@ -181,6 +208,14 @@
       background: #fafafa;
       border-radius: 0 8px 8px 0;
       margin: 28px 0;
+    }
+    /* Spec/literal quote variant — body voice instead of editorial italic */
+    .cs-callout.is-quote {
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 17px;
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1.6;
     }
 
     /* ── Inline annotation ── */
@@ -302,23 +337,63 @@
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
 
+    .pv-inner { counter-reset: chapter; }
+
+    /* Chapter intermissions sit OUTSIDE cards, on the nebula background.
+       Cream type. Generous top padding pushes the band away from the previous
+       card; tighter bottom padding brings it close to the card it introduces. */
     .cs-chapter {
-      margin: 64px calc(-1 * var(--card-h)) 0;
-      padding: 44px var(--card-h);
-      background: #f8f8f6;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
+      counter-increment: chapter;
+      background: transparent;
+      color: var(--c-cream);
+      padding: 88px var(--card-h) 36px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 32px;
+      align-items: start;
+      position: relative;
+      border: none;
+      margin: 0;
+    }
+    .cs-chapter > * { grid-column: 2; }
+    .cs-chapter::before {
+      content: counter(chapter, decimal-leading-zero);
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 300;
+      font-size: 140px;
+      line-height: 0.82;
+      letter-spacing: -0.04em;
+      color: var(--c-cream);
+      font-feature-settings: 'lnum';
+      text-shadow: 0 0 36px rgba(217,38,56,0.18);
+      grid-column: 1;
+      grid-row: 1 / 4;
     }
     .cs-chapter-label {
       color: var(--accent);
-      margin-bottom: 14px;
+      margin-bottom: 22px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
-    .cs-chapter-label::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); }
-    .cs-chapter-title { font-size: 36px; margin-bottom: 10px; }
-    .cs-chapter-sub { font-size: 16px; line-height: 1.5; color: #767676; max-width: 58ch; }
+    .cs-chapter-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+    .cs-chapter-title {
+      font-size: clamp(38px, 3.8vw, 52px);
+      line-height: 1.04;
+      color: var(--c-cream);
+      margin-bottom: 22px;
+      text-wrap: balance;
+    }
+    .cs-chapter-sub {
+      color: var(--c-cream);
+      max-width: 56ch;
+    }
+
+    /* Card-leading takeaway resets its leading space */
+    .card > .cs-takeaway:first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
 
     /* ── Metric grids ── */
     .cs-metrics { display: grid; gap: 24px; margin: 28px 0; }
@@ -361,10 +436,7 @@
 
     /* ── Footer ── */
     .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      position: relative;
       z-index: 10;
       display: flex;
       justify-content: space-between;
@@ -372,12 +444,6 @@
       padding: 32px 48px;
       font-size: 12px;
       color: rgba(244,237,226,0.55);
-    }
-    .footer .mark {
-      font-family: 'Fraunces', Georgia, serif;
-      font-style: italic;
-      font-size: 14px;
-      color: rgba(244,237,226,0.45);
     }
     .copy-btn { background: none; border: none; cursor: pointer; padding: 15px; margin: -15px; border-radius: 4px; color: rgba(244,237,226,0.3); display: flex; align-items: center; transition: color 150ms, background 150ms; flex-shrink: 0; }
     .copy-btn:hover { color: rgba(244,237,226,0.9); background: rgba(255,255,255,0.08); }
@@ -387,7 +453,7 @@
     /* ── Responsive ── */
 
     @media (max-width: 760px) {
-      .pv-inner { padding: 6px 0 120px; }
+      .pv-inner { padding: 6px 0 24px; }
       .card { --card-h: 40px; padding: 48px var(--card-h) 64px; box-shadow: none; }
       .hero { padding: 40px 40px 48px; margin: -6px 0 0; }
       .hero-body { margin-top: 56px; }
@@ -396,7 +462,7 @@
     }
 
     @media (max-width: 520px) {
-      .pv-inner { padding: 4px 0 120px; }
+      .pv-inner { padding: 4px 0 24px; }
       .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
@@ -413,7 +479,6 @@
       .cs-metrics-2, .cs-metrics-3, .cs-metrics-4 { grid-template-columns: 1fr; }
       .cs-metric-val { font-size: 44px; }
       .footer { position: relative; padding: 20px 20px; background: transparent; }
-      .footer .mark { display: none; }
     }
   </style>
 </head>
@@ -426,13 +491,13 @@
     <a class="cs-chap-link caption" href="#ch2" aria-current="false">The bigger picture</a>
     <a class="cs-chap-link caption" href="#ch3" aria-current="false">What I learned</a>
   </nav>
-  <div class="pv-inner" role="main">
+  <div class="pv-inner" role="main" style="padding: 8px 12px 24px">
 
     <!-- Hero -->
-    <div class="hero">
-      <div class="hero-body">
+    <div class="hero" style="min-height: 0">
+      <div class="hero-body" style="margin: 72px 0px 0px; gap: 8px">
         <div>
-          <p class="hero-eyebrow label">TurboTax Business Tax</p>
+          <p class="hero-eyebrow label" style="margin: 0px 0px 20px">TurboTax Business Tax</p>
           <h1 class="cs-title">The Product Was Broken Before They Got There</h1>
         </div>
         <div class="hero-foot label">
@@ -463,13 +528,15 @@
         <p>This wasn't a complicated insight. But naming it mattered. It gave the program a shared mental model for what "fixing starts" actually meant at the design level. It turned a panic response into a coordinated one.</p>
       </div>
 
-      <div class="cs-chapter" id="ch1">
-        <div class="cs-chapter-label label">Chapter 1 &nbsp;·&nbsp; The cascade</div>
+    </div>
+
+    <div class="cs-chapter" id="ch1">
+        <div class="cs-chapter-label label">The cascade</div>
         <h2 class="cs-chapter-title">The tests that bought time.</h2>
         <div class="cs-chapter-sub">Four wins. One breakout. One honest loss that led to a structural reframe.</div>
       </div>
 
-      <div style="margin-top:48px;">
+      <div class="card">
         <h3>What shipped</h3>
         <p>I tracked every test the program ran in a canonical file: wins, kills, and everything in between. Both design and program management used it to understand what was happening in real time. Four tests won and shipped.</p>
 
@@ -479,7 +546,6 @@
         <h4>Business Tax Homepage v1 and v2</h4>
         <p>Two successive iterations on the business tax home page entry experience. Recipe B rolled. Recipe C rolled. Each one a sharper, more confident version of the product's first impression, reducing the cognitive cost of deciding to start.</p>
         <p>None of these were the breakout win. That was Dual Auth.</p>
-      </div>
 
       <div class="cs-section">
         <h3>The breakout: Dual Auth</h3>
@@ -556,7 +622,7 @@
         <p>The vast majority of customers were sole proprietors. The screen was asking them to make a decision they didn't need to make. The entity question had been built for the product's internal taxonomy, not for the customer's self-understanding.</p>
 
         <h4>R2: the reframe</h4>
-        <div class="cs-callout" style="font-family:'Inter',sans-serif;font-size:15px;font-style:normal;line-height:1.65;">"If we provide an 'I'm not sure' option, and then route all customers who select that into the sole prop SKU, reduce and simplify the content, reduce the choices, and lower cognitive burden, then we will reduce abandonment and increase starts."</div>
+        <div class="cs-callout is-quote">"If we provide an 'I'm not sure' option, and then route all customers who select that into the sole prop SKU, reduce and simplify the content, reduce the choices, and lower cognitive burden, then we will reduce abandonment and increase starts."</div>
         <p>The "I'm not sure" routing is the key design decision. Most onboarding flows force a choice and treat uncertainty as a failure state. I treated uncertainty as information. 58% of customers were sole props. 10% didn't know what they were. Routing uncertain customers to the most likely correct outcome wasn't a hack. It was designing for the actual distribution instead of the assumed one.</p>
 
         <div class="cs-metrics cs-metrics-3">
@@ -580,13 +646,16 @@
         <p>The win was structural. It didn't just improve a metric. It changed who got routed where. That's a different category of design decision than copy optimization or visual refinement.</p>
       </div>
 
+      </div>
+
       <div class="cs-chapter" id="ch2">
-        <div class="cs-chapter-label label">Chapter 2 &nbsp;·&nbsp; The bigger picture</div>
+        <div class="cs-chapter-label label">The bigger picture</div>
         <h2 class="cs-chapter-title">Running two tracks simultaneously.</h2>
         <div class="cs-chapter-sub">While the tests were moving metrics, a patterns library, a diagnostic, and a product vision were being built in parallel.</div>
       </div>
 
-      <div class="cs-section" style="border-top:none;padding-top:0;">
+      <div class="card">
+      <div class="cs-section">
         <h3>The work underneath the cascade</h3>
         <p>The four shipped tests were the visible layer. Running in parallel, all season, was a complete in-product design system.</p>
         <p>I started the Patterns: Assisted Business Tax file on January 9th with cards and levels scaffolding. By February 11th it had become "Business: modernized landing tables with next best action." The addition of "next best action" signals the shift from a product that collects data to a product that guides behavior. By April 23rd the file contained fully designed Prove identity verification flows: the automated business info collection concept from the vision work, moved into production-quality execution.</p>
@@ -661,13 +730,16 @@
         <p>I grounded every design decision in research. Customer findings were cited at the relevant moments in the flow, not as decoration, but as the evidence chain connecting customer problem to design response. Each question was traceable back to a finding.</p>
       </div>
 
+      </div>
+
       <div class="cs-chapter" id="ch3">
-        <div class="cs-chapter-label label">Chapter 3 &nbsp;·&nbsp; What I learned</div>
+        <div class="cs-chapter-label label">What I learned</div>
         <h2 class="cs-chapter-title">Three altitudes. One season.</h2>
         <div class="cs-chapter-sub">Vision, diagnostic, and execution: running in parallel, and connected.</div>
       </div>
 
-      <div class="cs-section" style="border-top:none;padding-top:0;">
+      <div class="card">
+      <div class="cs-section">
 
         <div class="cs-altitude-grid">
           <div class="cs-altitude">
@@ -688,12 +760,14 @@
         </div>
 
         <p>The three layers connect. The "I'm not sure → sole prop" routing in Reductive GTKMB R2 was the literal execution of "shift the burden of entity selection off the customer." The Prove verification flow in the patterns file was the same automated business info collection concept from the vision work. The personal tax flows designed inside the business tax file were the practical expression of "one product, one return."</p>
+        </div>
+      </div>
 
+      <div class="card">
         <div class="cs-takeaway">
           <div class="cs-takeaway-text">Name the structural problem earlier and louder.</div>
           <div class="cs-takeaway-sub">I spent most of the season treating the broken architecture as context for the test work. It deserved to be the primary argument. The test wins were evidence for it, not the other way around.</div>
         </div>
-      </div>
 
       <a href="ae-tof.html" class="cs-next">
         <div class="cs-next-label label">Also in this portfolio</div>
@@ -707,8 +781,7 @@
 
   <footer class="footer">
     <span>© 2026 Matt Kirkpatrick</span>
-    <span class="mark">Made with care.</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;">
+    <span class="footer-email">
       m.k.kirkpatrick@icloud.com
       <button class="copy-btn" data-copy="m.k.kirkpatrick@icloud.com" title="Copy email">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -887,7 +960,7 @@
       btn.style.alignItems = 'center';
       btn.style.gap = '4px';
       btn.style.whiteSpace = 'nowrap';
-      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:11px;font-family:inherit;letter-spacing:0.04em;">Copied</span>';
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="label">Copied</span>';
       setTimeout(function () {
         btn.classList.remove('copied');
         btn.style.display = '';

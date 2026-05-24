@@ -24,8 +24,8 @@
 ───────────────────────────────────── */
 body {
   font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.6;
   color: var(--c-primary);
 }
 
@@ -42,10 +42,10 @@ h1, h2, h3, h4, h5, h6 {
 h3, h4, h5, h6 { line-height: normal; }
 
 p {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.6;
   color: var(--c-primary);
-  margin-bottom: 16px;
+  margin-bottom: 22px;
 }
 p:last-child { margin-bottom: 0; }
 
@@ -77,6 +77,7 @@ figcaption {
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.1em;
   line-height: 1.5;
   color: var(--c-secondary);
 }
@@ -108,3 +109,12 @@ figcaption {
 .t-teal      { color: var(--c-teal); }
 .t-forest    { color: var(--c-forest); }
 .t-crimson   { color: var(--c-crimson); }
+
+/* ─────────────────────────────────────
+   Utility layouts
+───────────────────────────────────── */
+.footer-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
