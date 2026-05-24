@@ -745,12 +745,32 @@
       .hero-eyebrow { margin-bottom: 18px; display: block; }
       .hero-eyebrow::before { display: none; }
 
-      /* Nav: identity pill opens the daily thought card on mobile */
+      /* Nav: identity pill triggers links dropdown on mobile */
       .nav-identity { cursor: pointer; user-select: none; }
       .nav-caret { display: block; }
       .nav-caret.open { transform: rotate(180deg); }
-      /* Thought card anchors left on mobile to align with the identity pill */
-      .thought-card { left: 16px; right: 16px; max-width: none; }
+      .nav-links {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        padding: 6px;
+        border-radius: 14px;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 180px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-6px);
+        transition: opacity 0.22s ease, transform 0.22s ease;
+      }
+      .nav-links.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+      .nav-link { padding: 10px 14px; border-radius: 8px; }
 
       /* Experience: stack date above content */
       .intuit-role { flex-direction: column-reverse; gap: 2px; }
@@ -1404,26 +1424,31 @@
       else nav.classList.remove('scrolled');
     }, { passive: true });
 
-    // Mobile: identity pill opens the daily thought card (only when caret is visible)
+    // Mobile: identity pill → links dropdown. Desktop: identity pill → thought card.
     function isMobileNav() {
       return window.getComputedStyle(caret).display !== 'none';
     }
 
     identity.addEventListener('click', function (e) {
-      if (!isMobileNav()) return;
       e.stopPropagation();
-      if (thoughtCard.isOpen()) {
-        thoughtCard.close();
-        caret.classList.remove('open');
+      if (isMobileNav()) {
+        // Mobile: toggle nav-links dropdown
+        var open = links.classList.toggle('open');
+        caret.classList.toggle('open', open);
       } else {
-        thoughtCard.open();
-        caret.classList.add('open');
+        // Desktop: toggle daily thought card
+        if (thoughtCard.isOpen()) {
+          thoughtCard.close();
+        } else {
+          thoughtCard.open();
+        }
       }
     });
 
     document.addEventListener('click', function (e) {
       if (!isMobileNav()) return;
-      if (!e.target.closest('#nav-identity')) {
+      if (!e.target.closest('#nav-identity') && !e.target.closest('#nav-links')) {
+        links.classList.remove('open');
         caret.classList.remove('open');
       }
     });
