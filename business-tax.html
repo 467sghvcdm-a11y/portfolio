@@ -459,6 +459,18 @@
       .hero-body { margin-top: 56px; }
       .hero-foot { flex-wrap: wrap; gap: 16px 40px; }
       .cs-metrics-3, .cs-metrics-4 { grid-template-columns: repeat(2, 1fr); }
+      /* Chapter intermissions: stack numeral above content, align with card body */
+      .cs-chapter {
+        grid-template-columns: 1fr;
+        row-gap: 14px;
+        padding: 72px 40px 32px;
+      }
+      .cs-chapter > *,
+      .cs-chapter::before { grid-column: 1; }
+      .cs-chapter::before { grid-row: auto; font-size: 96px; }
+      .cs-chapter-title { font-size: 40px; }
+      .cs-chapter-label { margin-bottom: 0; }
+      .cs-chapter-title { margin-bottom: 0; }
     }
 
     @media (max-width: 520px) {
@@ -467,6 +479,9 @@
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
       .cs-title { font-size: 44px; }
+      .cs-chapter { padding: 56px 20px 24px; row-gap: 10px; }
+      .cs-chapter::before { font-size: 72px; }
+      .cs-chapter-title { font-size: 30px; }
       .cs-chap-nav { left: 116px; right: 16px; transform: none; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
       .cs-chap-nav::-webkit-scrollbar { display: none; }
       .cs-chap-nav.nav-scrolled { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); }
@@ -819,10 +834,14 @@
   // cs-back on-light detection
   (function () {
     const back = document.querySelector('.cs-back');
-    const card = document.querySelector('.card');
+    const cards = document.querySelectorAll('.card');
     const chapNav = document.getElementById('cs-chap-nav');
     function updateBack() {
-      const overCard = card.getBoundingClientRect().top < 48;
+      let overCard = false;
+      cards.forEach(function(c) {
+        const r = c.getBoundingClientRect();
+        if (r.top < 48 && r.bottom > 0) overCard = true;
+      });
       back.classList.toggle('on-light', overCard);
       if (window.matchMedia('(max-width: 520px)').matches) {
         chapNav.classList.toggle('on-light', overCard);
