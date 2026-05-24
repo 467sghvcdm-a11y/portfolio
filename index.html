@@ -99,11 +99,10 @@
     }
     .nav-caret {
       display: none;
-      font-size: 10px;
       color: rgba(244,237,226,0.45);
       margin-left: 2px;
       transition: transform 200ms;
-      line-height: 1;
+      flex-shrink: 0;
     }
     .nav-links {
       display: flex;
@@ -746,32 +745,12 @@
       .hero-eyebrow { margin-bottom: 18px; display: block; }
       .hero-eyebrow::before { display: none; }
 
-      /* Nav: identity becomes a dropdown trigger; links shown as dropdown */
+      /* Nav: identity pill opens the daily thought card on mobile */
       .nav-identity { cursor: pointer; user-select: none; }
       .nav-caret { display: block; }
-      .nav-links {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 2px;
-        padding: 6px;
-        border-radius: 14px;
-        position: absolute;
-        top: calc(100% + 8px);
-        left: 0;
-        min-width: 180px;
-        opacity: 0;
-        pointer-events: none;
-        transform: translateY(-6px);
-        transition: opacity 0.22s ease, transform 0.22s ease;
-      }
-      .nav-links.open {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0);
-      }
       .nav-caret.open { transform: rotate(180deg); }
-      .nav-link { padding: 10px 14px; border-radius: 8px; }
+      /* Thought card anchors left on mobile to align with the identity pill */
+      .thought-card { left: 16px; right: 16px; max-width: none; }
 
       /* Experience: stack date above content */
       .intuit-role { flex-direction: column-reverse; gap: 2px; }
@@ -808,7 +787,7 @@
     <div class="nav-identity" id="nav-identity">
       <div class="avatar"><img src="assets/portrait.jpg" alt="" width="513" height="513"></div>
       <span class="nav-name">Matt Kirkpatrick</span>
-      <span class="nav-caret" id="nav-caret" aria-hidden="true">▾</span>
+      <svg class="nav-caret" id="nav-caret" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><polyline points="3,5 7,9 11,5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
     <div class="nav-links" id="nav-links">
       <a href="resume.html" class="nav-link" target="_blank">Resume</a>
@@ -824,7 +803,7 @@
 
       <div class="hero-body">
         <div>
-          <p class="hero-eyebrow label">Principal Product Designer &nbsp;·&nbsp; TurboTax &nbsp;·&nbsp; Intuit</p>
+          <p class="hero-eyebrow label">Principal Product Designer &nbsp;·&nbsp; Intuit</p>
           <h1 class="hero-title">
             Put me on the hardest problem.<br class="mobile-br"> I build the <em class="acc">/strategies</em><br class="mobile-br"> that solve it.
           </h1>
@@ -1184,7 +1163,7 @@
   })();
 
   // ── Daily thought ──
-  (function () {
+  var thoughtCard = (function () {
     var thoughts = [
       "The brief is never the real problem. The real problem is what the brief was written around.",
       "A test that wins on one surface is evidence, not strategy. Know what you're actually measuring before you ship the next variant.",
@@ -1231,6 +1210,8 @@
     document.addEventListener('click', function (e) {
       if (open && !card.contains(e.target)) closeCard();
     });
+
+    return { open: openCard, close: closeCard, isOpen: function() { return open; } };
   })();
 
   // ── Background gradients expand toward the dwarf star ──
@@ -1423,21 +1404,26 @@
       else nav.classList.remove('scrolled');
     }, { passive: true });
 
-    // Mobile dropdown toggle (only active when caret is visible)
+    // Mobile: identity pill opens the daily thought card (only when caret is visible)
     function isMobileNav() {
       return window.getComputedStyle(caret).display !== 'none';
     }
 
     identity.addEventListener('click', function (e) {
       if (!isMobileNav()) return;
-      var open = links.classList.toggle('open');
-      caret.classList.toggle('open', open);
+      e.stopPropagation();
+      if (thoughtCard.isOpen()) {
+        thoughtCard.close();
+        caret.classList.remove('open');
+      } else {
+        thoughtCard.open();
+        caret.classList.add('open');
+      }
     });
 
     document.addEventListener('click', function (e) {
       if (!isMobileNav()) return;
-      if (!e.target.closest('#nav-identity') && !e.target.closest('#nav-links')) {
-        links.classList.remove('open');
+      if (!e.target.closest('#nav-identity')) {
         caret.classList.remove('open');
       }
     });
