@@ -63,14 +63,22 @@
       border-radius: 0;
     }
 
-    .cs-chap-nav {
+    .cs-topbar {
       position: fixed;
       top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 16px;
+      right: 16px;
       z-index: 100;
       display: flex;
       align-items: center;
+      gap: 8px;
+    }
+    .cs-chap-nav {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 2px;
       background: rgba(10,10,10,0.65);
       backdrop-filter: blur(12px);
@@ -79,6 +87,7 @@
       border-radius: 100px;
       padding: 3px;
       white-space: nowrap;
+      overflow: hidden;
     }
     .cs-chap-link {
       color: rgba(244,237,226,0.72);
@@ -86,15 +95,13 @@
       padding: 5px 14px;
       border-radius: 100px;
       transition: color 150ms, background 150ms;
+      flex-shrink: 0;
     }
     .cs-chap-link:hover { color: #f4ede2; }
     .cs-chap-link.active { color: #f4ede2; background: rgba(255,255,255,0.18); }
 
     .cs-back {
-      position: fixed;
-      top: 16px;
-      left: 16px;
-      z-index: 100;
+      flex-shrink: 0;
       color: rgba(244,237,226,0.6);
       text-decoration: none;
       background: rgba(10,10,10,0.65);
@@ -103,6 +110,7 @@
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 100px;
       padding: 8px 16px;
+      white-space: nowrap;
       transition: color 200ms, background 200ms, border-color 200ms;
     }
     .cs-back:hover { color: #f4ede2; background: rgba(10,10,10,0.85); }
@@ -110,10 +118,7 @@
     .cs-back.on-light:hover { color: rgba(0,0,0,0.85); background: rgba(255,255,255,0.96); }
 
     .cs-nav-links {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 100;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       gap: 2px;
@@ -139,6 +144,9 @@
     .cs-nav-link:hover { color: #f4ede2; background: rgba(255,255,255,0.1); }
     .cs-nav-link:focus { outline: none; }
     .cs-nav-link:focus-visible { outline: 2px solid rgba(255,255,255,0.35); outline-offset: 3px; }
+    .cs-nav-links.on-light { background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
+    .cs-nav-links.on-light .cs-nav-link { color: rgba(0,0,0,0.5); }
+    .cs-nav-links.on-light .cs-nav-link:hover { color: rgba(0,0,0,0.85); background: rgba(0,0,0,0.06); }
 
     .hero-body {
       flex: 1;
@@ -492,7 +500,8 @@
       .cs-chapter { padding: 56px var(--card-h) 24px; row-gap: 20px; }
       .cs-chapter::before { font-size: 72px; }
       .cs-chapter-title { font-size: 30px; }
-      .cs-chap-nav { left: 116px; right: 16px; transform: none; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
+      .cs-nav-links { display: none; }
+      .cs-chap-nav { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
       .cs-chap-nav::-webkit-scrollbar { display: none; }
       .cs-chap-nav.nav-scrolled { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); }
       .cs-chap-nav.nav-at-end { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%); mask-image: linear-gradient(to right, transparent 0%, black 20%); }
@@ -510,20 +519,22 @@
 </head>
 <body>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
-  <a href="index.html" class="cs-back caption">← Work</a>
-  <div class="cs-nav-links">
-    <a href="resume.html" class="cs-nav-link" target="_blank">Resume</a>
-    <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="cs-nav-link" target="_blank">LinkedIn</a>
-    <a href="mailto:m.k.kirkpatrick@icloud.com" class="cs-nav-link">Get in touch</a>
-  </div>
-  <nav class="cs-chap-nav" id="cs-chap-nav">
-    <a class="cs-chap-link caption" href="#intro" aria-current="false">Overview</a>
-    <a class="cs-chap-link caption" href="#ch1" aria-current="false">Foundation</a>
-    <a class="cs-chap-link caption" href="#ch2" aria-current="false">Preseason</a>
-    <a class="cs-chap-link caption" href="#ch3" aria-current="false">Scale</a>
-    <a class="cs-chap-link caption" href="#ch4" aria-current="false">Strategy</a>
-    <a class="cs-chap-link caption" href="#ch5" aria-current="false">Outcomes</a>
-  </nav>
+  <div class="cs-topbar">
+    <a href="index.html" class="cs-back caption">← Work</a>
+    <nav class="cs-chap-nav" id="cs-chap-nav">
+      <a class="cs-chap-link caption" href="#intro" aria-current="false">Overview</a>
+      <a class="cs-chap-link caption" href="#ch1" aria-current="false">Foundation</a>
+      <a class="cs-chap-link caption" href="#ch2" aria-current="false">Preseason</a>
+      <a class="cs-chap-link caption" href="#ch3" aria-current="false">Scale</a>
+      <a class="cs-chap-link caption" href="#ch4" aria-current="false">Strategy</a>
+      <a class="cs-chap-link caption" href="#ch5" aria-current="false">Outcomes</a>
+    </nav>
+    <div class="cs-nav-links">
+      <a href="resume.html" class="cs-nav-link" target="_blank">Resume</a>
+      <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="cs-nav-link" target="_blank">LinkedIn</a>
+      <a href="mailto:m.k.kirkpatrick@icloud.com" class="cs-nav-link">Email →</a>
+    </div>
+  </div><!-- /.cs-topbar -->
   <div class="pv-inner" role="main" style="padding: 8px 12px 24px">
 
     <div class="hero" style="min-height: 0">
@@ -1051,18 +1062,17 @@
     });
   })();
 
-  // Back pill — dark over hero, light over white body
+  // Back pill / chapter nav / nav-links — dark over hero, light over white body
   (function () {
-    const back = document.querySelector('.cs-back');
-    const card = document.querySelector('.card');
-    const chapNav = document.getElementById('cs-chap-nav');
+    const back     = document.querySelector('.cs-back');
+    const card     = document.querySelector('.card');
+    const chapNav  = document.getElementById('cs-chap-nav');
+    const navLinks = document.querySelector('.cs-nav-links');
     function updateBack() {
-      const cardTop = card.getBoundingClientRect().top;
-      const overCard = cardTop < 48;
+      const overCard = card.getBoundingClientRect().top < 48;
       back.classList.toggle('on-light', overCard);
-      if (window.matchMedia('(max-width: 520px)').matches) {
-        chapNav.classList.toggle('on-light', overCard);
-      }
+      chapNav.classList.toggle('on-light', overCard);
+      if (navLinks) navLinks.classList.toggle('on-light', overCard);
     }
     window.addEventListener('scroll', updateBack, { passive: true });
     updateBack();

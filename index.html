@@ -97,6 +97,14 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
     }
+    .nav-caret {
+      display: none;
+      font-size: 10px;
+      color: rgba(244,237,226,0.45);
+      margin-left: 2px;
+      transition: transform 200ms;
+      line-height: 1;
+    }
     .nav-links {
       display: flex;
       align-items: center;
@@ -156,18 +164,7 @@
       letter-spacing: 0.04em;
     }
     .nav-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: none;
-      cursor: pointer;
-      position: absolute;
-      top: 29px;
-      right: 40px;
-      z-index: 200;
-      animation: dot-breathe 7s ease-in-out infinite;
-      padding: 0;
+      display: none;
     }
     body { position: relative; }
     .nav-dot::before {
@@ -749,9 +746,32 @@
       .hero-eyebrow { margin-bottom: 18px; display: block; }
       .hero-eyebrow::before { display: none; }
 
-      /* Nav dot + nav links: hide on mobile */
-      .nav-dot { display: none; }
-      .nav-links { display: none; }
+      /* Nav: identity becomes a dropdown trigger; links shown as dropdown */
+      .nav-identity { cursor: pointer; user-select: none; }
+      .nav-caret { display: block; }
+      .nav-links {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        padding: 6px;
+        border-radius: 14px;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 180px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-6px);
+        transition: opacity 0.22s ease, transform 0.22s ease;
+      }
+      .nav-links.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+      .nav-caret.open { transform: rotate(180deg); }
+      .nav-link { padding: 10px 14px; border-radius: 8px; }
 
       /* Experience: stack date above content */
       .intuit-role { flex-direction: column-reverse; gap: 2px; }
@@ -785,14 +805,15 @@
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
   <nav class="nav" id="nav">
-    <div class="nav-identity">
+    <div class="nav-identity" id="nav-identity">
       <div class="avatar"><img src="assets/portrait.jpg" alt="" width="513" height="513"></div>
       <span class="nav-name">Matt Kirkpatrick</span>
+      <span class="nav-caret" id="nav-caret" aria-hidden="true">▾</span>
     </div>
-    <div class="nav-links">
+    <div class="nav-links" id="nav-links">
       <a href="resume.html" class="nav-link" target="_blank">Resume</a>
       <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="nav-link" target="_blank">LinkedIn</a>
-      <a href="mailto:m.k.kirkpatrick@icloud.com" class="nav-link">Get in touch</a>
+      <a href="mailto:m.k.kirkpatrick@icloud.com" class="nav-link">Email →</a>
     </div>
   </nav>
 
@@ -808,7 +829,6 @@
             Put me on the hardest problem.<br class="mobile-br"> I build the <em class="acc">/strategies</em><br class="mobile-br"> that solve it.
           </h1>
         </div>
-        <a href="mailto:m.k.kirkpatrick@icloud.com" class="hero-cta">Get in touch →</a>
       </div>
     </div>
 
@@ -1393,11 +1413,34 @@
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
   (function () {
-    var nav = document.getElementById('nav');
+    var nav      = document.getElementById('nav');
+    var identity = document.getElementById('nav-identity');
+    var links    = document.getElementById('nav-links');
+    var caret    = document.getElementById('nav-caret');
+
     window.addEventListener('scroll', function () {
       if (window.scrollY > 40) nav.classList.add('scrolled');
       else nav.classList.remove('scrolled');
     }, { passive: true });
+
+    // Mobile dropdown toggle (only active when caret is visible)
+    function isMobileNav() {
+      return window.getComputedStyle(caret).display !== 'none';
+    }
+
+    identity.addEventListener('click', function (e) {
+      if (!isMobileNav()) return;
+      var open = links.classList.toggle('open');
+      caret.classList.toggle('open', open);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!isMobileNav()) return;
+      if (!e.target.closest('#nav-identity') && !e.target.closest('#nav-links')) {
+        links.classList.remove('open');
+        caret.classList.remove('open');
+      }
+    });
   })();
   </script>
   <script>
