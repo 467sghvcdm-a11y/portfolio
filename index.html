@@ -96,7 +96,14 @@
       background: rgba(10,10,10,0.65);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: background 220ms, border-color 220ms;
     }
+    .nav-identity:hover {
+      background: rgba(10,10,10,0.85);
+      border-color: rgba(255,255,255,0.18);
+    }
+    .nav-identity:hover .nav-name { color: #ffffff; }
     .nav-caret {
       display: none;
       color: rgba(244,237,226,0.45);
@@ -207,7 +214,7 @@
     .thought-card {
       position: fixed;
       top: 66px;
-      right: 48px;
+      left: 16px;
       max-width: 272px;
       background: rgba(10,10,10,0.82);
       backdrop-filter: blur(20px);
