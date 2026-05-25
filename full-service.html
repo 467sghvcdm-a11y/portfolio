@@ -15,9 +15,9 @@
       min-height: 100dvh;
       background-color: #000000;
       background-image:
-        radial-gradient(ellipse at 82% 10%, rgba(200,145,38,0.46) 0%, transparent 52%),
-        radial-gradient(ellipse at 8%  78%, rgba(80,30,150,0.40)  0%, transparent 50%),
-        radial-gradient(ellipse at 52% 50%, rgba(25,50,130,0.26)  0%, transparent 46%);
+        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50)  0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28)  0%, transparent 46%);
       background-attachment: fixed;
       --accent: #d92638;
       --card-radius: 20px;
@@ -217,7 +217,7 @@
       letter-spacing: -0.04em;
       color: var(--c-cream);
       font-feature-settings: 'lnum';
-      text-shadow: 0 0 36px rgba(200,145,38,0.22);
+      text-shadow: 0 0 36px rgba(217,38,56,0.18);
       grid-column: 1;
       grid-row: 1 / 4;
     }
@@ -472,35 +472,41 @@
   <div class="pv-inner" role="main">
 
     <!-- Hero -->
-    <div class="hero" id="intro">
-      <div class="hero-body">
+    <div class="hero" style="min-height: 0">
+      <div class="hero-body" style="gap: 8px">
         <div>
-          <p class="hero-eyebrow label">Full Service &nbsp;·&nbsp; Scott Cook Innovation Award, FY24</p>
-          <h1 class="cs-title">22 days to<br>a few hours.</h1>
+          <p class="hero-eyebrow label">TurboTax Full Service</p>
+          <h1 class="cs-title">22 days to a few hours.</h1>
         </div>
-        <div class="hero-foot">
-          <div>
-            <span class="label t-secondary">Completed returns</span>
-            <b>283K</b>
-          </div>
-          <div>
-            <span class="label t-secondary">Revenue</span>
-            <b>$73M</b>
-          </div>
-          <div>
-            <span class="label t-secondary">Same-day satisfaction</span>
-            <b>90 / 100</b>
-          </div>
-          <div>
-            <span class="label t-secondary">Same-day margin</span>
-            <b>+97%</b>
-          </div>
+        <div class="hero-foot label">
+          <span>Role<b>Design Lead</b></span>
+          <span>Years<b>TY2021–2023</b></span>
         </div>
       </div>
     </div>
 
     <!-- Overview card -->
-    <div class="card">
+    <div class="card" id="intro">
+
+      <div class="cs-metrics cs-metrics-4" style="margin-bottom: 56px">
+        <div class="cs-metric win">
+          <div class="cs-metric-val win">283<span class="cs-metric-sup">K</span></div>
+          <div class="cs-metric-lbl label">Completed returns</div>
+        </div>
+        <div class="cs-metric win">
+          <div class="cs-metric-val win">$73<span class="cs-metric-sup">M</span></div>
+          <div class="cs-metric-lbl label">Revenue</div>
+        </div>
+        <div class="cs-metric win">
+          <div class="cs-metric-val win">90</div>
+          <div class="cs-metric-lbl label">Satisfaction score</div>
+          <div class="cs-metric-ctx caption">100-pt scale</div>
+        </div>
+        <div class="cs-metric win">
+          <div class="cs-metric-val win">+97<span class="cs-metric-sup">%</span></div>
+          <div class="cs-metric-lbl label">Same-day margin</div>
+        </div>
+      </div>
 
       <h3>The problem</h3>
       <p>TurboTax Live launched with a promise and a workflow that couldn't keep it. By Tax Year 2021, the average customer waited 18 days from their first contact with a tax prep assistant to a filed return. For dissatisfied customers it was 21 days. 30% named wait time as the reason. 16% of all support calls were customers asking where their expert was.</p>
@@ -674,8 +680,8 @@
           </div>
           <div class="cs-metric win">
             <div class="cs-metric-val win">90</div>
-            <div class="cs-metric-lbl caption">Same-day satisfaction</div>
-            <div class="cs-metric-ctx caption">vs. 84 overall</div>
+            <div class="cs-metric-lbl caption">Satisfaction score</div>
+            <div class="cs-metric-ctx caption">100-pt scale · vs. 84 overall</div>
           </div>
         </div>
         <p>59% of customers who connected with an expert finished that same day, versus 6% the prior year. Open customer cases dropped 79%. In August 2022, Same Day became the primary approach across all Full Service versions.</p>
@@ -701,8 +707,8 @@
           </div>
           <div class="cs-metric win">
             <div class="cs-metric-val win">90</div>
-            <div class="cs-metric-lbl caption">Same-day satisfaction</div>
-            <div class="cs-metric-ctx caption">vs. 60 for all other TTO</div>
+            <div class="cs-metric-lbl caption">Satisfaction score</div>
+            <div class="cs-metric-ctx caption">100-pt scale · vs. 60 for all other TTO</div>
           </div>
         </div>
         <p>Average return completion time went from 22 days to a few hours. Same-day margin increased 97%. On April 15, 58,000 customers started (double the prior year), 11,000 completed returns (266% above), and 17,000 live expert calls were handled (325% above).</p>
