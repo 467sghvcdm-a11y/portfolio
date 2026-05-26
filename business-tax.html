@@ -35,7 +35,7 @@
 
     /* ── Card ── */
     .card {
-      background: #fff;
+      background: var(--c-card-surface);
       border-radius: var(--card-radius);
       padding: 56px var(--card-h) 72px;
       position: relative;
@@ -57,7 +57,7 @@
       background: transparent;
       color: #f4ede2;
       min-height: 68vh;
-      padding: 36px 80px 56px;
+      padding: 36px var(--card-h) 56px;
       display: flex;
       flex-direction: column;
       margin: -8px -8px 0;
@@ -205,7 +205,7 @@
       line-height: 1.0;
       padding: 24px 28px;
       border-left: 3px solid var(--accent);
-      background: #fafafa;
+      background: var(--c-card-subsurface);
       border-radius: 0 8px 8px 0;
       margin: 28px 0;
     }
@@ -238,7 +238,7 @@
     }
     .cs-metrics-table td {
       padding: 11px 20px 11px 0;
-      border-bottom: 1px solid #f5f5f5;
+      border-bottom: 1px solid var(--c-rule);
       color: var(--c-secondary);
     }
     .cs-metrics-table td:first-child { color: #767676; }
@@ -299,12 +299,12 @@
     }
     .cs-artifact-list li {
       padding: 13px 0;
-      border-top: 1px solid #f0f0f0;
+      border-top: 1px solid var(--c-rule);
       color: var(--c-secondary);
       display: flex;
       gap: 12px;
     }
-    .cs-artifact-list li:last-child { border-bottom: 1px solid #f0f0f0; }
+    .cs-artifact-list li:last-child { border-bottom: 1px solid var(--c-rule); }
     .cs-artifact-list li::before {
       content: '→' / '';
       color: #ccc;
@@ -321,7 +321,7 @@
       border-radius: 10px;
       overflow: hidden;
     }
-    .cs-altitude { background: #fafafa; padding: 28px 32px; }
+    .cs-altitude { background: var(--c-card-subsurface); padding: 28px 32px; }
     .cs-altitude-label { color: var(--accent); margin-bottom: 10px; }
     .cs-altitude-title { font-family: 'Fraunces', Georgia, serif; font-size: 20px; margin-bottom: 12px; }
     .cs-altitude-desc { color: var(--c-secondary); }
@@ -347,15 +347,11 @@
       background: transparent;
       color: var(--c-cream);
       padding: 88px var(--card-h) 36px;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      column-gap: 32px;
-      align-items: start;
       position: relative;
       border: none;
       margin: 0;
     }
-    .cs-chapter > * { grid-column: 2; }
+    /* Massive numeral, cream on nebula — floats in left margin at wide viewports */
     .cs-chapter::before {
       content: counter(chapter, decimal-leading-zero);
       font-family: 'Fraunces', Georgia, serif;
@@ -366,8 +362,25 @@
       color: var(--c-cream);
       font-feature-settings: 'lnum';
       text-shadow: 0 0 36px rgba(217,38,56,0.18);
-      grid-column: 1;
-      grid-row: 1 / 4;
+      position: absolute;
+      top: 88px;
+      left: 0;
+      width: var(--card-h);
+      padding-right: 32px;
+      text-align: right;
+    }
+    /* Below ~1280px the left margin isn't wide enough for the numeral to live in —
+       fall back to stacked-above-content. Mobile rules below override font size further. */
+    @media (max-width: 1280px) {
+      .cs-chapter::before {
+        position: static;
+        width: auto;
+        padding-right: 0;
+        text-align: left;
+        display: block;
+        font-size: 96px;
+        margin-bottom: 22px;
+      }
     }
     .cs-chapter-label {
       color: var(--accent);
@@ -461,13 +474,8 @@
       .cs-metrics-3, .cs-metrics-4 { grid-template-columns: repeat(2, 1fr); }
       /* Chapter intermissions: stack numeral above content, align with card body */
       .cs-chapter {
-        grid-template-columns: 1fr;
-        row-gap: 14px;
         padding: 72px 40px 32px;
       }
-      .cs-chapter > *,
-      .cs-chapter::before { grid-column: 1; }
-      .cs-chapter::before { grid-row: auto; font-size: 96px; }
       .cs-chapter-title { font-size: 40px; }
       .cs-chapter-label { margin-bottom: 0; }
       .cs-chapter-title { margin-bottom: 0; }
@@ -479,8 +487,8 @@
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
       .cs-title { font-size: 44px; }
-      .cs-chapter { padding: 56px 20px 24px; row-gap: 10px; }
-      .cs-chapter::before { font-size: 72px; }
+      .cs-chapter { padding: 56px 20px 24px; }
+      .cs-chapter::before { font-size: 72px; margin-bottom: 18px; }
       .cs-chapter-title { font-size: 30px; }
       .cs-chap-nav { left: 116px; right: 16px; transform: none; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
       .cs-chap-nav::-webkit-scrollbar { display: none; }

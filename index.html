@@ -40,8 +40,15 @@
     }
 
     /* ── Cards ── */
+    /* Card surface and overrides live in style.css :root. Body[data-surface=...]
+       rules below let the Tweaks panel preview alternate surfaces live. */
+    body[data-surface="cream"]  { --c-card-surface: var(--c-cream); }
+    body[data-surface="linen"]  { --c-card-surface: #f7f1e6; }
+    body[data-surface="paper"]  { --c-card-surface: #faf5ed; }
+    body[data-surface="bone"]   { --c-card-surface: #fcf9f3; }
+    body[data-surface="snow"]   { --c-card-surface: #ffffff; }
     .card {
-      background: #fff;
+      background: var(--c-card-surface);
       border-radius: var(--card-radius);
       padding: 80px var(--card-h);
       position: relative;
@@ -58,7 +65,7 @@
       background: transparent;
       color: #f4ede2;
       min-height: calc(100vh - 200px);
-      padding: 20px 80px 48px;
+      padding: 20px var(--card-h) 48px;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -409,68 +416,214 @@
     /* ── Section headings ── */
     h2 { font-size: 38px; margin-bottom: 20px; }
 
-    /* ── Work ── */
-    .work-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
+    /* ── Work — base (shared across all layouts) ── */
+    .work-grid { display: grid; gap: 0; }
     .work-item {
-      display: block;
       text-decoration: none;
       color: inherit;
-      overflow: hidden;
       position: relative;
-      aspect-ratio: 1 / 1;
-      border-radius: 8px;
+      overflow: hidden;
       background: linear-gradient(135deg, #c8c8c8 0%, #b0b0b0 100%);
-      margin: 8px;
-      box-shadow: 0 0 0 6px rgba(255,255,255,0.85);
       transition: box-shadow 220ms ease, transform 220ms ease;
     }
-    .work-item img {
+    .work-thumb { position: absolute; inset: 0; overflow: hidden; }
+    .work-thumb img {
       width: 100%; height: 100%;
       object-fit: cover; display: block;
       transition: transform 600ms cubic-bezier(0.2, 0.6, 0.2, 1);
     }
+    .work-body { position: relative; z-index: 1; }
+    .work-title { margin: 0; }
+    .work-problem { margin: 6px 0 0; line-height: 1.5; }
+
     @media (hover: hover) {
-      .work-item:hover {
-        box-shadow: 0 0 0 6px rgba(255,255,255,0.85), 0 20px 44px rgba(0,0,0,0.22);
-      }
-      .work-item:hover img { transform: scale(1.03); }
+      .work-item:hover .work-thumb img { transform: scale(1.03); }
       .work-item:active { transform: scale(0.99); transition-duration: 80ms; }
     }
-    .work-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: flex-end;
-      padding: 24px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: rgba(0,0,0,0.35);
+
+    /* ── Layout: Grid 3-up (default) — overlay copy on dark gradient ── */
+    body[data-layout="grid"] .work-grid {
+      grid-template-columns: repeat(3, 1fr);
     }
-    .work-overlay {
+    body[data-layout="grid"] .work-item {
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      margin: 8px;
+      box-shadow: 0 0 0 6px rgba(252,249,243,0.85);
+    }
+    body[data-layout="grid"] .work-body {
       position: absolute;
       inset: auto 0 0 0;
       padding: 64px 18px 18px;
       background: linear-gradient(to top, rgba(15,15,15,0.92), rgba(15,15,15,0.4) 55%, transparent);
-      color: #fff;
-      font-size: 16px;
-      letter-spacing: -0.01em;
+      color: var(--c-cream);
     }
-    .work-problem {
-      font-family: 'Figtree', sans-serif;
+    body[data-layout="grid"] .work-title {
+      font-size: 18px;
+      color: var(--c-cream);
+    }
+    body[data-layout="grid"] .work-problem {
       font-size: 13px;
-      line-height: 1.55;
-      color: rgba(255,255,255,1);
-      margin-bottom: 8px;
-      font-style: normal;
+      color: var(--c-cream);
     }
-    .work-overlay .meta {
-      color: var(--accent);
-      margin-bottom: 4px;
+    @media (hover: hover) {
+      body[data-layout="grid"] .work-item:hover {
+        box-shadow: 0 0 0 6px rgba(252,249,243,0.85), 0 20px 44px rgba(0,0,0,0.22);
+      }
+    }
+
+    /* ── Layout: Featured (1 large + 2 stacked) ── */
+    body[data-layout="featured"] .work-grid {
+      grid-template-columns: 1.6fr 1fr;
+      grid-auto-rows: 1fr;
+    }
+    body[data-layout="featured"] .work-item {
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      margin: 8px;
+      box-shadow: 0 0 0 6px rgba(252,249,243,0.85);
+    }
+    body[data-layout="featured"] .work-item:first-child {
+      grid-row: 1 / 3;
+      aspect-ratio: 4 / 5;
+    }
+    body[data-layout="featured"] .work-body {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 64px 22px 22px;
+      background: linear-gradient(to top, rgba(15,15,15,0.92), rgba(15,15,15,0.4) 55%, transparent);
+      color: var(--c-cream);
+    }
+    body[data-layout="featured"] .work-item:first-child .work-title {
+      font-size: 36px;
+      color: var(--c-cream);
+    }
+    body[data-layout="featured"] .work-item:first-child .work-problem {
+      font-size: 16px;
+      color: var(--c-cream);
+      max-width: 38ch;
+      margin-top: 10px;
+    }
+    body[data-layout="featured"] .work-item:not(:first-child) .work-title {
+      font-size: 18px;
+      color: var(--c-cream);
+    }
+    body[data-layout="featured"] .work-item:not(:first-child) .work-problem {
+      font-size: 13px;
+      color: var(--c-cream);
+    }
+    @media (hover: hover) {
+      body[data-layout="featured"] .work-item:hover {
+        box-shadow: 0 0 0 6px rgba(252,249,243,0.85), 0 20px 44px rgba(0,0,0,0.22);
+      }
+    }
+
+    /* ── Layout: Stacked rows (landscape, image left + copy right) ── */
+    body[data-layout="stacked"] .work-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    body[data-layout="stacked"] .work-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: stretch;
+      aspect-ratio: auto;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: visible;
+      padding: 24px 0;
+      border-bottom: 1px solid #e8e3d4;
+    }
+    body[data-layout="stacked"] .work-item:first-child { padding-top: 8px; }
+    body[data-layout="stacked"] .work-item:last-child { border-bottom: none; padding-bottom: 8px; }
+    body[data-layout="stacked"] .work-thumb {
+      position: relative;
+      inset: auto;
+      aspect-ratio: 16 / 10;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    body[data-layout="stacked"] .work-body {
+      background: transparent;
+      color: var(--c-primary);
+      padding: 8px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 42ch;
+    }
+    body[data-layout="stacked"] .work-title {
+      font-size: 36px;
+      color: var(--c-primary);
+      margin-bottom: 14px;
+      transition: color 200ms;
+    }
+    body[data-layout="stacked"] .work-problem {
+      font-size: 17px;
+      color: var(--c-secondary);
+      margin: 0;
+    }
+    @media (hover: hover) {
+      body[data-layout="stacked"] .work-item:hover .work-title { color: var(--accent); }
+    }
+
+    /* ── Layout: Index (editorial list — text first, thumb on right) ── */
+    body[data-layout="index"] .work-grid {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid #e8e3d4;
+      margin-top: 8px;
+    }
+    body[data-layout="index"] .work-item {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      align-items: center;
+      gap: 40px;
+      padding: 36px 0;
+      border-bottom: 1px solid #e8e3d4;
+      aspect-ratio: auto;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: visible;
+      color: var(--c-primary);
+    }
+    body[data-layout="index"] .work-thumb {
+      position: relative;
+      inset: auto;
+      aspect-ratio: 16 / 10;
+      border-radius: 4px;
+      overflow: hidden;
+      opacity: 0.42;
+      filter: grayscale(0.55);
+      transition: opacity 240ms, filter 240ms;
+    }
+    body[data-layout="index"] .work-body {
+      background: transparent;
+      color: var(--c-primary);
+      padding: 0;
+    }
+    body[data-layout="index"] .work-title {
+      font-size: 44px;
+      color: var(--c-primary);
+      margin-bottom: 12px;
+      transition: color 200ms;
+    }
+    body[data-layout="index"] .work-problem {
+      font-size: 16px;
+      color: var(--c-secondary);
+      max-width: 56ch;
+      margin: 0;
+    }
+    @media (hover: hover) {
+      body[data-layout="index"] .work-item:hover .work-thumb {
+        opacity: 1;
+        filter: none;
+      }
+      body[data-layout="index"] .work-item:hover .work-title { color: var(--accent); }
     }
 
     /* ── About ── */
@@ -558,9 +711,9 @@
       flex-direction: column;
       gap: 4px;
       padding: 9px 0;
-      border-top: 1px solid #f5f5f5;
+      border-top: 1px solid var(--c-rule);
     }
-    .exp-item-footnote:last-child { border-bottom: 1px solid #f5f5f5; }
+    .exp-item-footnote:last-child { border-bottom: 1px solid var(--c-rule); }
 
     /* ── Footer ── */
     .footer {
@@ -590,8 +743,29 @@
 
       .hero { padding: 40px 32px 40px; margin: -6px 0 0; }
 
-      /* Work: single column */
-      .work-grid { grid-template-columns: 1fr; }
+      /* Work: collapse all layouts to a single column on mobile */
+      body[data-layout="grid"] .work-grid,
+      body[data-layout="featured"] .work-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+      }
+      body[data-layout="featured"] .work-item:first-child {
+        grid-row: auto;
+        aspect-ratio: 1 / 1;
+      }
+      body[data-layout="featured"] .work-item:first-child .work-title { font-size: 24px; }
+      body[data-layout="featured"] .work-item:first-child .work-problem { font-size: 14px; }
+      body[data-layout="stacked"] .work-item {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      body[data-layout="stacked"] .work-title { font-size: 28px; }
+      body[data-layout="index"] .work-item {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      body[data-layout="index"] .work-title { font-size: 32px; }
+      body[data-layout="index"] .work-thumb { display: none; }
 
       /* About: stack portrait below text */
       .about-grid { grid-template-columns: 1fr; }
@@ -621,7 +795,7 @@
       background: rgba(10,10,10,0.65);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      color: rgba(244,237,226,0.85);
+      color: rgba(252,249,243,0.85);
       font-family: 'Figtree', sans-serif;
       font-size: 12px;
       font-weight: 400;
@@ -710,6 +884,9 @@
       border-radius: 8px;
       padding: 3px;
     }
+    .twk-seg.is-4 { grid-template-columns: repeat(4, 1fr); }
+    .twk-seg.is-5 { grid-template-columns: repeat(5, 1fr); }
+    .twk-seg.is-5 button { padding: 8px 2px; font-size: 11px; }
     .twk-seg button {
       background: transparent;
       border: none;
@@ -802,11 +979,15 @@
     window.__TWEAKS = /*EDITMODE-BEGIN*/{
       "mood": "aurora",
       "acc": "code",
-      "atmos": "meteors"
+      "atmos": "meteors",
+      "layout": "featured",
+      "surface": "bone"
     }/*EDITMODE-END*/;
-    document.body.dataset.mood  = window.__TWEAKS.mood;
-    document.body.dataset.acc   = window.__TWEAKS.acc;
-    document.body.dataset.atmos = window.__TWEAKS.atmos;
+    document.body.dataset.mood    = window.__TWEAKS.mood;
+    document.body.dataset.acc     = window.__TWEAKS.acc;
+    document.body.dataset.atmos   = window.__TWEAKS.atmos;
+    document.body.dataset.layout  = window.__TWEAKS.layout;
+    document.body.dataset.surface = window.__TWEAKS.surface;
   </script>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
@@ -842,25 +1023,31 @@
     <div class="card" id="work">
       <h2>Work</h2>
       <div class="work-grid">
-        <a href="business-tax.html" class="work-item">
-          <img src="assets/work-business-tax.jpg" alt="Business Tax" width="2048" height="784" loading="lazy" decoding="async">
-          <div class="work-overlay">
-            <div class="work-problem">How do you grow a product category most customers don't know exists?</div>
-            Business Tax
+        <a href="full-service.html" class="work-item">
+          <div class="work-thumb">
+            <img src="assets/work-full-service-square.jpg" alt="" width="1000" height="1000" loading="lazy" decoding="async">
+          </div>
+          <div class="work-body">
+            <h3 class="work-title">Full Service</h3>
+            <p class="work-problem">How do you cut an 18-day wait to a few hours without rebuilding from scratch?</p>
           </div>
         </a>
         <a href="ae-tof.html" class="work-item">
-          <img src="assets/work-ae-tof.jpg" alt="Activate Experts TOF" width="2127" height="824" loading="lazy" decoding="async">
-          <div class="work-overlay">
-            <div class="work-problem">How do you build a front door that filters for the right customer, not just any customer?</div>
-            Activate Experts
+          <div class="work-thumb">
+            <img src="assets/work-ae-tof.jpg" alt="" width="2127" height="824" loading="lazy" decoding="async">
+          </div>
+          <div class="work-body">
+            <h3 class="work-title">Activate Experts</h3>
+            <p class="work-problem">How do you build a front door that filters for the right customer, not just any customer?</p>
           </div>
         </a>
-        <a href="full-service.html" class="work-item">
-          <div class="work-placeholder">Full Service</div>
-          <div class="work-overlay">
-            <div class="work-problem">How do you cut an 18-day wait to a few hours without rebuilding from scratch?</div>
-            Full Service
+        <a href="business-tax.html" class="work-item">
+          <div class="work-thumb">
+            <img src="assets/work-business-tax.jpg" alt="" width="2048" height="784" loading="lazy" decoding="async">
+          </div>
+          <div class="work-body">
+            <h3 class="work-title">Business Tax</h3>
+            <p class="work-problem">How do you grow a product category most customers don't know exists?</p>
           </div>
         </a>
       </div>
@@ -1550,13 +1737,38 @@
         <button data-value="silence">Silence</button>
       </div>
     </div>
+    <div class="twk-row">
+      <span class="twk-label">Work layout</span>
+      <div class="twk-seg is-4" data-key="layout">
+        <button data-value="grid">Grid</button>
+        <button data-value="featured">Featured</button>
+        <button data-value="stacked">Stacked</button>
+        <button data-value="index">Index</button>
+      </div>
+    </div>
+    <div class="twk-row">
+      <span class="twk-label">Card surface</span>
+      <div class="twk-seg is-5" data-key="surface">
+        <button data-value="cream">Cream</button>
+        <button data-value="linen">Linen</button>
+        <button data-value="paper">Paper</button>
+        <button data-value="bone">Bone</button>
+        <button data-value="snow">Snow</button>
+      </div>
+    </div>
   </div>
 
   <script>
   (function () {
-    // Tweaks panel is dev-only — gate behind ?tweaks=1
+    // Tweaks panel is dev-only.
+    // Auto-shown in the design preview (claudeusercontent.com) and localhost.
+    // On any deployed host (GitHub Pages, custom domain, etc.) it stays hidden
+    // unless explicitly enabled via `?tweaks=1` or `#tweaks`.
     var params = new URLSearchParams(window.location.search);
-    if (params.get('tweaks') !== '1') {
+    var host = window.location.hostname;
+    var isDev = /claudeusercontent\.com$|^localhost$|^127\.0\.0\.1$/.test(host);
+    var explicit = params.get('tweaks') === '1' || window.location.hash === '#tweaks';
+    if (!isDev && !explicit) {
       var fab = document.getElementById('twk-btn');
       var pnl = document.getElementById('twk-panel');
       if (fab) fab.remove();

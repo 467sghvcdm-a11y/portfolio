@@ -43,7 +43,7 @@
     }
 
     .card {
-      background: #fff;
+      background: var(--c-card-surface);
       border-radius: var(--card-radius);
       padding: 56px var(--card-h) 80px;
       position: relative;
@@ -56,7 +56,7 @@
       background: transparent;
       color: #f4ede2;
       min-height: 68vh;
-      padding: 36px 80px 56px;
+      padding: 36px var(--card-h) 56px;
       display: flex;
       flex-direction: column;
       margin: -8px -8px 0;
@@ -231,15 +231,9 @@
       background: transparent;
       color: var(--c-cream);
       padding: 88px var(--card-h) 36px;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      column-gap: 32px;
-      align-items: start;
       position: relative;
     }
-    /* Pin label/title/sub to the right column, stacked */
-    .cs-chapter > * { grid-column: 2; }
-    /* Massive numeral, cream on nebula */
+    /* Massive numeral, cream on nebula — floats in left margin at wide viewports */
     .cs-chapter::before {
       content: counter(chapter, decimal-leading-zero);
       font-family: 'Fraunces', Georgia, serif;
@@ -250,8 +244,25 @@
       color: var(--c-cream);
       font-feature-settings: 'lnum';
       text-shadow: 0 0 36px rgba(217,38,56,0.18);
-      grid-column: 1;
-      grid-row: 1 / 4;
+      position: absolute;
+      top: 88px;
+      left: 0;
+      width: var(--card-h);
+      padding-right: 32px;
+      text-align: right;
+    }
+    /* Below ~1280px the left margin isn't wide enough for the numeral to live in —
+       fall back to stacked-above-content. Mobile rules below override font size further. */
+    @media (max-width: 1280px) {
+      .cs-chapter::before {
+        position: static;
+        width: auto;
+        padding-right: 0;
+        text-align: left;
+        display: block;
+        font-size: 96px;
+        margin-bottom: 22px;
+      }
     }
     .cs-chapter-label {
       /* Inherits .label (12px Figtree 600 uppercase + tracking) — override color + layout */
@@ -298,7 +309,7 @@
       letter-spacing: -0.02em;
       padding: 20px 24px;
       border-left: 3px solid var(--accent);
-      background: #fafafa;
+      background: var(--c-card-subsurface);
       border-radius: 0 8px 8px 0;
       margin: 28px 0;
     }
@@ -369,7 +380,7 @@
 
     /* ── Principles matrix ── */
     .cs-matrix { width: 100%; border-collapse: collapse; font-size: 14px; margin: 28px 0; }
-    .cs-matrix th, .cs-matrix td { padding: 14px 18px 14px 0; text-align: left; border-bottom: 1px solid #f0f0f0; vertical-align: top; line-height: 1.55; }
+    .cs-matrix th, .cs-matrix td { padding: 14px 18px 14px 0; text-align: left; border-bottom: 1px solid var(--c-rule); vertical-align: top; line-height: 1.55; }
     .cs-matrix tbody tr:last-child th, .cs-matrix tbody tr:last-child td { border-bottom: none; }
     .cs-matrix th, .cs-matrix td.row-label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--c-secondary); }
     .cs-matrix th { border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -379,19 +390,19 @@
 
     /* ── Deployment table ── */
     .cs-deploy-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 20px 0; }
-    .cs-deploy-table th, .cs-deploy-table td { padding: 12px 0; border-bottom: 1px solid #f5f5f5; text-align: left; font-weight: 400; vertical-align: top; }
+    .cs-deploy-table th, .cs-deploy-table td { padding: 12px 0; border-bottom: 1px solid var(--c-rule); text-align: left; font-weight: 400; vertical-align: top; }
     .cs-deploy-table thead th { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--c-secondary); border-bottom-color: #e0e0e0; }
     .cs-deploy-table tbody th { color: var(--c-secondary); width: 160px; }
     .cs-deploy-table td { color: var(--c-primary); }
 
     /* ── Delivered/not-shipped split ── */
     .cs-split { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin: 24px 0; background: #eee; border-radius: 10px; overflow: hidden; }
-    .cs-split-col { background: #fafafa; padding: 28px 32px; }
+    .cs-split-col { background: var(--c-card-subsurface); padding: 28px 32px; }
     .cs-split-label { margin-bottom: 16px; }
     .cs-split-label.done { color: #1a1a1a; }
     .cs-split-label.pending { color: #767676; }
     .cs-split-list { list-style: none; }
-    .cs-split-list li { font-size: 14px; color: #767676; padding: 7px 0; border-bottom: 1px solid #f0f0f0; line-height: 1.4; }
+    .cs-split-list li { font-size: 14px; color: #767676; padding: 7px 0; border-bottom: 1px solid var(--c-rule); line-height: 1.4; }
     .cs-split-list li:last-child { border-bottom: none; }
 
     /* ── Numbered list ── */
@@ -441,13 +452,8 @@
       .cs-metrics-3, .cs-metrics-4 { grid-template-columns: repeat(2, 1fr); }
       /* Chapter intermissions: stack numeral above content, align with card body */
       .cs-chapter {
-        grid-template-columns: 1fr;
-        row-gap: 14px;
         padding: 72px 40px 32px;
       }
-      .cs-chapter > *,
-      .cs-chapter::before { grid-column: 1; }
-      .cs-chapter::before { grid-row: auto; font-size: 96px; }
       .cs-chapter-title { font-size: 40px; }
       .cs-chapter-label { margin-bottom: 0; }
       .cs-chapter-title { margin-bottom: 0; }
@@ -459,8 +465,8 @@
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
       .cs-title { font-size: 44px; }
-      .cs-chapter { padding: 56px 20px 24px; row-gap: 10px; }
-      .cs-chapter::before { font-size: 72px; }
+      .cs-chapter { padding: 56px 20px 24px; }
+      .cs-chapter::before { font-size: 72px; margin-bottom: 18px; }
       .cs-chapter-title { font-size: 30px; }
       .cs-chap-nav { left: 116px; right: 16px; transform: none; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
       .cs-chap-nav::-webkit-scrollbar { display: none; }

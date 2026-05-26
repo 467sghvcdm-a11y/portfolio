@@ -17,6 +17,11 @@
   --c-teal:      #007A66;
   --c-forest:    #005C4E;
   --c-crimson:   #d92638;
+
+  /* card surfaces (sit on the dark stage; designed against bone-cream not pure white) */
+  --c-card-surface:    #fcf9f3;  /* primary card bg */
+  --c-card-subsurface: #f4ede2;  /* callouts/quotes/insets — one tonal step from surface */
+  --c-rule:            #e9e1d0;  /* warm hairline that reads on bone */
 }
 
 /* ─────────────────────────────────────
