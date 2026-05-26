@@ -176,6 +176,8 @@
       background: var(--c-forest);
       flex-shrink: 0;
     }
+    .cs-result.is-fail { color: #d92638; }
+    .cs-result.is-fail::before { background: #d92638; }
 
     .cs-section {
       margin-top: 96px;
@@ -371,11 +373,7 @@
       margin: 36px min(0px, 40px - var(--card-h));
       width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
     }
-    .card figure.cs-inline-figure {
-      width: 100%;
-      margin-left: 0;
-      margin-right: 0;
-    }
+
 
     /* ── Recipe pairs ── */
     .cs-recipe-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
@@ -540,7 +538,7 @@
 
       <p>TurboTax operates 500+ branded storefronts nationwide. Each one is a fixed cost: staff, leases, local advertising written into the unit economics. The digital storefront is the front door to that network. It decides whether the customer who found TurboTax online books an appointment, calls, or keeps scrolling.</p>
 
-      <figure class="cs-inline-figure">
+      <figure style="width: 100%; margin-left: 0; margin-right: 0;">
         <img src="assets/expert-session.webp" alt="A TurboTax expert working with a customer" width="2400" height="1601" loading="lazy" decoding="async">
       </figure>
 
@@ -662,8 +660,6 @@
         <h3>Test 5023: Organic LP, dual-engine discovery</h3>
         <p>We ran what looked like the same test on a different surface and got a different answer. That contradiction was the finding. The Storefront worked because intent was already named. The Organic LP is a different moment. We weren't testing two recipes. We were measuring two engines built for two different objectives.</p>
 
-        <h4 class="cs-result badge">Result: Two recipes, two engines — both deployed</h4>
-
         <div class="cs-metrics cs-metrics-2">
           <div class="cs-metric win">
             <div class="cs-metric-val win">+80%</div>
@@ -688,12 +684,12 @@
           </div>
         </div>
 
+        <h4 class="cs-result badge">Result: Two recipes, two engines — both deployed</h4>
+
       <div class="cs-section">
         <h3>Test 5012: Localization</h3>
         <p>The assumption: local content plus Match should be additive. If customers respond to expertise, they respond more when that expertise feels like it belongs to their specific market.</p>
         <p>Localized content alone (Recipe B) won in both NY and LA. Adding Match on top diluted the gains. Recipe C delivered less than half the Full Service completion lift of Recipe B in NY (+215% vs. +643%).</p>
-
-        <h4 class="cs-result badge">Result: Recipe B won — localized content alone outperformed localized content + Match</h4>
 
         <div class="cs-metrics cs-metrics-3">
           <div class="cs-metric win"><div class="cs-metric-val win">+62%</div><div class="cs-metric-lbl label">Completions</div></div>
@@ -712,6 +708,8 @@
             <img width="1882" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/localizationC.png" alt="Recipe C: localized content combined with expert match CTA, underperformed localized content alone">
           </div>
         </div>
+
+        <h4 class="cs-result badge">Result: Recipe B won — localized content alone outperformed localized content + Match</h4>
 
         <p>On the storefront, Match works because the customer arrived with expert intent already formed. On a category landing page, the customer is still orienting. Match asks for a commitment the page has not yet earned.</p>
       </div>
@@ -764,8 +762,6 @@
         <h3>Test 5176: The failure test</h3>
         <p>We routed AE page visitors directly to the FS in-product flow, bypassing the CTA filtering step, on the assumption that a page visit signals expert intent. Both recipes missed on revenue per visitor, down 15% vs. control. Test stopped.</p>
 
-        <h4 class="cs-result badge">Result: Both recipes missed — −15% revenue per visitor, test stopped</h4>
-
         <div class="cs-recipe-pair">
           <div class="cs-recipe">
             <div class="cs-recipe-label label">Recipe B <span class="accent">Direct route to FS flow</span></div>
@@ -776,6 +772,8 @@
             <img width="997" height="824" loading="lazy" decoding="async" src="assets/ae-tof/FSroutingC.png" alt="Recipe C: page variant with direct route variation to full service flow, both recipes missed on revenue per visitor">
           </div>
         </div>
+
+        <h4 class="cs-result is-fail badge">Result: Both recipes missed — −15% revenue per visitor, test stopped</h4>
 
         <p>5041 stripped the qualifying signal from the CTA. 5176 bypassed the qualifying step entirely. Two tests, same principle.</p>
 
@@ -798,8 +796,6 @@
         <h3>End-of-season PPC: when the appointment door closes, does Match still hold?</h3>
         <p>By second peak, in-person appointments were no longer available across most markets. The question was whether replacing Schedule with Match for Free would keep expert intent in motion, or whether the surface lost meaning when its primary action wasn't available.</p>
 
-        <h4 class="cs-result badge">Result: Recipe B won — +9% revenue per visitor, Match held without appointments</h4>
-
         <div class="cs-metrics cs-metrics-2">
           <div class="cs-metric win">
             <div class="cs-metric-val win">+9%</div>
@@ -817,6 +813,8 @@
             <img width="1882" height="1031" loading="lazy" decoding="async" src="assets/ae-tof/EOSPPCc.png" alt="Recipe C: end-of-season PPC page with match combined with DIWM pod entry point">
           </div>
         </div>
+
+        <h4 class="cs-result badge">Result: Recipe B won — +9% revenue per visitor, Match held without appointments</h4>
 
       </div>
 
