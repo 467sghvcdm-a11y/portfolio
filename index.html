@@ -646,12 +646,28 @@
     .portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; }
     .about-speaking {
-      margin-top: 32px;
-      padding-top: 20px;
-      border-top: 1px solid var(--c-rule, rgba(255,255,255,0.08));
+      margin-top: 16px;
       display: flex;
       flex-direction: column;
       gap: 6px;
+    }
+    .speaking-photos {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 160px 160px;
+      gap: 6px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 36px;
+    }
+    .speaking-photos img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .speaking-photos img:first-child {
+      grid-row: 1 / 3;
     }
     .tag {
       font-size: 12px;
@@ -1061,13 +1077,18 @@
           <p>I've spent the last decade at Intuit building things that didn't have templates. TurboTax Full Service didn't exist when I joined. I helped design it from scratch alongside tax experts, service designers, operations, and delivery teams. I then ran design strategy for TurboTax Business, and I now own top-of-funnel acquisition for Assisted Tax: the surfaces that determine whether the right customer takes the first step toward filing with an expert.</p>
           <p>I work at the intersection of design, strategy, and data, not as separate modes I shift between, but as concurrent tracks. I build frameworks that hold up under scrutiny, run controlled experiments, and push back when the data is being interpreted wrong. I can design the pixel, read the experiment result, and explain why a finding from one surface doesn't transfer to another.</p>
           <p>AI is part of how I work every day. I use it to pressure-test ideas, accelerate synthesis, and sharpen my thinking before it goes into a room. Designers who aren't using these tools yet are leaving capability on the table.</p>
-          <div class="about-speaking">
-            <span class="label">Recent talk</span>
-            <span>How TurboTax reimagined the future of tax help</span>
-            <span class="caption t-secondary">UX Speakeasy San Diego · Apr 2026</span>
-          </div>
         </div>
         <div class="portrait"><img src="assets/portrait.jpg" alt="Matt Kirkpatrick" width="513" height="513" loading="lazy" decoding="async"></div>
+      </div>
+      <div class="speaking-photos">
+        <img src="assets/speaking-wide.jpg" alt="Speaking at UX Speakeasy San Diego" width="1040" height="694" loading="lazy" decoding="async">
+        <img src="assets/speaking-gesture.jpg" alt="" width="1040" height="694" loading="lazy" decoding="async">
+        <img src="assets/speaking-room.jpg" alt="" width="1040" height="694" loading="lazy" decoding="async">
+      </div>
+      <div class="about-speaking">
+        <span class="label">Recent talk</span>
+        <span>How TurboTax reimagined the future of tax help</span>
+        <span class="caption t-secondary">UX Speakeasy San Diego · Apr 2026</span>
       </div>
     </div>
 
