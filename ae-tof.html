@@ -444,6 +444,15 @@
     .copy-btn.copied { color: #4ade80; }
     .copy-btn svg { display: block; }
 
+    /* ── Matrix mobile (stacked cards, shown ≤760px) ── */
+    .cs-matrix-mobile { display: none; flex-direction: column; gap: 12px; margin: 28px 0; }
+    .cs-matrix-card { background: var(--c-card-subsurface); border-radius: 8px; padding: 20px 24px; }
+    .cs-matrix-card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-secondary); margin-bottom: 14px; }
+    .cs-matrix-card-title.acc { color: var(--accent); }
+    .cs-matrix-card dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 14px; margin: 0; }
+    .cs-matrix-card dt { color: var(--c-secondary); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 3px; white-space: nowrap; }
+    .cs-matrix-card dd { color: #767676; margin: 0; line-height: 1.5; }
+
     /* ── Responsive ── */
 
     @media (max-width: 760px) {
@@ -458,11 +467,15 @@
         padding: 72px 40px 32px;
       }
       .cs-chapter-title { font-size: 40px; }
-      .cs-chapter-label { margin-bottom: 0; }
-      .cs-chapter-title { margin-bottom: 0; }
+      .cs-chapter-label { margin-bottom: 8px; }
+      .cs-chapter-title { margin-bottom: 12px; }
+      .cs-matrix { display: none; }
+      .cs-matrix-mobile { display: flex; }
     }
 
     @media (max-width: 520px) {
+      .cs-section { margin-top: 64px; }
+      .cs-takeaway { margin-top: 64px; }
       .pv-inner { padding: 4px 0 24px; }
       .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
@@ -768,7 +781,7 @@
 
         <h4 class="cs-result is-fail badge">Result: Both recipes missed — −15% revenue per visitor, test stopped</h4>
 
-        <p>5041 stripped the qualifying signal from the CTA. 5176 bypassed the qualifying step entirely. Two tests, same principle.</p>
+        <p>CTA Isolation stripped the qualifying signal. The failure test bypassed the qualifying step entirely. Two tests, same principle.</p>
 
         <div class="cs-callout">Page visit is not intent. The CTA is where intent gets named. Self-selection before commitment is the architecture that protects revenue quality.</div>
 
@@ -905,6 +918,36 @@
             </tr>
           </tbody>
         </table>
+
+        <div class="cs-matrix-mobile">
+          <div class="cs-matrix-card">
+            <div class="cs-matrix-card-title acc">Match Filter</div>
+            <dl>
+              <dt>Best for</dt><dd>High-intent surfaces (Storefront, post-decision PPC)</dd>
+              <dt>Optimizes for</dt><dd>Revenue quality, ARPC, FS mix</dd>
+              <dt>Trade-off</dt><dd>Lower top-of-funnel volume</dd>
+              <dt>Strategic role</dt><dd>Precision filter</dd>
+            </dl>
+          </div>
+          <div class="cs-matrix-card">
+            <div class="cs-matrix-card-title">Modular Post-Auth Throttle</div>
+            <dl>
+              <dt>Best for</dt><dd>Volume-driving organic surfaces</dd>
+              <dt>Optimizes for</dt><dd>Total franchise starts, T2S volume</dd>
+              <dt>Trade-off</dt><dd>Lower revenue per visitor</dd>
+              <dt>Strategic role</dt><dd>Volume engine</dd>
+            </dl>
+          </div>
+          <div class="cs-matrix-card">
+            <div class="cs-matrix-card-title">Modular Pre-Auth Filter</div>
+            <dl>
+              <dt>Best for</dt><dd>Mid-orientation surfaces (CLPs with localized content)</dd>
+              <dt>Optimizes for</dt><dd>Self-selected entry without premature commitment</dd>
+              <dt>Trade-off</dt><dd>Slower commitment moment</dd>
+              <dt>Strategic role</dt><dd>Soft qualifier</dd>
+            </dl>
+          </div>
+        </div>
 
         <h3>Three principles that came out of the season</h3>
         <ul class="cs-provocation-list">
