@@ -106,8 +106,8 @@
       transition: color 200ms, background 200ms, border-color 200ms;
     }
     .cs-back:hover { color: #f4ede2; background: rgba(10,10,10,0.85); }
-    .cs-back.on-light { color: rgba(0,0,0,0.5); background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
-    .cs-back.on-light:hover { color: rgba(0,0,0,0.85); background: rgba(255,255,255,0.96); }
+    .cs-back.on-light { color: rgba(26,26,26,0.5); background: rgba(252,249,243,0.90); border-color: rgba(233,225,208,0.85); }
+    .cs-back.on-light:hover { color: rgba(26,26,26,0.85); background: rgba(252,249,243,0.98); }
 
     .hero-body {
       flex: 1;
@@ -378,7 +378,7 @@
     /* ── Recipe pairs ── */
     .cs-recipe-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
     .cs-recipe-label { margin-bottom: 10px; }
-    .cs-recipe-label .accent { color: var(--c-primary); text-transform: none; font-size: 14px; font-weight: 400; margin-left: 8px; }
+    .cs-recipe-label .accent { color: var(--c-primary); text-transform: none; font-size: 14px; font-weight: 400; letter-spacing: 0; line-height: 1.5; margin-left: 8px; }
     .cs-recipe img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
     /* ── Principles matrix ── */
@@ -447,11 +447,11 @@
     /* ── Matrix mobile (stacked cards, shown ≤760px) ── */
     .cs-matrix-mobile { display: none; flex-direction: column; gap: 12px; margin: 28px 0; }
     .cs-matrix-card { background: var(--c-card-subsurface); border-radius: 8px; padding: 20px 24px; }
-    .cs-matrix-card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-secondary); margin-bottom: 14px; }
+    .cs-matrix-card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-primary); margin-bottom: 14px; }
     .cs-matrix-card-title.acc { color: var(--accent); }
     .cs-matrix-card dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 14px; margin: 0; }
-    .cs-matrix-card dt { color: var(--c-secondary); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 3px; white-space: nowrap; }
-    .cs-matrix-card dd { color: #767676; margin: 0; line-height: 1.5; }
+    .cs-matrix-card dt { color: var(--c-secondary); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding-top: 3px; white-space: nowrap; }
+    .cs-matrix-card dd { color: var(--c-secondary); margin: 0; line-height: 1.5; }
 
     /* ── Responsive ── */
 
@@ -489,9 +489,9 @@
       .cs-chap-nav.nav-scrolled { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); }
       .cs-chap-nav.nav-at-end { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%); mask-image: linear-gradient(to right, transparent 0%, black 20%); }
       .hero-eyebrow::before { display: none; }
-      .cs-chap-nav.on-light { background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
-      .cs-chap-nav.on-light .cs-chap-link { color: rgba(0,0,0,0.4); }
-      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(0,0,0,0.8); background: rgba(0,0,0,0.08); }
+      .cs-chap-nav.on-light { background: rgba(252,249,243,0.90); border-color: rgba(233,225,208,0.85); }
+      .cs-chap-nav.on-light .cs-chap-link { color: rgba(26,26,26,0.45); }
+      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(26,26,26,0.85); background: rgba(233,225,208,0.55); }
       .cs-metrics-2, .cs-metrics-3, .cs-metrics-4 { grid-template-columns: 1fr; }
       .cs-recipe-pair { grid-template-columns: 1fr; }
       .cs-split { grid-template-columns: 1fr; }
@@ -690,7 +690,7 @@
           </div>
         </div>
 
-        <h4 class="cs-result badge">Result: Two recipes, two engines — both deployed</h4>
+        <h4 class="cs-result badge">Result: Two recipes, two engines. Both deployed.</h4>
 
       <div class="cs-section">
         <h3>Localization</h3>
@@ -715,7 +715,7 @@
           </div>
         </div>
 
-        <h4 class="cs-result badge">Result: Recipe B won — localized content alone outperformed localized content + Match</h4>
+        <h4 class="cs-result badge">Result: Recipe B won. Localized content alone outperformed localized content + Match.</h4>
 
         <p>On the storefront, Match works because the customer arrived with expert intent already formed. On a category landing page, the customer is still orienting. Match asks for a commitment the page has not yet earned.</p>
       </div>
@@ -761,7 +761,7 @@
           </div>
         </div>
 
-        <h4 class="cs-result badge">Result: Generic CTA collapsed Full Service mix — audience composition shifted</h4>
+        <h4 class="cs-result badge">Result: Generic CTA collapsed Full Service mix. Audience composition shifted.</h4>
       </div>
 
       <div class="cs-section">
@@ -779,7 +779,7 @@
           </div>
         </div>
 
-        <h4 class="cs-result is-fail badge">Result: Both recipes missed — −15% revenue per visitor, test stopped</h4>
+        <h4 class="cs-result is-fail badge">Result: Both recipes missed. −15% revenue per visitor, test stopped.</h4>
 
         <p>CTA Isolation stripped the qualifying signal. The failure test bypassed the qualifying step entirely. Two tests, same principle.</p>
 
@@ -820,7 +820,7 @@
           </div>
         </div>
 
-        <h4 class="cs-result badge">Result: Recipe B won — +9% revenue per visitor, Match held without appointments</h4>
+        <h4 class="cs-result badge">Result: Recipe B won. +9% revenue per visitor. Match held without appointments.</h4>
 
       </div>
 
