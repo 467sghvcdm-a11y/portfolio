@@ -371,6 +371,17 @@
       margin: 36px min(0px, 40px - var(--card-h));
       width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
     }
+    /* Lead figure: bleeds top + sides, rounded card corners at top */
+    .cs-lead-figure {
+      margin-top: -56px;
+      margin-bottom: 48px;
+    }
+    .cs-lead-figure img {
+      border-radius: var(--card-radius) var(--card-radius) 0 0;
+      max-height: 480px;
+      object-fit: cover;
+      object-position: center 40%;
+    }
 
     /* ── Recipe pairs ── */
     .cs-recipe-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
@@ -512,6 +523,10 @@
 
     <div class="card" id="intro">
 
+      <figure class="cs-lead-figure">
+        <img src="assets/store-interior.webp" alt="Inside a TurboTax storefront" width="1920" height="1281" decoding="async" fetchpriority="high">
+      </figure>
+
       <h3>The entire job of the page is to get the right person to start. Not just any person.</h3>
 
       <div class="cs-metrics cs-metrics-3">
@@ -529,11 +544,17 @@
         </div>
       </div>
 
-      <figure>
-        <img width="2048" height="784" decoding="async" fetchpriority="high" src="assets/ae-tof/page-templates.jpg" alt="AE page templates">
-      </figure>
+      <p>TurboTax operates 500+ branded storefronts nationwide. Each one is a fixed cost: staff, leases, local advertising written into the unit economics. The digital storefront is the front door to that network. It decides whether the customer who found TurboTax online books an appointment, calls, or keeps scrolling.</p>
+
+      <p>The customer arriving is what the team called an Efficiency Value Seeker: someone who has already decided to hand off their taxes. They're not comparing TurboTax to TaxAct. They're comparing it to sitting in a CPA's office. The page's job isn't to sell them on expert help. It's to recognize they've already made that decision, and not fumble the moment.</p>
 
       <p>As the design lead for the AE front door, I was responsible for the entry experience of over half a million weekly visitors. Every CTA, every flow, every surface decision has direct downstream revenue consequences. Design as a precision instrument, not a finish.</p>
+
+      <figure>
+        <img width="2048" height="784" loading="lazy" decoding="async" src="assets/ae-tof/page-templates.jpg" alt="AE page templates">
+        <figcaption>13+ AE page templates spanning storefronts, landing pages, and the store locator.</figcaption>
+      </figure>
+
       <p>This case study covers one tax season. One measurement audit that changed what the program was optimizing for. Seven tests built on that foundation. And one failure test that made everything else more credible.</p>
     </div>
 
