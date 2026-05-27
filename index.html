@@ -1379,6 +1379,15 @@
         setTimeout(() => { location.href = href; }, 240);
       });
     });
+
+    // bfcache fix: browser restores page with opacity:0 from the leave transition
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) {
+        inner.style.transition = 'none';
+        inner.style.opacity = '1';
+        inner.style.transform = 'translateY(0)';
+      }
+    });
   })();
 
   </script>
