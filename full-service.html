@@ -229,30 +229,33 @@
     }
     .cs-carousel-item img {
       width: 100%;
-      height: auto;
+      height: 440px;
+      object-fit: cover;
       display: block;
     }
-    .cs-carousel-item-label {
-      padding: 10px var(--card-h) 0;
+    .cs-carousel-label {
+      padding: 14px var(--card-h) 0;
       color: var(--c-secondary);
     }
     .cs-carousel-controls {
       display: flex;
+      align-items: center;
       justify-content: center;
-      padding: 20px var(--card-h) 0;
+      gap: 12px;
+      padding: 14px var(--card-h) 0;
     }
     .cs-carousel-pill {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       background: var(--c-card-subsurface);
       border: 1px solid var(--c-rule);
       border-radius: 100px;
-      padding: 8px 12px;
+      padding: 10px 16px;
     }
     .cs-carousel-dot {
-      width: 7px;
-      height: 7px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: var(--c-rule);
       border: none;
@@ -262,9 +265,29 @@
       transition: width 250ms ease, border-radius 250ms ease, background 250ms ease;
     }
     .cs-carousel-dot.active {
-      width: 22px;
-      border-radius: 4px;
+      width: 28px;
+      border-radius: 5px;
       background: var(--c-primary);
+    }
+    .cs-carousel-chevron {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--c-rule);
+      background: none;
+      color: var(--c-primary);
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 150ms, border-color 150ms;
+      flex-shrink: 0;
+    }
+    .cs-carousel-chevron:hover { background: var(--c-card-subsurface); border-color: #d0c8b8; }
+    .cs-carousel-chevron:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+    @media (max-width: 520px) {
+      .cs-carousel-item img { height: 220px; }
     }
 
     /* ── Chapter breaks ── */
@@ -666,25 +689,25 @@
 
       <div class="cs-carousel">
         <div class="cs-carousel-rail">
-          <div class="cs-carousel-item">
+          <div class="cs-carousel-item" data-label="Customer journey">
             <img src="assets/fs-customer-e2e.png" alt="Full Service customer end-to-end journey" width="3122" height="1342" loading="eager" decoding="async">
-            <div class="cs-carousel-item-label label">Customer journey</div>
           </div>
-          <div class="cs-carousel-item">
-            <img src="assets/fs-expert-e2e.png" alt="Expert end-to-end journey" width="3270" height="834" loading="lazy" decoding="async">
-            <div class="cs-carousel-item-label label">Expert journey</div>
-          </div>
-          <div class="cs-carousel-item">
+          <div class="cs-carousel-item" data-label="Tax prep assistant">
             <img src="assets/fs-tpa-e2e.png" alt="Tax prep assistant end-to-end journey" width="3054" height="1834" loading="lazy" decoding="async">
-            <div class="cs-carousel-item-label label">Tax prep assistant</div>
+          </div>
+          <div class="cs-carousel-item" data-label="Expert journey">
+            <img src="assets/fs-expert-e2e.png" alt="Expert end-to-end journey" width="3270" height="834" loading="lazy" decoding="async">
           </div>
         </div>
+        <div class="cs-carousel-label label">Customer journey</div>
         <div class="cs-carousel-controls">
+          <button class="cs-carousel-chevron cs-carousel-prev" aria-label="Previous">&#8249;</button>
           <div class="cs-carousel-pill" role="tablist">
             <button class="cs-carousel-dot active" aria-label="Customer journey"></button>
-            <button class="cs-carousel-dot" aria-label="Expert journey"></button>
             <button class="cs-carousel-dot" aria-label="Tax prep assistant"></button>
+            <button class="cs-carousel-dot" aria-label="Expert journey"></button>
           </div>
+          <button class="cs-carousel-chevron cs-carousel-next" aria-label="Next">&#8250;</button>
         </div>
       </div>
 
@@ -1035,18 +1058,28 @@
     if (!rail) return;
     var dots = Array.from(document.querySelectorAll('.cs-carousel-dot'));
     var items = Array.from(rail.querySelectorAll('.cs-carousel-item'));
-    function goTo(index) {
-      rail.scrollTo({ left: index * rail.clientWidth, behavior: 'smooth' });
+    var label = document.querySelector('.cs-carousel-label');
+    var prev = document.querySelector('.cs-carousel-prev');
+    var next = document.querySelector('.cs-carousel-next');
+    function currentIndex() {
+      return Math.round(rail.scrollLeft / rail.clientWidth);
     }
-    function updateDots() {
-      var index = Math.round(rail.scrollLeft / rail.clientWidth);
-      dots.forEach(function (d, i) { d.classList.toggle('active', i === index); });
+    function goTo(i) {
+      i = Math.max(0, Math.min(i, items.length - 1));
+      rail.scrollTo({ left: i * rail.clientWidth, behavior: 'smooth' });
     }
-    dots.forEach(function (dot, i) {
-      dot.addEventListener('click', function () { goTo(i); });
-    });
-    rail.addEventListener('scroll', updateDots, { passive: true });
-    updateDots();
+    function update() {
+      var i = currentIndex();
+      dots.forEach(function (d, j) { d.classList.toggle('active', j === i); });
+      if (label && items[i]) label.textContent = items[i].dataset.label || '';
+      if (prev) prev.disabled = i === 0;
+      if (next) next.disabled = i === items.length - 1;
+    }
+    dots.forEach(function (dot, i) { dot.addEventListener('click', function () { goTo(i); }); });
+    if (prev) prev.addEventListener('click', function () { goTo(currentIndex() - 1); });
+    if (next) next.addEventListener('click', function () { goTo(currentIndex() + 1); });
+    rail.addEventListener('scroll', update, { passive: true });
+    update();
   })();
   </script>
 </body>
