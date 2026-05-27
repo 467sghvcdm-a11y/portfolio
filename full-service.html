@@ -196,8 +196,15 @@
     figure { margin: 36px 0; }
     figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
     figcaption { font-size: 14px; color: var(--c-secondary); margin-top: 10px; line-height: 1.5; }
-    /* UI screenshots — reading column */
-    figure.fig-ui { max-width: 680px; }
+    /* Full-bleed — expands into card gutters like the carousel */
+    figure.fig-flow {
+      margin-left: min(0px, 40px - var(--card-h));
+      margin-right: min(0px, 40px - var(--card-h));
+      width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
+    }
+    figure.fig-flow img { border-radius: 0; }
+    /* UI screenshots — full card content width */
+    figure.fig-ui { max-width: 100%; }
     /* Portrait or small UI — constrained further */
     figure.fig-sm { max-width: 400px; }
 
