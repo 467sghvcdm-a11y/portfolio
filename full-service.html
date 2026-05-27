@@ -192,6 +192,17 @@
     /* ── Reading column cap ── */
     .card :is(p, h3, h4, .cs-callout) { max-width: 680px; }
 
+    /* ── Figures ── */
+    figure { margin: 36px 0; }
+    figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
+    figcaption { font-size: 14px; color: var(--c-secondary); margin-top: 10px; line-height: 1.5; }
+    /* Flow diagrams — full card width, benefit from scale */
+    figure.fig-flow { max-width: 100%; }
+    /* UI screenshots — reading column */
+    figure.fig-ui { max-width: 680px; }
+    /* Portrait or small UI — constrained further */
+    figure.fig-sm { max-width: 400px; }
+
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
     .pv-inner { counter-reset: chapter; }
@@ -532,7 +543,7 @@
       <p>The product had been designed around the expert's workflow, and it showed. Customers uploaded documents, got queued, waited to be contacted, exchanged messages over days, and eventually reviewed and filed. It was modeled on how a CPA firm operates. The problem is that people go to a CPA's office and sit there until their return is done. They don't drop off their W-2 and come back in 18 days.</p>
       <p>Every promise in the marketing was running into friction in the product:</p>
 
-      <figure>
+      <figure class="fig-flow">
         <img src="assets/fs-customer-e2e.png" alt="Full Service customer end-to-end journey" width="3122" height="1342" loading="lazy" decoding="async">
         <figcaption>The customer journey from entry to filed return. Every handoff between teams was a gap the customer felt.</figcaption>
       </figure>
@@ -596,7 +607,7 @@
         <p>Senior leadership held a strong prior: more screens meant more abandonment. Every screen was an opportunity to drop off, so fewer screens before the expert connection meant more completions. The direction from the top was to reduce steps in the funnel. We had to test it.</p>
         <p>I pushed back that this was a different type of product. TurboTax Live Full Service wasn't a self-serve flow where friction was purely cost. It was a service that required customer participation to work. Customers who arrived at an expert without documents, without a realistic sense of how long the session would take, without a genuine intent to finish that day. Those customers weren't saving time by connecting faster. They were shifting the cost of their unpreparedness onto the expert's clock.</p>
         <p>The design argument was that preparation should feel like progress, not a barrier. I structured the onboarding questions to be easy to answer. Customers already knew the answers. Moderated research sessions validated what the design intended: customers didn't experience the questions as friction. They experienced them as investment. The more they put in, the more committed they felt to the outcome. The psychological pull was deliberate.</p>
-        <figure>
+        <figure class="fig-flow">
           <img src="assets/fs-onboarding.png" alt="Full Service onboarding flow" width="3475" height="876" loading="lazy" decoding="async">
           <figcaption>The onboarding sequence. Each question was easy to answer and calibrated commitment before an expert's time was committed.</figcaption>
         </figure>
@@ -623,7 +634,7 @@
             of all documents acquired before expert connection by TY22
           </div>
         </div>
-        <figure>
+        <figure class="fig-sm">
           <img src="assets/fs-checklist.png" alt="Document checklist designs side by side" width="832" height="1273" loading="lazy" decoding="async">
           <figcaption>Checklist iterations across the program. By TY23 the design collapsed overlapping states and automated determinations the system could make on its own.</figcaption>
         </figure>
@@ -640,7 +651,7 @@
         <h4>The handoff</h4>
         <p>In the original model, the tax prep assistant's job ended with intake. I redesigned it to end with handoff, the bridge between the two products.</p>
         <p>The rebuilt experience had one goal: get the customer document-ready, confirm they were willing to connect now, and transfer them directly to an expert on the same call. Central to this was a readiness confirmation step where customers explicitly affirmed they were ready. It looked like friction on paper. It was doing selection work before an expert's time was committed. The connect-now / connect-later offer structure honored customers who couldn't connect immediately. By Tax Year 2023, 79% connected immediately, 14% scheduled for later, and 7% booked a specific appointment.</p>
-        <figure>
+        <figure class="fig-ui">
           <img src="assets/fs-handoff.png" alt="Tax prep assistant handoff interface" width="1248" height="948" loading="lazy" decoding="async">
           <figcaption>The rebuilt tax prep assistant handoff. The readiness confirmation step is the pivot point between intake and expert connection.</figcaption>
         </figure>
@@ -651,7 +662,7 @@
         <h4>Expert-facing tools</h4>
         <p>A significant share of the leverage lived on the expert side, the second product.</p>
         <p>I maintained the end-to-end experience documentation used to train thousands of tax experts going into each season. I directed the redesign of the expert accuracy review flow, consolidating overlapping check categories into a simpler flow with clearer purpose at each step and automation where the system could make its own determinations. I flagged that the vast majority of experts accepted the system's default filing method recommendation without reviewing it. An entire manual selection screen that could be eliminated.</p>
-        <figure>
+        <figure class="fig-ui">
           <img src="assets/fs-expert-iep.jpg" alt="Expert Integrated Experience Platform" width="1367" height="1367" loading="lazy" decoding="async">
           <figcaption>The expert-facing platform. Accuracy review, document status, and session management consolidated into one view.</figcaption>
         </figure>
@@ -727,7 +738,7 @@
             <div class="cs-metric-ctx caption">100-pt scale · vs. 84 overall</div>
           </div>
         </div>
-        <figure>
+        <figure class="fig-ui">
           <img src="assets/fs-filed.png" alt="Filed return confirmation screen" width="1706" height="1134" loading="lazy" decoding="async">
           <figcaption>The filed state. The moment the customer's return is complete and transmitted.</figcaption>
         </figure>
