@@ -205,8 +205,10 @@
     figure.fig-flow img { border-radius: 0; }
     /* UI screenshots — full card content width */
     figure.fig-ui { max-width: 100%; }
+    figure.fig-ui img { border-radius: 0; }
     /* Portrait or small UI — constrained further */
     figure.fig-sm { max-width: 400px; }
+    figure.fig-sm img { border-radius: 0; }
 
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
@@ -469,6 +471,7 @@
     }
 
     @media (max-width: 520px) {
+      #intro .fig-flow img { min-height: 280px; }
       .cs-section { margin-top: 64px; }
       .pv-inner { padding: 4px 0 24px; }
       .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
