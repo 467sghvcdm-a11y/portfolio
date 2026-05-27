@@ -106,8 +106,8 @@
       transition: color 200ms, background 200ms, border-color 200ms;
     }
     .cs-back:hover { color: #f4ede2; background: rgba(10,10,10,0.85); }
-    .cs-back.on-light { color: rgba(0,0,0,0.5); background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
-    .cs-back.on-light:hover { color: rgba(0,0,0,0.85); background: rgba(255,255,255,0.96); }
+    .cs-back.on-light { color: rgba(26,26,26,0.5); background: rgba(252,249,243,0.90); border-color: rgba(233,225,208,0.85); }
+    .cs-back.on-light:hover { color: rgba(26,26,26,0.85); background: rgba(252,249,243,0.98); }
 
     .hero-body {
       flex: 1;
@@ -311,7 +311,7 @@
       max-width: 100%;
     }
     .cs-promise-table thead th {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -339,7 +339,7 @@
     /* ── Award ── */
     .cs-award { display: flex; align-items: center; gap: 24px; margin: 28px 0; padding: 24px 28px; background: var(--c-card-subsurface); border-radius: 12px; }
     .cs-award-badge { width: 64px; height: 64px; flex-shrink: 0; display: block; }
-    .cs-award-name { font-size: 15px; font-weight: 600; color: var(--c-primary); margin-bottom: 4px; letter-spacing: -0.01em; }
+    .cs-award-name { font-size: 14px; font-weight: 600; color: var(--c-primary); margin-bottom: 4px; letter-spacing: 0; }
     .cs-award-context { font-size: 14px; color: var(--c-secondary); line-height: 1.5; margin: 0; }
 
     /* ── Leadership quotes ── */
@@ -358,7 +358,7 @@
       line-height: 1.55;
       margin-bottom: 12px;
     }
-    .cs-quote-attr { font-size: 13px; color: var(--c-secondary); }
+    .cs-quote-attr { font-size: 12px; color: var(--c-secondary); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
 
     /* ── Era divider ── */
     .cs-era {
@@ -368,7 +368,7 @@
     }
     .cs-era:first-child { margin-top: 0; padding-top: 0; border-top: none; }
     .cs-era-label {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -463,9 +463,9 @@
       .cs-chap-nav.nav-scrolled { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); }
       .cs-chap-nav.nav-at-end { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%); mask-image: linear-gradient(to right, transparent 0%, black 20%); }
       .hero-eyebrow::before { display: none; }
-      .cs-chap-nav.on-light { background: rgba(255,255,255,0.82); border-color: rgba(0,0,0,0.06); }
-      .cs-chap-nav.on-light .cs-chap-link { color: rgba(0,0,0,0.4); }
-      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(0,0,0,0.8); background: rgba(0,0,0,0.08); }
+      .cs-chap-nav.on-light { background: rgba(252,249,243,0.90); border-color: rgba(233,225,208,0.85); }
+      .cs-chap-nav.on-light .cs-chap-link { color: rgba(26,26,26,0.45); }
+      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(26,26,26,0.85); background: rgba(233,225,208,0.55); }
       .cs-metrics-2, .cs-metrics-3, .cs-metrics-4 { grid-template-columns: 1fr; }
       .cs-metric-val { font-size: 44px; }
       .cs-promise-table td:first-child { padding-right: 20px; width: 46%; }
@@ -490,7 +490,7 @@
       <div class="hero-body" style="gap: 8px">
         <div>
           <p class="hero-eyebrow label">TurboTax Full Service</p>
-          <h1 class="cs-title">22 days to a few hours.</h1>
+          <h1 class="cs-title">22 days to a few hours</h1>
         </div>
         <div class="hero-foot label">
           <span>Role<b>Design Lead</b></span>
@@ -502,7 +502,7 @@
     <!-- Overview card -->
     <div class="card" id="intro">
 
-      <h3>Customers weren't comparing us to a digital competitor. They were comparing us to sitting in their CPA's office.</h3>
+      <h3>Customers weren't comparing us to a digital competitor. They were comparing us to sitting in their CPA's office</h3>
 
       <div class="cs-metrics cs-metrics-4" style="margin: 40px 0 56px">
         <div class="cs-metric win">
@@ -575,7 +575,7 @@
     <!-- Chapter 1 -->
     <div class="cs-chapter" id="ch1">
       <div class="cs-chapter-label label">The system</div>
-      <h2 class="cs-chapter-title">Two products. One conviction.</h2>
+      <h2 class="cs-chapter-title">Two products, one conviction</h2>
       <div class="cs-chapter-sub">The customer experience and the expert experience had to be designed simultaneously, held together by one conviction about where the leverage was.</div>
     </div>
 
@@ -640,7 +640,7 @@
     <!-- Chapter 2 -->
     <div class="cs-chapter" id="ch2">
       <div class="cs-chapter-label label">The proof</div>
-      <h2 class="cs-chapter-title">What the failures taught us.</h2>
+      <h2 class="cs-chapter-title">What the failures taught us</h2>
       <div class="cs-chapter-sub">The strongest validation of the conviction came from what happened when it was tested against.</div>
     </div>
 
@@ -665,7 +665,7 @@
     <!-- Chapter 3 -->
     <div class="cs-chapter" id="ch3">
       <div class="cs-chapter-label label">The result</div>
-      <h2 class="cs-chapter-title">What three years built.</h2>
+      <h2 class="cs-chapter-title">What three years built</h2>
       <div class="cs-chapter-sub">283,000 returns. $73 million. A different product.</div>
     </div>
 
