@@ -208,88 +208,6 @@
     /* Portrait or small UI — constrained further */
     figure.fig-sm { max-width: 400px; }
 
-    /* ── E2E carousel ── */
-    /* ── E2E carousel (horizontal scroll rail) ── */
-    .cs-carousel {
-      margin: 36px min(0px, 40px - var(--card-h)) 0;
-      width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
-      overflow: hidden;
-    }
-    .cs-carousel-rail {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .cs-carousel-rail::-webkit-scrollbar { display: none; }
-    .cs-carousel-item {
-      flex: 0 0 100%;
-      scroll-snap-align: start;
-    }
-    .cs-carousel-item img {
-      width: 100%;
-      height: 440px;
-      object-fit: cover;
-      display: block;
-    }
-    .cs-carousel-label {
-      padding: 14px var(--card-h) 0;
-      color: var(--c-secondary);
-    }
-    .cs-carousel-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 14px var(--card-h) 0;
-    }
-    .cs-carousel-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--c-card-subsurface);
-      border: 1px solid var(--c-rule);
-      border-radius: 100px;
-      padding: 10px 16px;
-    }
-    .cs-carousel-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--c-rule);
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: width 250ms ease, border-radius 250ms ease, background 250ms ease;
-    }
-    .cs-carousel-dot.active {
-      width: 28px;
-      border-radius: 5px;
-      background: var(--c-primary);
-    }
-    .cs-carousel-chevron {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 1px solid var(--c-rule);
-      background: none;
-      color: var(--c-primary);
-      cursor: pointer;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 150ms, border-color 150ms;
-      flex-shrink: 0;
-    }
-    .cs-carousel-chevron:hover { background: var(--c-card-subsurface); border-color: #d0c8b8; }
-    .cs-carousel-chevron:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
-    @media (max-width: 520px) {
-      .cs-carousel-item img { height: 220px; }
-    }
-
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
     .pv-inner { counter-reset: chapter; }
@@ -687,30 +605,6 @@
       <p>Same Day Full Service was two products that had to stay in sync: what the customer saw and did, and what the tax prep assistant and expert needed to complete a return in a single session. No single team owned both. I designed across both, which meant every decision had to hold up on two axes at once.</p>
       <p>The conviction running through all of it: customers who were prepared to complete a return were worth more than customers who were fast to connect. Preparation before connection was the unlock. That conviction was contested. Defending it, from the design level up to leadership, was as much of the work as the design itself.</p>
 
-      <div class="cs-carousel">
-        <div class="cs-carousel-rail">
-          <div class="cs-carousel-item" data-label="Customer journey">
-            <img src="assets/fs-customer-e2e.png" alt="Full Service customer end-to-end journey" width="3122" height="1342" loading="eager" decoding="async">
-          </div>
-          <div class="cs-carousel-item" data-label="Tax prep assistant">
-            <img src="assets/fs-tpa-e2e.png" alt="Tax prep assistant end-to-end journey" width="3054" height="1834" loading="lazy" decoding="async">
-          </div>
-          <div class="cs-carousel-item" data-label="Expert journey">
-            <img src="assets/fs-expert-e2e.png" alt="Expert end-to-end journey" width="3270" height="834" loading="lazy" decoding="async">
-          </div>
-        </div>
-        <div class="cs-carousel-label label">Customer journey</div>
-        <div class="cs-carousel-controls">
-          <button class="cs-carousel-chevron cs-carousel-prev" aria-label="Previous">&#8249;</button>
-          <div class="cs-carousel-pill" role="tablist">
-            <button class="cs-carousel-dot active" aria-label="Customer journey"></button>
-            <button class="cs-carousel-dot" aria-label="Tax prep assistant"></button>
-            <button class="cs-carousel-dot" aria-label="Expert journey"></button>
-          </div>
-          <button class="cs-carousel-chevron cs-carousel-next" aria-label="Next">&#8250;</button>
-        </div>
-      </div>
-
       <div class="cs-section">
         <h4>Onboarding</h4>
         <p>The first, and most contested, place that conviction had to be defended was the pre-signup experience.</p>
@@ -1052,35 +946,6 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { cancelAnimationFrame(raf); raf = null; }
   })();
 
-  // E2E carousel
-  (function () {
-    var rail = document.querySelector('.cs-carousel-rail');
-    if (!rail) return;
-    var dots = Array.from(document.querySelectorAll('.cs-carousel-dot'));
-    var items = Array.from(rail.querySelectorAll('.cs-carousel-item'));
-    var label = document.querySelector('.cs-carousel-label');
-    var prev = document.querySelector('.cs-carousel-prev');
-    var next = document.querySelector('.cs-carousel-next');
-    function currentIndex() {
-      return Math.round(rail.scrollLeft / rail.clientWidth);
-    }
-    function goTo(i) {
-      i = Math.max(0, Math.min(i, items.length - 1));
-      rail.scrollTo({ left: i * rail.clientWidth, behavior: 'smooth' });
-    }
-    function update() {
-      var i = currentIndex();
-      dots.forEach(function (d, j) { d.classList.toggle('active', j === i); });
-      if (label && items[i]) label.textContent = items[i].dataset.label || '';
-      if (prev) prev.disabled = i === 0;
-      if (next) next.disabled = i === items.length - 1;
-    }
-    dots.forEach(function (dot, i) { dot.addEventListener('click', function () { goTo(i); }); });
-    if (prev) prev.addEventListener('click', function () { goTo(currentIndex() - 1); });
-    if (next) next.addEventListener('click', function () { goTo(currentIndex() + 1); });
-    rail.addEventListener('scroll', update, { passive: true });
-    update();
-  })();
   </script>
 </body>
 </html>
