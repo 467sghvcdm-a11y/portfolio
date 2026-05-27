@@ -714,8 +714,9 @@
       margin-top: 5px;
     }
     .intuit-role-award { /* uses .caption ramp token in markup */
-      margin-top: 8px;
+      display: flex; align-items: center; gap: 8px; margin-top: 10px;
     }
+    .intuit-role-award-badge { width: 22px; height: 22px; display: block; flex-shrink: 0; }
     .intuit-role-award-detail { /* uses .caption .t-secondary ramp tokens in markup */
       margin-top: 2px;
     }
@@ -1158,7 +1159,10 @@
               <div class="intuit-role-left">
                 <div class="intuit-role-title caption">T3–T6 &nbsp;·&nbsp; Full Service, built from the ground up</div>
                 <div class="intuit-role-desc">Lead designer across consumer and expert-facing experiences for TurboTax Full Service. Drove strategic design decisions across a complex end-to-end flow from customer entry through filing completion. Joined working on DIY tax, then moved to Full Service as it was being built, helping design the end-to-end experience from scratch, including consumer flows, expert tools, and the operational connective tissue between them.</div>
-                <div class="intuit-role-award caption">Scott Cook Innovation Award</div>
+                <div class="intuit-role-award">
+                  <img class="intuit-role-award-badge" src="assets/scott-cook-award.png" alt="" width="300" height="300">
+                  <span class="caption">Scott Cook Innovation Award</span>
+                </div>
                 <div class="intuit-role-award-detail caption t-secondary">Reduced average return completion time from 22 days to a few hours and increased same-day margin by 97%. In August 2022 it became the primary approach across all Full Service versions.</div>
               </div>
               <div class="intuit-role-date caption t-secondary">2017—2024</div>
