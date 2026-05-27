@@ -209,39 +209,62 @@
     figure.fig-sm { max-width: 400px; }
 
     /* ── E2E carousel ── */
+    /* ── E2E carousel (horizontal scroll rail) ── */
     .cs-carousel {
       margin: 36px min(0px, 40px - var(--card-h));
       width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
     }
-    .cs-carousel-nav {
+    .cs-carousel-rail {
       display: flex;
-      gap: 0;
-      padding: 0 max(0px, var(--card-h) - 40px);
-      border-bottom: 1px solid var(--c-rule);
-      margin-bottom: 0;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: max(0px, var(--card-h) - 40px);
+      gap: 16px;
+      padding: 0 max(20px, var(--card-h) - 40px);
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
-    .cs-carousel-tab {
-      font-family: 'Figtree', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+    .cs-carousel-rail::-webkit-scrollbar { display: none; }
+    .cs-carousel-item {
+      scroll-snap-align: start;
+      flex-shrink: 0;
+    }
+    .cs-carousel-item img {
+      height: 360px;
+      width: auto;
+      display: block;
+      border-radius: 8px;
+    }
+    .cs-carousel-item-label {
+      margin-top: 10px;
       color: var(--c-secondary);
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      cursor: pointer;
-      padding: 10px 16px;
-      transition: color 150ms, border-color 150ms;
     }
-    .cs-carousel-tab:hover { color: var(--c-primary); }
-    .cs-carousel-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-    .cs-carousel-slide { display: none; }
-    .cs-carousel-slide.active { display: block; }
-    .cs-carousel-slide img { width: 100%; height: auto; display: block; }
-    .cs-carousel-caption { display: none; font-size: 14px; color: var(--c-secondary); line-height: 1.5; margin: 10px 0 0; padding: 0 max(0px, var(--card-h) - 40px); }
-    .cs-carousel-caption.active { display: block; }
+    .cs-carousel-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 16px max(20px, var(--card-h) - 40px) 0;
+    }
+    .cs-carousel-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--c-rule);
+      background: none;
+      color: var(--c-primary);
+      cursor: pointer;
+      font-size: 17px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 150ms, border-color 150ms;
+    }
+    .cs-carousel-btn:hover { background: var(--c-card-subsurface); border-color: #d0c8b8; }
+    .cs-carousel-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+    @media (max-width: 520px) {
+      .cs-carousel-item img { height: 200px; }
+    }
 
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
@@ -584,25 +607,24 @@
       <p>Every promise in the marketing was running into friction in the product:</p>
 
       <div class="cs-carousel">
-        <div class="cs-carousel-nav">
-          <button class="cs-carousel-tab active" data-slide="0">Customer journey</button>
-          <button class="cs-carousel-tab" data-slide="1">Expert journey</button>
-          <button class="cs-carousel-tab" data-slide="2">Tax prep assistant</button>
-        </div>
-        <div class="cs-carousel-slides">
-          <div class="cs-carousel-slide active">
+        <div class="cs-carousel-rail">
+          <div class="cs-carousel-item">
             <img src="assets/fs-customer-e2e.png" alt="Full Service customer end-to-end journey" width="3122" height="1342" loading="eager" decoding="async">
+            <div class="cs-carousel-item-label label">Customer journey</div>
           </div>
-          <div class="cs-carousel-slide">
+          <div class="cs-carousel-item">
             <img src="assets/fs-expert-e2e.png" alt="Expert end-to-end journey" width="3270" height="834" loading="lazy" decoding="async">
+            <div class="cs-carousel-item-label label">Expert journey</div>
           </div>
-          <div class="cs-carousel-slide">
+          <div class="cs-carousel-item">
             <img src="assets/fs-tpa-e2e.png" alt="Tax prep assistant end-to-end journey" width="3054" height="1834" loading="lazy" decoding="async">
+            <div class="cs-carousel-item-label label">Tax prep assistant</div>
           </div>
         </div>
-        <p class="cs-carousel-caption active">The customer journey from entry to filed return. Every handoff between teams was a gap the customer felt.</p>
-        <p class="cs-carousel-caption">The expert's side of the same session — accuracy review, document management, and live connection.</p>
-        <p class="cs-carousel-caption">The tax prep assistant flow — intake, readiness confirmation, and the handoff to an expert.</p>
+        <div class="cs-carousel-footer">
+          <button class="cs-carousel-btn cs-carousel-prev" aria-label="Previous">&#8592;</button>
+          <button class="cs-carousel-btn cs-carousel-next" aria-label="Next">&#8594;</button>
+        </div>
       </div>
 
       <table class="cs-promise-table">
@@ -1002,21 +1024,24 @@
 
   // E2E carousel
   (function () {
-    document.querySelectorAll('.cs-carousel').forEach(function (carousel) {
-      var tabs = carousel.querySelectorAll('.cs-carousel-tab');
-      var slides = carousel.querySelectorAll('.cs-carousel-slide');
-      var captions = carousel.querySelectorAll('.cs-carousel-caption');
-      tabs.forEach(function (tab, i) {
-        tab.addEventListener('click', function () {
-          tabs.forEach(function (t) { t.classList.remove('active'); });
-          slides.forEach(function (s) { s.classList.remove('active'); });
-          captions.forEach(function (c) { c.classList.remove('active'); });
-          tab.classList.add('active');
-          slides[i].classList.add('active');
-          captions[i].classList.add('active');
-        });
-      });
-    });
+    var rail = document.querySelector('.cs-carousel-rail');
+    if (!rail) return;
+    var prev = document.querySelector('.cs-carousel-prev');
+    var next = document.querySelector('.cs-carousel-next');
+    function scrollByItem(dir) {
+      var item = rail.querySelector('.cs-carousel-item');
+      if (!item) return;
+      var amount = item.getBoundingClientRect().width + 16;
+      rail.scrollBy({ left: dir * amount, behavior: 'smooth' });
+    }
+    prev.addEventListener('click', function () { scrollByItem(-1); });
+    next.addEventListener('click', function () { scrollByItem(1); });
+    function updateButtons() {
+      prev.disabled = rail.scrollLeft < 2;
+      next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 2;
+    }
+    rail.addEventListener('scroll', updateButtons, { passive: true });
+    updateButtons();
   })();
   </script>
 </body>
