@@ -435,6 +435,11 @@
     .work-body { position: relative; z-index: 1; }
     .work-title { margin: 0; }
     .work-problem { margin: 6px 0 0; line-height: 1.5; }
+    .work-award { display: flex; align-items: center; gap: 7px; margin-top: 12px; opacity: 0.75; }
+    .work-award img { width: 18px; height: 18px; display: block; flex-shrink: 0; }
+    /* On light-bg layouts, pull back to secondary so it doesn't fight the title */
+    body[data-layout="stacked"] .work-award,
+    body[data-layout="index"] .work-award { color: var(--c-secondary); }
 
     @media (hover: hover) {
       .work-item:hover .work-thumb img { transform: scale(1.03); }
@@ -1042,6 +1047,10 @@
           <div class="work-body">
             <h3 class="work-title">Full Service</h3>
             <p class="work-problem">How do you cut an 18-day wait to a few hours without rebuilding from scratch?</p>
+            <div class="work-award label">
+              <img src="assets/scott-cook-award.png" alt="" width="300" height="300">
+              Scott Cook Innovation Award
+            </div>
           </div>
         </a>
         <a href="ae-tof.html" class="work-item">

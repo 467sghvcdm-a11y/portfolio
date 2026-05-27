@@ -336,6 +336,12 @@
     }
     .cs-promise-table td:last-child { color: #767676; }
 
+    /* ── Award ── */
+    .cs-award { display: flex; align-items: center; gap: 24px; margin: 28px 0; padding: 24px 28px; background: var(--c-card-subsurface); border-radius: 12px; }
+    .cs-award-badge { width: 64px; height: 64px; flex-shrink: 0; display: block; }
+    .cs-award-name { font-size: 15px; font-weight: 600; color: var(--c-primary); margin-bottom: 4px; letter-spacing: -0.01em; }
+    .cs-award-context { font-size: 14px; color: var(--c-secondary); line-height: 1.5; margin: 0; }
+
     /* ── Leadership quotes ── */
     .cs-quotes { display: flex; flex-direction: column; gap: 20px; margin: 36px 0; }
     .cs-quote {
@@ -730,7 +736,13 @@
 
       <div class="cs-section">
         <h3>The recognition</h3>
-        <p>The Scott Cook Innovation Award was presented at the Q2 Intuit State of the Company meeting. Scott Cook cited the team's day-one mindset: treating the problem as if TurboTax Live were being built from scratch rather than incrementally improved.</p>
+        <div class="cs-award">
+          <img class="cs-award-badge" src="assets/scott-cook-award.png" alt="Scott Cook Innovation Award badge" width="300" height="300">
+          <div>
+            <div class="cs-award-name">Scott Cook Innovation Award</div>
+            <p class="cs-award-context">Presented at the Q2 Intuit State of the Company meeting. Scott Cook cited the team's day-one mindset: treating the problem as if TurboTax Live were being built from scratch rather than incrementally improved.</p>
+          </div>
+        </div>
         <div class="cs-quotes">
           <div class="cs-quote">
             <div class="cs-quote-text">"The Same Day Full Service work is the kind of design thinking that changes what's possible. The team didn't try to make the wait shorter. They asked whether the wait had to exist at all."</div>
