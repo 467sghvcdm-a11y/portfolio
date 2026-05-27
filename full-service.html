@@ -196,12 +196,45 @@
     figure { margin: 36px 0; }
     figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
     figcaption { font-size: 14px; color: var(--c-secondary); margin-top: 10px; line-height: 1.5; }
-    /* Flow diagrams — full card width, benefit from scale */
-    figure.fig-flow { max-width: 100%; }
     /* UI screenshots — reading column */
     figure.fig-ui { max-width: 680px; }
     /* Portrait or small UI — constrained further */
     figure.fig-sm { max-width: 400px; }
+
+    /* ── E2E carousel ── */
+    .cs-carousel {
+      margin: 36px min(0px, 40px - var(--card-h));
+      width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
+    }
+    .cs-carousel-nav {
+      display: flex;
+      gap: 0;
+      padding: 0 max(0px, var(--card-h) - 40px);
+      border-bottom: 1px solid var(--c-rule);
+      margin-bottom: 0;
+    }
+    .cs-carousel-tab {
+      font-family: 'Figtree', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--c-secondary);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      cursor: pointer;
+      padding: 10px 16px;
+      transition: color 150ms, border-color 150ms;
+    }
+    .cs-carousel-tab:hover { color: var(--c-primary); }
+    .cs-carousel-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .cs-carousel-slide { display: none; }
+    .cs-carousel-slide.active { display: block; }
+    .cs-carousel-slide img { width: 100%; height: auto; display: block; }
+    .cs-carousel-caption { display: none; font-size: 14px; color: var(--c-secondary); line-height: 1.5; margin: 10px 0 0; padding: 0 max(0px, var(--card-h) - 40px); }
+    .cs-carousel-caption.active { display: block; }
 
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
@@ -543,10 +576,27 @@
       <p>The product had been designed around the expert's workflow, and it showed. Customers uploaded documents, got queued, waited to be contacted, exchanged messages over days, and eventually reviewed and filed. It was modeled on how a CPA firm operates. The problem is that people go to a CPA's office and sit there until their return is done. They don't drop off their W-2 and come back in 18 days.</p>
       <p>Every promise in the marketing was running into friction in the product:</p>
 
-      <figure class="fig-flow">
-        <img src="assets/fs-customer-e2e.png" alt="Full Service customer end-to-end journey" width="3122" height="1342" loading="lazy" decoding="async">
-        <figcaption>The customer journey from entry to filed return. Every handoff between teams was a gap the customer felt.</figcaption>
-      </figure>
+      <div class="cs-carousel">
+        <div class="cs-carousel-nav">
+          <button class="cs-carousel-tab active" data-slide="0">Customer journey</button>
+          <button class="cs-carousel-tab" data-slide="1">Expert journey</button>
+          <button class="cs-carousel-tab" data-slide="2">Tax prep assistant</button>
+        </div>
+        <div class="cs-carousel-slides">
+          <div class="cs-carousel-slide active">
+            <img src="assets/fs-customer-e2e.png" alt="Full Service customer end-to-end journey" width="3122" height="1342" loading="eager" decoding="async">
+          </div>
+          <div class="cs-carousel-slide">
+            <img src="assets/fs-expert-e2e.png" alt="Expert end-to-end journey" width="3270" height="834" loading="lazy" decoding="async">
+          </div>
+          <div class="cs-carousel-slide">
+            <img src="assets/fs-tpa-e2e.png" alt="Tax prep assistant end-to-end journey" width="3054" height="1834" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <p class="cs-carousel-caption active">The customer journey from entry to filed return. Every handoff between teams was a gap the customer felt.</p>
+        <p class="cs-carousel-caption">The expert's side of the same session — accuracy review, document management, and live connection.</p>
+        <p class="cs-carousel-caption">The tax prep assistant flow — intake, readiness confirmation, and the handoff to an expert.</p>
+      </div>
 
       <table class="cs-promise-table">
         <thead>
@@ -941,6 +991,25 @@
     resize(); draw();
     document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(raf); raf = null; } else if (!raf) draw(); });
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { cancelAnimationFrame(raf); raf = null; }
+  })();
+
+  // E2E carousel
+  (function () {
+    document.querySelectorAll('.cs-carousel').forEach(function (carousel) {
+      var tabs = carousel.querySelectorAll('.cs-carousel-tab');
+      var slides = carousel.querySelectorAll('.cs-carousel-slide');
+      var captions = carousel.querySelectorAll('.cs-carousel-caption');
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () {
+          tabs.forEach(function (t) { t.classList.remove('active'); });
+          slides.forEach(function (s) { s.classList.remove('active'); });
+          captions.forEach(function (c) { c.classList.remove('active'); });
+          tab.classList.add('active');
+          slides[i].classList.add('active');
+          captions[i].classList.add('active');
+        });
+      });
+    });
   })();
   </script>
 </body>
