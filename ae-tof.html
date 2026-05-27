@@ -93,7 +93,7 @@
     .cs-back {
       position: fixed;
       top: 16px;
-      left: 16px;
+      left: 40px;
       z-index: 100;
       color: rgba(244,237,226,0.6);
       text-decoration: none;
@@ -456,6 +456,7 @@
     /* ── Responsive ── */
 
     @media (max-width: 760px) {
+      .cs-back { left: 16px; }
       .pv-inner { padding: 6px 0 24px; }
       .card { --card-h: 40px; padding: 48px var(--card-h) 64px; box-shadow: none; }
       .hero { padding: 40px 40px 48px; margin: -6px 0 0; }
