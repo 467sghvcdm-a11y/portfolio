@@ -747,46 +747,26 @@
       margin-top: 40px;
       padding-top: 40px;
       border-top: 1px solid var(--c-rule);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px 56px;
     }
-    .amd-section h4 {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--c-secondary);
-      margin-bottom: 14px;
-    }
-    .amd-section ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .amd-section li {
-      font-size: 14px;
-      line-height: 1.6;
+    .amd-file {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.75;
       color: var(--c-primary);
-      padding-left: 14px;
-      position: relative;
+      background: var(--c-card-subsurface);
+      border: 1px solid var(--c-rule);
+      border-radius: 8px;
+      padding: 28px 32px;
     }
-    .amd-section li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 9px;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--accent);
+    .amd-h {
+      color: var(--accent);
+      margin-top: 28px;
+      margin-bottom: 4px;
     }
-    .amd-section li strong { font-weight: 600; }
-
-    @media (max-width: 760px) {
-      .about-cmd-output-inner { grid-template-columns: 1fr; gap: 32px; }
-    }
+    .amd-h:first-child { margin-top: 0; }
+    .amd-blank { height: 4px; }
+    .amd-item { color: var(--c-primary); }
+    .amd-item strong { font-weight: 600; }
     .portrait {
       width: 280px;
       height: 280px;
@@ -1248,56 +1228,46 @@
 
       <div class="about-cmd-output" id="about-cmd-output">
         <div class="about-cmd-output-inner">
+          <div class="amd-file">
 
-          <div class="amd-section">
-            <h4>How I think</h4>
-            <ul>
-              <li>I interrogate what data measures before accepting what it means. The gap between what a number measures and what's being claimed about it is where most decisions go wrong.</li>
-              <li>I think structurally before I think tactically. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.</li>
-              <li>I build for durability, not just delivery. The framework, the principle, the rule that lets future decisions be made faster and more consistently.</li>
-              <li>I treat research as the primary input to strategy, not a validation step after design decisions are made.</li>
-              <li>I move between registers fluently. Craft, strategy, business, data. I know which one the room needs in the moment.</li>
-              <li>I hold positions under pressure until the data resolves it. I don't move off a position because the room is uncomfortable — I move when the data changes.</li>
-              <li>I separate what I know from what I'm told. Verbal claims, repeated assertions, and inherited assumptions get tested against documented sources.</li>
-            </ul>
+            <div class="amd-h">## How I think</div>
+            <div class="amd-blank"></div>
+            <div class="amd-item">- I interrogate what data measures before accepting what it means. The gap between what a number measures and what's being claimed about it is where most decisions go wrong.</div>
+            <div class="amd-item">- I think structurally before I think tactically. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.</div>
+            <div class="amd-item">- I build for durability, not just delivery. The framework, the principle, the rule that lets future decisions be made faster and more consistently.</div>
+            <div class="amd-item">- I treat research as the primary input to strategy, not a validation step after design decisions are made.</div>
+            <div class="amd-item">- I move between registers fluently. Craft, strategy, business, data. I know which one the room needs in the moment.</div>
+            <div class="amd-item">- I hold positions under pressure until the data resolves it. I don't move off a position because the room is uncomfortable — I move when the data changes.</div>
+            <div class="amd-item">- I separate what I know from what I'm told. Verbal claims, repeated assertions, and inherited assumptions get tested against documented sources.</div>
+
+            <div class="amd-h">## How I produce work</div>
+            <div class="amd-blank"></div>
+            <div class="amd-item">- <strong>Show, not tell.</strong> I build the artifact that makes the case rather than rely on verbal advocacy alone.</div>
+            <div class="amd-item">- <strong>Rigor is load-bearing.</strong> My standards are high because the audiences I can't be in front of require it. When my manager has to carry my case into rooms I'm not in, the artifact has to survive that handoff.</div>
+            <div class="amd-item">- <strong>Attribution discipline.</strong> I separate direct ownership from framework contribution from context. I credit collaborators by name.</div>
+            <div class="amd-item">- <strong>Put me on the hardest problem.</strong> The most strategically demanding work is where I'm most useful, even when it's not the most visually complex.</div>
+            <div class="amd-item">- <strong>I prepare for rooms I won't be in.</strong> Before high-stakes reviews I build cheat sheets of likely pushback and pre-written responses, embedded directly in the Figma file being reviewed.</div>
+            <div class="amd-item">- <strong>I encode strategy into reusable systems.</strong> Mid-project, I build the framework, the instruction set, the rule — so future collaborators can snap into the same mode without starting from scratch.</div>
+
+            <div class="amd-h">## What I'm uniquely good at</div>
+            <div class="amd-blank"></div>
+            <div class="amd-item">- Holding craft and strategy as the same practice. The craft rigor is what earns the standing to shape strategy.</div>
+            <div class="amd-item">- Naming structural problems with no obvious owner. The ones the system has no natural mechanism to surface.</div>
+            <div class="amd-item">- Building leverage artifacts. Things that change what other people are able to do, not just deliverables.</div>
+            <div class="amd-item">- Data literacy for a designer. Indices, p-values in context, attribution models. I know what a test proves versus what someone is claiming it proves.</div>
+            <div class="amd-item">- Translating design decisions into business language without losing the design logic.</div>
+            <div class="amd-item">- Catching context mismatches before they become bad decisions. A finding validated on one surface doesn't transfer automatically to another.</div>
+            <div class="amd-item">- Advocating for a position through sustained organizational resistance and being proven right by data.</div>
+
+            <div class="amd-h">## Working preferences</div>
+            <div class="amd-blank"></div>
+            <div class="amd-item">- Lead with action, not planning narration</div>
+            <div class="amd-item">- Direct is better than diplomatic. Specific is better than general.</div>
+            <div class="amd-item">- Close the loop on dropped findings; flag things that go quiet</div>
+            <div class="amd-item">- No trailing summaries unless asked</div>
+            <div class="amd-item">- When something can be tested, test it before reporting it done</div>
+
           </div>
-
-          <div class="amd-section">
-            <h4>How I produce work</h4>
-            <ul>
-              <li><strong>Show, not tell.</strong> I build the artifact that makes the case rather than rely on verbal advocacy alone.</li>
-              <li><strong>Rigor is load-bearing.</strong> My standards are high because the audiences I can't be in front of require it. When my manager has to carry my case into rooms I'm not in, the artifact has to survive that handoff.</li>
-              <li><strong>Attribution discipline.</strong> I separate direct ownership from framework contribution from context. I credit collaborators by name.</li>
-              <li><strong>Put me on the hardest problem.</strong> The most strategically demanding work is where I'm most useful, even when it's not the most visually complex.</li>
-              <li><strong>I prepare for rooms I won't be in.</strong> Before high-stakes reviews I build cheat sheets of likely pushback and pre-written responses, embedded directly in the Figma file being reviewed.</li>
-              <li><strong>I encode strategy into reusable systems.</strong> Mid-project, I build the framework, the instruction set, the rule — so future collaborators can snap into the same mode without starting from scratch.</li>
-            </ul>
-          </div>
-
-          <div class="amd-section">
-            <h4>What I'm uniquely good at</h4>
-            <ul>
-              <li>Holding craft and strategy as the same practice. The craft rigor is what earns the standing to shape strategy.</li>
-              <li>Naming structural problems with no obvious owner. The ones the system has no natural mechanism to surface.</li>
-              <li>Building leverage artifacts. Things that change what other people are able to do, not just deliverables.</li>
-              <li>Data literacy for a designer. Indices, p-values in context, attribution models. I know what a test proves versus what someone is claiming it proves.</li>
-              <li>Translating design decisions into business language without losing the design logic.</li>
-              <li>Catching context mismatches before they become bad decisions. A finding validated on one surface doesn't transfer automatically to another.</li>
-              <li>Advocating for a position through sustained organizational resistance and being proven right by data.</li>
-            </ul>
-          </div>
-
-          <div class="amd-section">
-            <h4>Working preferences</h4>
-            <ul>
-              <li>Lead with action, not planning narration</li>
-              <li>Direct is better than diplomatic. Specific is better than general.</li>
-              <li>Close the loop on dropped findings; flag things that go quiet</li>
-              <li>No trailing summaries unless asked</li>
-              <li>When something can be tested, test it before reporting it done</li>
-            </ul>
-          </div>
-
         </div>
       </div>
 
