@@ -682,6 +682,111 @@
     }
     .about-text p:last-of-type { margin-bottom: 20px; }
     .about-text { max-width: 680px; }
+
+    /* ── /about-matt command UI ── */
+    .about-cmd-setup {
+      font-size: 14px;
+      color: var(--c-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .about-cmd-setup a { color: var(--c-secondary); text-decoration: underline; text-underline-offset: 2px; }
+    .about-cmd-setup a:hover { color: var(--c-primary); }
+    .about-cmd-prompt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--c-card-subsurface);
+      border-radius: 8px;
+      border: 1px solid var(--c-rule);
+      width: fit-content;
+    }
+    .about-cmd-prefix {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--c-secondary);
+      user-select: none;
+    }
+    .about-cmd-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      letter-spacing: 0;
+      transition: opacity 150ms;
+    }
+    .about-cmd-btn:hover { opacity: 0.7; }
+    .about-cmd-btn.active { color: var(--c-secondary); cursor: default; }
+    .about-cmd-enter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--c-secondary);
+      opacity: 0.5;
+      user-select: none;
+      transition: opacity 150ms;
+    }
+    .about-cmd-enter.hidden { opacity: 0; pointer-events: none; }
+
+    /* Output panel */
+    .about-cmd-output {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.3s ease;
+    }
+    .about-cmd-output.open {
+      max-height: 6000px;
+      opacity: 1;
+    }
+    .about-cmd-output-inner {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid var(--c-rule);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 56px;
+    }
+    .amd-section h4 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--c-secondary);
+      margin-bottom: 14px;
+    }
+    .amd-section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .amd-section li {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--c-primary);
+      padding-left: 14px;
+      position: relative;
+    }
+    .amd-section li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .amd-section li strong { font-weight: 600; }
+
+    @media (max-width: 760px) {
+      .about-cmd-output-inner { grid-template-columns: 1fr; gap: 32px; }
+    }
     .portrait {
       width: 280px;
       height: 280px;
@@ -1131,12 +1236,71 @@
       <h2>About</h2>
       <div class="about-grid">
         <div class="about-text">
-          <p>I've spent the last decade at Intuit building things that didn't have templates. TurboTax Full Service didn't exist when I joined. I helped design it from scratch alongside tax experts, service designers, operations, and delivery teams. I then ran design strategy for TurboTax Business, and I now own top-of-funnel acquisition for Assisted Tax: the surfaces that determine whether the right customer takes the first step toward filing with an expert.</p>
-          <p>I work at the intersection of design, strategy, and data, not as separate modes I shift between, but as concurrent tracks. I build frameworks that hold up under scrutiny, run controlled experiments, and push back when the data is being interpreted wrong. I can design the pixel, read the experiment result, and explain why a finding from one surface doesn't transfer to another.</p>
-          <p>AI is part of how I work every day. I use it to pressure-test ideas, accelerate synthesis, and sharpen my thinking before it goes into a room. Designers who aren't using these tools yet are leaving capability on the table.</p>
+          <p class="about-cmd-setup">The public tier of my about-me file — the output of <a href="thinking.html"><code>/create-about-me</code></a>, a skill described in the writing above.</p>
+          <div class="about-cmd-prompt">
+            <span class="about-cmd-prefix">></span>
+            <button class="about-cmd-btn" id="about-cmd-btn">/about-matt</button>
+            <span class="about-cmd-enter" id="about-cmd-enter">↵ run</span>
+          </div>
         </div>
         <div class="portrait"><img src="assets/portrait.jpg" alt="Matt Kirkpatrick" width="513" height="513" loading="lazy" decoding="async"></div>
       </div>
+
+      <div class="about-cmd-output" id="about-cmd-output">
+        <div class="about-cmd-output-inner">
+
+          <div class="amd-section">
+            <h4>How I think</h4>
+            <ul>
+              <li>I interrogate what data measures before accepting what it means. The gap between what a number measures and what's being claimed about it is where most decisions go wrong.</li>
+              <li>I think structurally before I think tactically. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.</li>
+              <li>I build for durability, not just delivery. The framework, the principle, the rule that lets future decisions be made faster and more consistently.</li>
+              <li>I treat research as the primary input to strategy, not a validation step after design decisions are made.</li>
+              <li>I move between registers fluently. Craft, strategy, business, data. I know which one the room needs in the moment.</li>
+              <li>I hold positions under pressure until the data resolves it. I don't move off a position because the room is uncomfortable — I move when the data changes.</li>
+              <li>I separate what I know from what I'm told. Verbal claims, repeated assertions, and inherited assumptions get tested against documented sources.</li>
+            </ul>
+          </div>
+
+          <div class="amd-section">
+            <h4>How I produce work</h4>
+            <ul>
+              <li><strong>Show, not tell.</strong> I build the artifact that makes the case rather than rely on verbal advocacy alone.</li>
+              <li><strong>Rigor is load-bearing.</strong> My standards are high because the audiences I can't be in front of require it. When my manager has to carry my case into rooms I'm not in, the artifact has to survive that handoff.</li>
+              <li><strong>Attribution discipline.</strong> I separate direct ownership from framework contribution from context. I credit collaborators by name.</li>
+              <li><strong>Put me on the hardest problem.</strong> The most strategically demanding work is where I'm most useful, even when it's not the most visually complex.</li>
+              <li><strong>I prepare for rooms I won't be in.</strong> Before high-stakes reviews I build cheat sheets of likely pushback and pre-written responses, embedded directly in the Figma file being reviewed.</li>
+              <li><strong>I encode strategy into reusable systems.</strong> Mid-project, I build the framework, the instruction set, the rule — so future collaborators can snap into the same mode without starting from scratch.</li>
+            </ul>
+          </div>
+
+          <div class="amd-section">
+            <h4>What I'm uniquely good at</h4>
+            <ul>
+              <li>Holding craft and strategy as the same practice. The craft rigor is what earns the standing to shape strategy.</li>
+              <li>Naming structural problems with no obvious owner. The ones the system has no natural mechanism to surface.</li>
+              <li>Building leverage artifacts. Things that change what other people are able to do, not just deliverables.</li>
+              <li>Data literacy for a designer. Indices, p-values in context, attribution models. I know what a test proves versus what someone is claiming it proves.</li>
+              <li>Translating design decisions into business language without losing the design logic.</li>
+              <li>Catching context mismatches before they become bad decisions. A finding validated on one surface doesn't transfer automatically to another.</li>
+              <li>Advocating for a position through sustained organizational resistance and being proven right by data.</li>
+            </ul>
+          </div>
+
+          <div class="amd-section">
+            <h4>Working preferences</h4>
+            <ul>
+              <li>Lead with action, not planning narration</li>
+              <li>Direct is better than diplomatic. Specific is better than general.</li>
+              <li>Close the loop on dropped findings; flag things that go quiet</li>
+              <li>No trailing summaries unless asked</li>
+              <li>When something can be tested, test it before reporting it done</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
       <div class="speaking-photos">
         <img src="assets/speaking-wide.jpg" alt="Speaking at UX Speakeasy San Diego" width="1040" height="694" loading="lazy" decoding="async">
         <img src="assets/speaking-gesture.jpg" alt="" width="1040" height="694" loading="lazy" decoding="async">
@@ -1698,6 +1862,25 @@
   })();
   </script>
   <script>
+  // /about-matt command interaction
+  (function () {
+    var btn    = document.getElementById('about-cmd-btn');
+    var output = document.getElementById('about-cmd-output');
+    var enter  = document.getElementById('about-cmd-enter');
+    if (!btn || !output) return;
+    btn.addEventListener('click', function () {
+      if (output.classList.contains('open')) {
+        output.classList.remove('open');
+        btn.classList.remove('active');
+        enter.classList.remove('hidden');
+      } else {
+        output.classList.add('open');
+        btn.classList.add('active');
+        enter.classList.add('hidden');
+      }
+    });
+  })();
+
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
   (function () {
