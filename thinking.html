@@ -128,6 +128,44 @@
     }
     .essay-section > p:first-of-type { margin-top: 16px; }
 
+    /* ── Skill file viewer ── */
+    .skill-file-toggle { margin-top: 24px; }
+    .skill-file-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: none;
+      border: 1px solid var(--c-rule);
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      color: var(--c-secondary);
+      transition: border-color 150ms, color 150ms;
+      letter-spacing: 0;
+    }
+    .skill-file-btn:hover { border-color: var(--c-primary); color: var(--c-primary); }
+    .skill-file-output {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.4s ease;
+    }
+    .skill-file-output.open { max-height: 600px; }
+    .skill-file-pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.65;
+      color: var(--c-primary);
+      background: var(--c-card-subsurface);
+      border: 1px solid var(--c-rule);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-top: 14px;
+      overflow-y: auto;
+      overflow-x: auto;
+      max-height: 560px;
+      white-space: pre;
+      tab-size: 2;
+    }
+
     /* ── Skill label ── */
     .skill-label {
       display: inline-block;
@@ -231,13 +269,17 @@
         <p>A skill is a structural solution. A set of instructions that constrains the agent to the right domain, the right sources, the right methodology. The difference between an agent that sounds authoritative and one that actually is.</p>
       </div>
 
-      <div class="essay-section">
+      <div class="essay-section" id="skill-section-claim-audit">
         <div class="skill-label">/claim-audit</div>
         <p>Numbers circulate in strategy decks and case studies, get repeated in meeting after meeting, and nobody actually checks whether they mean what the person citing them thinks they mean. The same metric gets defined three different ways across three different dashboards. A finding gets summarized, the summary gets summarized, and by the fourth hop it's asserting something the original study never said.</p>
         <p>My first instinct was to build a rebuttal machine. That version of the skill is useless — it gets you into a fight before it changes anything. The reframe that made it work: the output is evidence integrity for your own work, not ammunition against the person who made the claim. Functionally identical. Politically deployable.</p>
         <p>The skill anchors quant claims to the canonical data layer first. It checks the claim against that anchor rather than whatever dashboard the person was looking at when they wrote the number down. Dashboard drift — where the number was real but was pulled with a filter state that doesn't match how the claim is being used — is one of the most common failure modes and the hardest to catch without this kind of check.</p>
         <p>For qual claims, it routes to the underlying study artifact, sample size, methodology, and conditions. It also surfaces when two research groups produced contradicting findings on the same question — which is often more useful than the audit result itself.</p>
         <p>The output is a structured drift report and a corrected claim: the same thing the original claimant was trying to say, written with the qualifications the underlying evidence actually supports.</p>
+        <div class="skill-file-toggle">
+          <button class="skill-file-btn" data-skill="claim-audit">view SKILL.md</button>
+          <div class="skill-file-output" id="sfo-claim-audit"></div>
+        </div>
       </div>
 
       <div class="essay-section">
@@ -253,6 +295,10 @@
         <p>This is a three-tier file — public, trusted, private — that captures the interpretive layer in a form that can travel deliberately. The interesting design constraint: the skill mines Slack history, memory files, and past artifacts before asking the user anything. It searches for messages where you reframed a problem, moments where others tagged you for expertise, how cross-functional partners have introduced you in new contexts.</p>
         <p>Self-report produces what people wish were true about themselves. Observed behavior produces what's actually true.</p>
         <p>The file pairs with <code class="skill-label">/offboard-program</code> and <code class="skill-label">/onboard-program</code>. When you leave a program, offboard packages a slice of your about-me alongside the work context. When someone joins, they can load your about-me and start understanding how you work before your first meeting.</p>
+        <div class="skill-file-toggle">
+          <button class="skill-file-btn" data-skill="create-about-me">view SKILL.md</button>
+          <div class="skill-file-output" id="sfo-create-about-me"></div>
+        </div>
       </div>
 
       <div class="essay-section">
@@ -260,6 +306,10 @@
         <p>When you join a new program after a reorg or a departure, the knowledge that existed walks out with whoever left. This skill searches for the previous owner's offboard package first — covering what was tried and what worked, the relationship context for each cross-functional partner, what was said in leadership forums that didn't make it into any deck, and the open threads that will fall through the cracks.</p>
         <p>If no package exists, it searches Slack, Drive, and Figma to reconstruct what it can and surfaces what's missing explicitly. It maps canonical sources into the workspace and writes a config block you can paste so every subsequent session starts with those sources already loaded. It loads about-me files for key collaborators before you meet them.</p>
         <p>The orientation document it produces includes a required "what's unknown" section — because an onboarding document that presents itself as complete is lying.</p>
+        <div class="skill-file-toggle">
+          <button class="skill-file-btn" data-skill="onboard-program">view SKILL.md</button>
+          <div class="skill-file-output" id="sfo-onboard-program"></div>
+        </div>
       </div>
 
       <div class="essay-section">
@@ -267,6 +317,10 @@
         <p>I was trying to reconstruct what I actually did on a past project. Not what I remembered — what the record showed. The process worked well enough that I formalized it.</p>
         <p>The skill runs two Slack passes. The first searches your own messages for how you actually framed the work: the rationale you explained, the moments you pushed back, the frameworks you authored. The second searches the broader record for how others saw it: high-react threads, cross-functional acknowledgment, executive recognition. Then it pulls Drive documents, surfaces a source inventory, extracts the story structure, and waits for you to validate the extraction before writing any narrative prose.</p>
         <p>Memory produces generic case studies. Sources produce specific ones. The moments that make a portfolio entry compelling are almost always in the record. You just have to look.</p>
+        <div class="skill-file-toggle">
+          <button class="skill-file-btn" data-skill="case-study-builder">view SKILL.md</button>
+          <div class="skill-file-output" id="sfo-case-study-builder"></div>
+        </div>
       </div>
 
       <div class="essay-section">
@@ -291,6 +345,46 @@
 
   <script>
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  // Skill file viewer
+  (function () {
+    function escapeHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    document.querySelectorAll('.skill-file-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var skill   = btn.dataset.skill;
+        var output  = document.getElementById('sfo-' + skill);
+        if (output.classList.contains('open')) {
+          output.classList.remove('open');
+          btn.textContent = 'view SKILL.md';
+          return;
+        }
+        if (output.querySelector('.skill-file-pre')) {
+          output.classList.add('open');
+          btn.textContent = 'close';
+          return;
+        }
+        btn.textContent = 'loading...';
+        btn.disabled = true;
+        fetch('assets/skills/' + skill + '.md')
+          .then(function (r) { return r.text(); })
+          .then(function (text) {
+            var pre = document.createElement('pre');
+            pre.className = 'skill-file-pre';
+            pre.textContent = text;
+            output.appendChild(pre);
+            output.classList.add('open');
+            btn.textContent = 'close';
+            btn.disabled = false;
+          })
+          .catch(function () {
+            btn.textContent = 'view SKILL.md';
+            btn.disabled = false;
+          });
+      });
+    });
+  })();
   </script>
 
 </body>
