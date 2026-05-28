@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building tools for your own practice · Matt Kirkpatrick</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Figtree:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html { min-height: 100dvh; background-color: #000000; }
+
+    body {
+      min-height: 100dvh;
+      background-color: #000000;
+      background-image:
+        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
+      background-attachment: fixed;
+      --accent: #d92638;
+      --card-radius: 20px;
+      --card-h: max(64px, calc((100vw - 16px - 1000px) / 2));
+    }
+
+    .pv-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 8px 12px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--c-card-surface);
+      border-radius: var(--card-radius);
+      padding: 56px var(--card-h) 80px;
+      position: relative;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.22);
+      overflow: hidden;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: transparent;
+      color: #f4ede2;
+      padding: 36px var(--card-h) 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 28vh;
+    }
+    .hero-body { display: flex; flex-direction: column; gap: 20px; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(244,237,226,0.55);
+    }
+    .hero-eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--accent); }
+    .cs-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 52px;
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: #f4ede2;
+      max-width: 18ch;
+    }
+    .hero-foot {
+      display: flex; gap: 32px; flex-wrap: wrap;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(244,237,226,0.45);
+    }
+    .hero-foot b { color: rgba(244,237,226,0.7); font-weight: 600; margin-left: 6px; }
+
+    /* ── Back pill ── */
+    .cs-back {
+      position: fixed;
+      top: 16px;
+      left: 40px;
+      z-index: 100;
+      color: rgba(244,237,226,0.6);
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      background: rgba(10,10,10,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: color 150ms, background 150ms;
+    }
+    .cs-back:hover { color: #f4ede2; background: rgba(10,10,10,0.85); }
+
+    /* ── Essay layout ── */
+    .essay { max-width: 660px; }
+    .essay p {
+      margin-top: 22px;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--c-primary);
+    }
+    .essay p:first-child { margin-top: 0; }
+
+    /* ── Section breaks ── */
+    .essay-section {
+      margin-top: 64px;
+      padding-top: 64px;
+      border-top: 1px solid var(--c-rule);
+      max-width: 660px;
+    }
+    .essay-section p {
+      margin-top: 20px;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--c-primary);
+    }
+    .essay-section p:first-child { margin-top: 0; }
+    .essay-section h3 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+    }
+    .essay-section > p:first-of-type { margin-top: 16px; }
+
+    /* ── Skill label ── */
+    .skill-label {
+      display: inline-block;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: var(--accent);
+      background: rgba(217,38,56,0.07);
+      border: 1px solid rgba(217,38,56,0.15);
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      letter-spacing: 0;
+    }
+
+    /* ── Opening pull quote ── */
+    .essay-lede {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 26px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.45;
+      color: var(--c-primary);
+      max-width: 540px;
+      margin-bottom: 36px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(244,237,226,0.35);
+      z-index: 10;
+      pointer-events: none;
+    }
+    .footer-links { display: flex; gap: 20px; pointer-events: auto; }
+    .footer-link {
+      color: rgba(244,237,226,0.35);
+      text-decoration: none;
+      transition: color 150ms;
+    }
+    .footer-link:hover { color: rgba(244,237,226,0.7); }
+
+    /* ── Responsive ── */
+    @media (max-width: 760px) {
+      .cs-back { left: 16px; }
+      .card { --card-h: 40px; padding: 48px var(--card-h) 64px; box-shadow: none; }
+      .hero { padding: 40px 40px 48px; min-height: 20vh; }
+      .cs-title { font-size: 40px; }
+      .footer { padding: 14px 20px; }
+    }
+    @media (max-width: 520px) {
+      .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
+      .hero { padding: 40px 20px 40px; }
+      .cs-title { font-size: 32px; }
+      .essay p, .essay-section p { font-size: 16px; }
+      .essay-lede { font-size: 22px; }
+      .essay-section h3 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <script src="password-gate.js"></script>
+
+  <a href="index.html" class="cs-back">← Work</a>
+
+  <div class="pv-inner">
+
+    <div class="hero">
+      <div class="hero-body">
+        <p class="hero-eyebrow">Writing</p>
+        <h1 class="cs-title">Building tools for your own practice</h1>
+        <div class="hero-foot label">
+          <span>Year<b>2026</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+
+      <p class="essay-lede">Building AI tools for my own design practice taught me more about how I think than anything I've shipped in years.</p>
+
+      <div class="essay">
+        <p>Not because the tools are transformative. Because writing them down precisely enough for an agent to follow forced me to make explicit things I'd always left implicit. The moment you try to write "evaluate the design decision" as an instruction, you realize you have no idea what you actually mean.</p>
+
+        <p>Intuit is in the middle of a real transformation. TurboTax Live is now 53% of TurboTax revenue and growing fast. The org is getting leaner: fewer layers, more direct execution. The expectation for the people who remain isn't just to do their jobs well. It's to extend their own capability — to build the tools and institutional memory that make the work more durable than any one person.</p>
+
+        <p>I started building because I was curious what that actually looked like in practice.</p>
+      </div>
+
+      <div class="essay-section">
+        <p>General-purpose AI is confidently wrong in specific, predictable ways.</p>
+        <p>Ask it to evaluate a design decision and it produces a plausible answer that ignores the actual constraints and customer context. Ask it to verify a claim and it reasons from general knowledge instead of checking the source. The failures aren't random. They're structural.</p>
+        <p>A skill is a structural solution. A set of instructions that constrains the agent to the right domain, the right sources, the right methodology. The difference between an agent that sounds authoritative and one that actually is.</p>
+      </div>
+
+      <div class="essay-section">
+        <div class="skill-label">/claim-audit</div>
+        <p>Numbers circulate in strategy decks and case studies, get repeated in meeting after meeting, and nobody actually checks whether they mean what the person citing them thinks they mean. The same metric gets defined three different ways across three different dashboards. A finding gets summarized, the summary gets summarized, and by the fourth hop it's asserting something the original study never said.</p>
+        <p>My first instinct was to build a rebuttal machine. That version of the skill is useless — it gets you into a fight before it changes anything. The reframe that made it work: the output is evidence integrity for your own work, not ammunition against the person who made the claim. Functionally identical. Politically deployable.</p>
+        <p>The skill anchors quant claims to the canonical data layer first. It checks the claim against that anchor rather than whatever dashboard the person was looking at when they wrote the number down. Dashboard drift — where the number was real but was pulled with a filter state that doesn't match how the claim is being used — is one of the most common failure modes and the hardest to catch without this kind of check.</p>
+        <p>For qual claims, it routes to the underlying study artifact, sample size, methodology, and conditions. It also surfaces when two research groups produced contradicting findings on the same question — which is often more useful than the audit result itself.</p>
+        <p>The output is a structured drift report and a corrected claim: the same thing the original claimant was trying to say, written with the qualifications the underlying evidence actually supports.</p>
+      </div>
+
+      <div class="essay-section">
+        <div class="skill-label">/transferability-check</div>
+        <p>Design patterns get copy-pasted across contexts without anyone stopping to ask whether the logic that made something work in the original situation still applies in the new one. Customer type, product model, constraints: all different. The pattern: the same.</p>
+        <p>The hard part of building this skill was figuring out what "does this transfer" actually means precisely enough to write it down. I had to identify the load-bearing assumptions of a design decision before I could write anything an agent could evaluate. The skill pulls the design rationale from the original context, extracts those assumptions, and evaluates each one against the new context. Where an assumption breaks, that's where the pattern needs to be rebuilt rather than reused.</p>
+        <p>It pairs directly with <code class="skill-label">/claim-audit</code>: claims that have been audited and patterns that have been checked for transfer are the building blocks of rationale that actually holds up.</p>
+      </div>
+
+      <div class="essay-section">
+        <div class="skill-label">/create-about-me</div>
+        <p>Every profile system at a company tells you what someone does. None of them tell you how they think, how they work through ambiguity, where they have friction with other functions. That layer lives in people's heads and evaporates every time someone moves to a new team.</p>
+        <p>This is a three-tier file — public, trusted, private — that captures the interpretive layer in a form that can travel deliberately. The interesting design constraint: the skill mines Slack history, memory files, and past artifacts before asking the user anything. It searches for messages where you reframed a problem, moments where others tagged you for expertise, how cross-functional partners have introduced you in new contexts.</p>
+        <p>Self-report produces what people wish were true about themselves. Observed behavior produces what's actually true.</p>
+        <p>The file pairs with <code class="skill-label">/offboard-program</code> and <code class="skill-label">/onboard-program</code>. When you leave a program, offboard packages a slice of your about-me alongside the work context. When someone joins, they can load your about-me and start understanding how you work before your first meeting.</p>
+      </div>
+
+      <div class="essay-section">
+        <div class="skill-label">/onboard-program</div>
+        <p>When you join a new program after a reorg or a departure, the knowledge that existed walks out with whoever left. This skill searches for the previous owner's offboard package first — covering what was tried and what worked, the relationship context for each cross-functional partner, what was said in leadership forums that didn't make it into any deck, and the open threads that will fall through the cracks.</p>
+        <p>If no package exists, it searches Slack, Drive, and Figma to reconstruct what it can and surfaces what's missing explicitly. It maps canonical sources into the workspace and writes a config block you can paste so every subsequent session starts with those sources already loaded. It loads about-me files for key collaborators before you meet them.</p>
+        <p>The orientation document it produces includes a required "what's unknown" section — because an onboarding document that presents itself as complete is lying.</p>
+      </div>
+
+      <div class="essay-section">
+        <div class="skill-label">/case-study-builder</div>
+        <p>I was trying to reconstruct what I actually did on a past project. Not what I remembered — what the record showed. The process worked well enough that I formalized it.</p>
+        <p>The skill runs two Slack passes. The first searches your own messages for how you actually framed the work: the rationale you explained, the moments you pushed back, the frameworks you authored. The second searches the broader record for how others saw it: high-react threads, cross-functional acknowledgment, executive recognition. Then it pulls Drive documents, surfaces a source inventory, extracts the story structure, and waits for you to validate the extraction before writing any narrative prose.</p>
+        <p>Memory produces generic case studies. Sources produce specific ones. The moments that make a portfolio entry compelling are almost always in the record. You just have to look.</p>
+      </div>
+
+      <div class="essay-section">
+        <p>I expected the value to be in the outputs. It turned out to be in the writing.</p>
+        <p>When you try to encode your own judgment into instructions precise enough for an agent to follow, you find out fast which parts of your thinking are real and which are habits you've never examined. The skills are useful. The process of building them was more useful.</p>
+        <p>Designers and PMs at companies going through real transformation face a version of the same question: how do you make your judgment more durable, more consistent, and less dependent on you personally carrying the context? These are one answer. They're not finished. But the direction is right.</p>
+        <p>Start where your work reliably breaks. Build there first.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span>© 2026 Matt Kirkpatrick</span>
+    <span class="footer-links">
+      <a href="resume.html" class="footer-link" target="_blank">Resume</a>
+      <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="footer-link" target="_blank">LinkedIn</a>
+      <a href="mailto:m.k.kirkpatrick@icloud.com" class="footer-link">Email →</a>
+    </span>
+  </footer>
+
+  <script>
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  </script>
+
+</body>
+</html>

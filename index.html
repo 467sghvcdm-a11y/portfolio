@@ -632,6 +632,48 @@
     }
 
     /* ── About ── */
+    /* ── Writing card ── */
+    .writing-item {
+      display: block;
+      text-decoration: none;
+      padding: 32px 0;
+      border-top: 1px solid var(--c-rule);
+      border-bottom: 1px solid var(--c-rule);
+      margin-top: 32px;
+      transition: opacity 150ms;
+    }
+    .writing-item:hover { opacity: 0.7; }
+    .writing-item-meta {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--c-secondary);
+      margin-bottom: 10px;
+    }
+    .writing-item-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--c-primary);
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+    .writing-item-desc {
+      font-size: 15px;
+      color: var(--c-secondary);
+      line-height: 1.6;
+      max-width: 56ch;
+      margin: 0;
+    }
+    .writing-item-cta {
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
     .about-grid {
       display: grid;
       grid-template-columns: 1fr 280px;
@@ -1071,6 +1113,17 @@
           </div>
         </a>
       </div>
+    </div>
+
+    <!-- ── Writing ── -->
+    <div class="card" id="writing">
+      <h2>Writing</h2>
+      <a href="thinking.html" class="writing-item">
+        <div class="writing-item-meta label">Practice · 2026</div>
+        <div class="writing-item-title">Building tools for your own practice</div>
+        <p class="writing-item-desc">On why general-purpose AI is wrong in specific, predictable ways — and what encoding your own judgment into agent instructions reveals about how you actually think.</p>
+        <div class="writing-item-cta label">Read →</div>
+      </a>
     </div>
 
     <!-- ── About ── -->
