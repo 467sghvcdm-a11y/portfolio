@@ -757,16 +757,11 @@
       border: 1px solid var(--c-rule);
       border-radius: 8px;
       padding: 28px 32px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-x: hidden;
+      margin: 0;
     }
-    .amd-h {
-      color: var(--accent);
-      margin-top: 28px;
-      margin-bottom: 4px;
-    }
-    .amd-h:first-child { margin-top: 0; }
-    .amd-blank { height: 4px; }
-    .amd-item { color: var(--c-primary); }
-    .amd-item strong { font-weight: 600; }
     .portrait {
       width: 280px;
       height: 280px;
@@ -1228,46 +1223,152 @@
 
       <div class="about-cmd-output" id="about-cmd-output">
         <div class="about-cmd-output-inner">
-          <div class="amd-file">
+          <pre class="amd-file">---
+person: matt-kirkpatrick
+role: principal-product-designer
+level: t6
+team: cg-design
+manager: laura-huston
+current_programs:
+  - t2a-preauth
+  - agentic-ai-experience-strategy
+past_programs:
+  - ae-tof
+  - turbotax-business
+  - full-service
+  - self-employed
+  - diy
+focus_areas:
+  - ai-experience-strategy
+  - evidence-integrity
+  - end-to-end-systems-thinking
+  - data-informed-design
+tier: public
+last_updated: 2026-05-18
+next_refresh_recommended: start of FY28 planning or next reorg
+---
 
-            <div class="amd-h">## How I think</div>
-            <div class="amd-blank"></div>
-            <div class="amd-item">- I interrogate what data measures before accepting what it means. The gap between what a number measures and what's being claimed about it is where most decisions go wrong.</div>
-            <div class="amd-item">- I think structurally before I think tactically. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.</div>
-            <div class="amd-item">- I build for durability, not just delivery. The framework, the principle, the rule that lets future decisions be made faster and more consistently.</div>
-            <div class="amd-item">- I treat research as the primary input to strategy, not a validation step after design decisions are made.</div>
-            <div class="amd-item">- I move between registers fluently. Craft, strategy, business, data. I know which one the room needs in the moment.</div>
-            <div class="amd-item">- I hold positions under pressure until the data resolves it. I don't move off a position because the room is uncomfortable — I move when the data changes.</div>
-            <div class="amd-item">- I separate what I know from what I'm told. Verbal claims, repeated assertions, and inherited assumptions get tested against documented sources.</div>
+# About Matt Kirkpatrick — public
 
-            <div class="amd-h">## How I produce work</div>
-            <div class="amd-blank"></div>
-            <div class="amd-item">- <strong>Show, not tell.</strong> I build the artifact that makes the case rather than rely on verbal advocacy alone.</div>
-            <div class="amd-item">- <strong>Rigor is load-bearing.</strong> My standards are high because the audiences I can't be in front of require it. When my manager has to carry my case into rooms I'm not in, the artifact has to survive that handoff.</div>
-            <div class="amd-item">- <strong>Attribution discipline.</strong> I separate direct ownership from framework contribution from context. I credit collaborators by name.</div>
-            <div class="amd-item">- <strong>Put me on the hardest problem.</strong> The most strategically demanding work is where I'm most useful, even when it's not the most visually complex.</div>
-            <div class="amd-item">- <strong>I prepare for rooms I won't be in.</strong> Before high-stakes reviews I build cheat sheets of likely pushback and pre-written responses, embedded directly in the Figma file being reviewed.</div>
-            <div class="amd-item">- <strong>I encode strategy into reusable systems.</strong> Mid-project, I build the framework, the instruction set, the rule — so future collaborators can snap into the same mode without starting from scratch.</div>
+The shareable layer. Helps a collaborator decide whether to consult me and how to approach me. For the trusted-tier or full file, request via the about-me skill.
 
-            <div class="amd-h">## What I'm uniquely good at</div>
-            <div class="amd-blank"></div>
-            <div class="amd-item">- Holding craft and strategy as the same practice. The craft rigor is what earns the standing to shape strategy.</div>
-            <div class="amd-item">- Naming structural problems with no obvious owner. The ones the system has no natural mechanism to surface.</div>
-            <div class="amd-item">- Building leverage artifacts. Things that change what other people are able to do, not just deliverables.</div>
-            <div class="amd-item">- Data literacy for a designer. Indices, p-values in context, attribution models. I know what a test proves versus what someone is claiming it proves.</div>
-            <div class="amd-item">- Translating design decisions into business language without losing the design logic.</div>
-            <div class="amd-item">- Catching context mismatches before they become bad decisions. A finding validated on one surface doesn't transfer automatically to another.</div>
-            <div class="amd-item">- Advocating for a position through sustained organizational resistance and being proven right by data.</div>
+---
 
-            <div class="amd-h">## Working preferences</div>
-            <div class="amd-blank"></div>
-            <div class="amd-item">- Lead with action, not planning narration</div>
-            <div class="amd-item">- Direct is better than diplomatic. Specific is better than general.</div>
-            <div class="amd-item">- Close the loop on dropped findings; flag things that go quiet</div>
-            <div class="amd-item">- No trailing summaries unless asked</div>
-            <div class="amd-item">- When something can be tested, test it before reporting it done</div>
+## How I think
 
-          </div>
+I interrogate what data measures before accepting what it means. When someone presents a result, my first move is to check the metric, the attribution, the population, the filters. The number itself is rarely the issue; the gap between what the number measures and what's being claimed about it is where most decisions go wrong.
+
+I think structurally before I think tactically. A problem in front of me is usually the surface of something deeper. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.
+
+I build for durability, not just delivery. I look for the pattern that will hold after the immediate project is done. The framework, the principle, the rule that lets future decisions be made faster and more consistently.
+
+I treat research as the primary input to strategy, not a validation step after design decisions are made. Research data feeds directly into the framing that drives design direction. When I co-create with researchers, they're co-authors of the strategy.
+
+I know when influence is capped. There's a point in every program where additional effort doesn't produce additional return, usually because the partnership structure or org context won't carry what I'm trying to build. Recognizing that point and reallocating is part of how I operate, not a failure mode.
+
+I move between registers fluently. Craft, strategy, business, data. Most people operate primarily in one. I read across all of them and know which one the room needs in the moment.
+
+I think end-to-end. Boundaries between surfaces, teams, and stages are where things break. The handoffs, the transitions, the seams.
+
+I separate what I know from what I'm told. Verbal claims, repeated assertions, and inherited assumptions get tested against documented sources.
+
+I hold positions under pressure until the data resolves it. When I believe something is right and the evidence supports it, I stay with it through sustained skepticism and organizational resistance. I don't move off a position because the room is uncomfortable — I move when the data changes.
+
+I correct misreads in public, with receipts. When someone states something inaccurate in a shared channel, I flag it directly and attach the source — Figma links, split data, test citations. Not to win an argument, but because bad data in a public thread becomes shared reality fast.
+
+---
+
+## How I produce work
+
+Show, not tell. I build the artifact that makes the case rather than rely on verbal advocacy alone.
+
+Rigor is load-bearing. My standards are high because the audiences I can't be in front of require it. When my manager has to carry my case into rooms I'm not in, the artifact has to survive that handoff.
+
+Attribution discipline. I separate direct ownership from framework contribution from context. I credit collaborators by name. I won't claim something I didn't drive.
+
+Self-assessment is part of the work. Calibration docs, retros, and growth narratives aren't routine outputs — they're how I make my work legible to people who don't see it daily.
+
+I draft for review, not approval. When I send something, I want a read on whether it lands.
+
+Put me on the hardest problem. The most strategically demanding work is where I'm most useful, even when it's not the most visually complex.
+
+AI is part of how I work every day. I use Claude to pressure-test ideas, accelerate synthesis, and sharpen my thinking before it goes into a room.
+
+I prepare for rooms I won't be in. Before high-stakes reviews I build cheat sheets of likely pushback and pre-written responses, embedded directly in the Figma file being reviewed. The artifact has to survive the handoff.
+
+I encode strategy into reusable systems. Mid-project, I build the framework, the instruction set, the rule — so future collaborators can snap into the same mode without starting from scratch. The Filter/Throttle framework, the AE project instructions, the knowledge transfer skills are all examples of this.
+
+---
+
+## What I'm uniquely good at
+
+Holding craft and strategy as the same practice. The craft rigor is what earns the standing to shape strategy.
+
+Naming structural problems with no obvious owner. The ones the system has no natural mechanism to surface.
+
+Building leverage artifacts. Things that change what other people are able to do, not just deliverables.
+
+Data literacy for a designer. Indices, p-values in context, attribution models. I know what a test proves versus what someone is claiming it proves.
+
+Translating design decisions into business language without losing the design logic.
+
+Working cross-functionally in registers other designers don't usually reach.
+
+Catching context mismatches before they become bad decisions. A finding validated on one surface doesn't transfer automatically to another. I flag this early, specifically, and with data — not as a blocker but as a redirect.
+
+Advocating for a position through sustained organizational resistance and being proven right by data. The Match CTA strategy is the clearest example — sustained skepticism from multiple directions, held position, validated at scale.
+
+Distributing capability, not just doing the work. Early adopter who encodes workflows and shares them so others can replicate — not just uses new tools but makes them accessible to the team.
+
+---
+
+## Working preferences
+
+- Lead with action, not planning narration
+- Direct is better than diplomatic. Specific is better than general.
+- Close the loop on dropped findings; flag things that go quiet
+- No trailing summaries unless asked
+- No em dashes; use commas, colons, or restructure
+- When something can be tested, test it before reporting it done
+
+---
+
+## What I'm currently building
+
+Skills shipped or scaffolding, intended to encode design's interpretive role in tooling:
+
+- /visual-qa — spec vs. implementation verification, shipped as alpha
+- /transferability-check — does a research finding apply to this context, shipped as alpha, being piloted by Ngoc Tran and Melrose Huang
+- /claim-audit — is a claim accurate against canonical sources, on fork, blocked on data access provisioning; two-mode architecture: qual via HeyMarvin (live), quant via DS-assisted handoff
+- /create-about-me, /offboard-program, /onboard-program — knowledge transfer skills, built, tested with real users (Betsy Freeman, Jett Barela), in alpha, not yet pushed to cgpm repo
+
+---
+
+## Intuit historical context
+
+Just under 9 years at Intuit, all on TurboTax. Started as a contractor on TurboTax.com entry points, then went full time. Path: DIY → Self-Employed → Full Service (from launch through scale) → Manager 3 of Full Service design → TurboTax Business reimagining → Activate Experts top of funnel → T2A pre-auth and AI experience strategy.
+
+Pre-Intuit: four years at Mirum, a global marketing agency.
+
+### Role history
+- Principal Product Designer, T6 (Dec 2024 to present): TurboTax Business (Dec 2024–Aug 2025), Activate Experts TOF (Aug 2025–May 2026), T2A pre-auth and Agentic AI experience strategy (May 2026–present).
+- Manager 3, Product Design, M3 (May–Nov 2024): Full Service.
+- Product Design Strategist, T6 (Jan 2023–Jun 2024): Full Service.
+- Principal Product Designer, T5 (Aug 2021–Jan 2023): Full Service.
+- Senior Product Designer, T3 (Dec 2017–Aug 2021): DIY → Self-Employed → Full Service.
+- XD Interaction Designer, contract (Aug–Dec 2017): TurboTax.com entry points.
+
+### Frameworks built
+- Filter/Throttle (AE TOF): distinguishes CTA strategies that filter the cohort vs. throttle volume
+- CTA-to-flow alignment (AE TOF): principle for matching CTA promise to flow destination
+- Dual-engine (AE TOF Organic LP Recipe C): Match as precision filter for revenue quality, modular auth as volume throttle for franchise growth
+- Canonical-first claim verification (across programs): canonical sources as truth, dashboards as evidence of what's being cited
+
+---
+
+## Vocabulary I use that's Intuit-specific
+
+T2A, T2S, T2C, RPn, TTO, CG, PDLC, PnP, MAO, FSO, GEO, CGDS, FMH, EVS, MAM/MAAM/PAM, ECC, ITC (index to control).</pre>
         </div>
       </div>
 
