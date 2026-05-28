@@ -333,6 +333,13 @@
       margin: 36px min(0px, 40px - var(--card-h));
       width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
     }
+    figure.fig-flow {
+      margin-left: min(0px, 40px - var(--card-h));
+      margin-right: min(0px, 40px - var(--card-h));
+      width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
+      margin-top: 0;
+    }
+    figure.fig-flow img { border-radius: 8px; }
 
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
@@ -536,7 +543,11 @@
     <!-- Body -->
     <div class="card" id="intro">
 
-      <h3>The problem no one had named</h3>
+      <figure class="fig-flow">
+        <img src="assets/work-business-tax.jpg" alt="TurboTax Business Tax product screens" width="2048" height="784" loading="eager" decoding="async" style="max-height: 460px; object-fit: cover; object-position: center center; border-radius: 8px;">
+      </figure>
+
+      <h3>The problem</h3>
       <p>TurboTax had a starts problem in Business Tax. Customers were arriving at the business tax product and not starting. The program realigned around the metric. Fix starts.</p>
       <p>But starts wasn't the real problem.</p>
       <p>A sole proprietor and a self-employed filer file the exact same tax forms. They have the same tax situation. The only meaningful difference between them is which front door they walked through to reach TurboTax. Sole prop customers were being routed into TTO Premium, a product designed for individual filers, and then asked to navigate a business tax experience that assumed knowledge they didn't have, forced decisions that shouldn't exist, and ended with a pricing surprise they weren't prepared for.</p>
