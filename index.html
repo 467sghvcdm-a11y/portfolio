@@ -42,6 +42,9 @@
     body.drawer-open .pv-inner {
       transform: translateX(-220px);
     }
+    @media (max-width: 760px) {
+      body.drawer-open { overflow: hidden; }
+    }
 
     /* ── Cards ── */
     /* Card surface and overrides live in style.css :root. Body[data-surface=...]
@@ -849,7 +852,25 @@
     .about-drawer-body strong { font-weight: 600; }
 
     @media (max-width: 760px) {
-      .about-drawer { width: 100vw; box-shadow: none; }
+      /* bottom sheet on mobile */
+      .about-drawer {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 88dvh;
+        border-left: none;
+        border-top: 1px solid var(--c-rule);
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -12px 40px rgba(0,0,0,0.2);
+        transform: translateY(100%);
+      }
+      .about-drawer.open { transform: translateY(0); }
+      .about-drawer-body {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
       body.drawer-open .pv-inner { transform: none; }
     }
     .portrait {
