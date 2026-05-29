@@ -797,16 +797,24 @@
     }
 
     /* Drawer content typography — plain markdown render */
-    .about-drawer-body {
+    .about-drawer-body,
+    .about-drawer-body h1,
+    .about-drawer-body h2,
+    .about-drawer-body h3,
+    .about-drawer-body p,
+    .about-drawer-body li,
+    .about-drawer-body code {
       font-family: 'Figtree', sans-serif;
+    }
+    .about-drawer-body {
       font-size: 14px;
       line-height: 1.7;
       color: var(--c-primary);
     }
     .md-fm {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      line-height: 1.8;
+      font-family: 'Figtree', sans-serif;
+      font-size: 12px;
+      line-height: 1.7;
       color: var(--c-secondary);
       background: var(--c-card-subsurface);
       border: 1px solid var(--c-rule);
@@ -817,27 +825,19 @@
       overflow-x: auto;
     }
     .about-drawer-body h1 {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
-      color: var(--c-primary);
       margin: 0 0 6px;
-      line-height: 1.25;
+      line-height: 1.3;
     }
     .about-drawer-body h2 {
       font-size: 14px;
       font-weight: 600;
-      color: var(--c-primary);
       margin: 24px 0 8px;
     }
-    .about-drawer-body h3 {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--c-primary);
-      margin: 16px 0 6px;
-    }
     .about-drawer-body p {
+      font-size: 14px;
       margin: 0 0 10px;
-      color: var(--c-primary);
     }
     .about-drawer-body hr {
       border: none;
@@ -845,6 +845,7 @@
       margin: 16px 0;
     }
     .about-drawer-body ul {
+      font-size: 14px;
       margin: 0 0 10px;
       padding-left: 18px;
     }
@@ -853,14 +854,6 @@
     }
     .about-drawer-body strong {
       font-weight: 600;
-    }
-    .about-drawer-body code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11.5px;
-      background: var(--c-card-subsurface);
-      border: 1px solid var(--c-rule);
-      border-radius: 3px;
-      padding: 1px 5px;
     }
 
     @media (max-width: 760px) {
@@ -2229,17 +2222,6 @@ focus_areas:
 
       <hr>
 
-      <h2>What I'm currently building</h2>
-      <p>Skills shipped or scaffolding, intended to encode design's interpretive role in tooling:</p>
-      <ul>
-        <li><code>/visual-qa</code> — spec vs. implementation verification, shipped as alpha</li>
-        <li><code>/transferability-check</code> — does a research finding apply to this context, shipped as alpha</li>
-        <li><code>/claim-audit</code> — is a claim accurate against canonical sources, on fork, blocked on data access provisioning</li>
-        <li><code>/create-about-me</code>, <code>/offboard-program</code>, <code>/onboard-program</code> — knowledge transfer skills, scoped</li>
-      </ul>
-
-      <hr>
-
       <h2>Intuit historical context</h2>
       <p>Just under 9 years at Intuit, all on TurboTax. Started as a contractor on TurboTax.com entry points, then went full time. Path: DIY → Self-Employed → Full Service (from launch through scale) → Manager 3 of Full Service design → TurboTax Business reimagining → Activate Experts top of funnel → T2A pre-auth and AI experience strategy.</p>
       <p>Pre-Intuit: four years at Mirum, a global marketing agency.</p>
@@ -2254,54 +2236,6 @@ focus_areas:
         <li><strong>XD Interaction Designer, contract (Aug–Dec 2017):</strong> TurboTax.com entry points.</li>
       </ul>
 
-      <h3>Frameworks built</h3>
-      <ul>
-        <li><strong>Filter/Throttle</strong> (AE TOF): distinguishes CTA strategies that filter the cohort vs. throttle volume</li>
-        <li><strong>CTA-to-flow alignment</strong> (AE TOF): principle for matching CTA promise to flow destination</li>
-        <li><strong>Dual-engine</strong> (AE TOF Organic LP Recipe C): Match as precision filter for revenue quality, modular auth as volume throttle for franchise growth</li>
-        <li><strong>Canonical-first claim verification</strong> (across programs): canonical sources as truth, dashboards as evidence of what's being cited</li>
-      </ul>
-
-      <hr>
-
-      <h2>Vocabulary I use that's Intuit-specific</h2>
-      <p>T2A, T2S, T2C, RPn, TTO, CG, PDLC, PnP, MAO, FSO, GEO, CGDS, FMH, EVS, MAM/MAAM/PAM, ECC, ITC (index to control).</p>
-
-      <hr>
-
-      <h2>Collaborators</h2>
-      <p>References to other about-me files where they exist. Request via the system if a referenced person doesn't have a file yet.</p>
-
-      <p><strong>Leadership</strong></p>
-      <ul>
-        <li><strong>Laura Huston</strong> — Director, Design. Direct manager.</li>
-        <li><strong>Cesar Villegas</strong> — VP, Human Factors Development. Laura's manager.</li>
-      </ul>
-
-      <p><strong>Activate Experts TOF (Aug 2025–present)</strong></p>
-      <ul>
-        <li><strong>Aaron Dsouza</strong> — Sr. Staff PM. Co-driver on the AE TOF test portfolio.</li>
-        <li><strong>Jaiswin Sundararajan</strong> — Principal PM, TurboTax.com Growth. AE test list and design spec handoffs.</li>
-        <li><strong>Betsy Freeman</strong> — Senior Product Designer. Co-designer on AE TOF page options.</li>
-        <li><strong>Jordan Epstein</strong> — Sr. Staff PM. AE pre-auth match flow and virtual-expert turnaway design.</li>
-        <li><strong>Justin Li</strong> — Group Product Design Manager. AE pre-auth design validation.</li>
-      </ul>
-
-      <p><strong>TurboTax Business (Dec 2024–Aug 2025)</strong></p>
-      <ul>
-        <li><strong>Vivek Gupta</strong> — Principal PM, Business Tax. Biz Tax T2S/T2A strategy partner.</li>
-        <li><strong>Brandon Mitchell</strong> — Director, PM. Senior PM partner on Sole Prop Experimentation and TY25 Biz Tax target state.</li>
-        <li><strong>Jim Fell</strong> — Director, Design. Peer design director on Biz Tax / Assisted / Canada onsite.</li>
-      </ul>
-
-      <p><strong>3X / cgpm-open-market alpha</strong></p>
-      <ul>
-        <li><strong>Ryan Brown</strong> — Group Manager, PM. Pipeline owner.</li>
-        <li><strong>Maya Weinhart</strong> — Sr. TPM. Sprint coordination.</li>
-        <li><strong>Ngoc Tran</strong> — Sr. Design Researcher. Piloting /claim-audit and /transferability-check.</li>
-        <li><strong>Melrose Huang</strong> — Sr. XD Researcher. Piloting same.</li>
-        <li><strong>Audrey Fu</strong> — Product Designer. Co-author on agentic PDLC counter-proposal.</li>
-      </ul>
 
     </div>
   </div>
