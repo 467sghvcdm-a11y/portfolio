@@ -796,25 +796,27 @@
       scrollbar-width: thin;
     }
 
-    /* Drawer content typography — plain markdown render */
+    /* Drawer content — uses existing type tokens from style.css.
+       caption (14px/400): body text base
+       label  (12px/600/uppercase): section headings
+       body   (17px/400): h1 title, Figtree override */
     .about-drawer-body,
     .about-drawer-body h1,
-    .about-drawer-body h2,
-    .about-drawer-body h3,
-    .about-drawer-body p,
-    .about-drawer-body li,
-    .about-drawer-body code {
-      font-family: 'Figtree', sans-serif;
+    .about-drawer-body h2 {
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
     }
+    /* base = caption token */
     .about-drawer-body {
       font-size: 14px;
-      line-height: 1.7;
+      font-weight: 400;
+      line-height: 1.5;
       color: var(--c-primary);
     }
+    /* frontmatter block — caption-sized, secondary, subtle bg */
     .md-fm {
-      font-family: 'Figtree', sans-serif;
-      font-size: 12px;
-      line-height: 1.7;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
       color: var(--c-secondary);
       background: var(--c-card-subsurface);
       border: 1px solid var(--c-rule);
@@ -824,37 +826,33 @@
       white-space: pre;
       overflow-x: auto;
     }
+    /* h1 — body size (17px), heavy weight, Figtree */
     .about-drawer-body h1 {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 800;
-      margin: 0 0 6px;
       line-height: 1.3;
+      letter-spacing: 0;
+      margin: 0 0 6px;
     }
+    /* h2 — label token */
     .about-drawer-body h2 {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      line-height: 1.5;
+      color: var(--c-secondary);
       margin: 24px 0 8px;
     }
-    .about-drawer-body p {
-      font-size: 14px;
-      margin: 0 0 10px;
-    }
+    .about-drawer-body p { margin: 0 0 10px; }
     .about-drawer-body hr {
       border: none;
       border-top: 1px solid var(--c-rule);
       margin: 16px 0;
     }
-    .about-drawer-body ul {
-      font-size: 14px;
-      margin: 0 0 10px;
-      padding-left: 18px;
-    }
-    .about-drawer-body li {
-      margin-bottom: 5px;
-    }
-    .about-drawer-body strong {
-      font-weight: 600;
-    }
+    .about-drawer-body ul { margin: 0 0 10px; padding-left: 18px; }
+    .about-drawer-body li { margin-bottom: 5px; }
+    .about-drawer-body strong { font-weight: 600; }
 
     @media (max-width: 760px) {
       .about-drawer { width: 100vw; box-shadow: none; }
