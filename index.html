@@ -796,57 +796,72 @@
       scrollbar-width: thin;
     }
 
-    /* Drawer content typography */
-    .adr-fm {
+    /* Drawer content typography — plain markdown render */
+    .about-drawer-body {
+      font-family: 'Figtree', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--c-primary);
+    }
+    .md-fm {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      line-height: 1.9;
+      line-height: 1.8;
       color: var(--c-secondary);
       background: var(--c-card-subsurface);
       border: 1px solid var(--c-rule);
       border-radius: 6px;
-      padding: 14px 16px;
-      margin-bottom: 24px;
-      opacity: 0.8;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      white-space: pre;
+      overflow-x: auto;
     }
-    .adr-title {
-      font-size: 18px;
+    .about-drawer-body h1 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--c-primary);
+      margin: 0 0 6px;
+      line-height: 1.25;
+    }
+    .about-drawer-body h2 {
+      font-size: 14px;
       font-weight: 600;
       color: var(--c-primary);
-      margin: 0 0 8px;
-      line-height: 1.3;
+      margin: 24px 0 8px;
     }
-    .adr-intro {
+    .about-drawer-body h3 {
       font-size: 13px;
-      color: var(--c-secondary);
-      line-height: 1.65;
-      margin: 0 0 20px;
+      font-weight: 600;
+      color: var(--c-primary);
+      margin: 16px 0 6px;
     }
-    .adr-rule {
+    .about-drawer-body p {
+      margin: 0 0 10px;
+      color: var(--c-primary);
+    }
+    .about-drawer-body hr {
       border: none;
       border-top: 1px solid var(--c-rule);
-      margin: 20px 0;
+      margin: 16px 0;
     }
-    .adr-section { margin-bottom: 24px; }
-    .adr-h2 {
-      font-size: 11px;
+    .about-drawer-body ul {
+      margin: 0 0 10px;
+      padding-left: 18px;
+    }
+    .about-drawer-body li {
+      margin-bottom: 5px;
+    }
+    .about-drawer-body strong {
       font-weight: 600;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin: 0 0 12px;
     }
-    .adr-body {
-      font-size: 13.5px;
-      line-height: 1.7;
-      color: var(--c-primary);
+    .about-drawer-body code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      background: var(--c-card-subsurface);
+      border: 1px solid var(--c-rule);
+      border-radius: 3px;
+      padding: 1px 5px;
     }
-    .adr-body p { margin: 0 0 10px; }
-    .adr-body p:last-child { margin-bottom: 0; }
-    .adr-body ul { margin: 0 0 10px; padding-left: 16px; }
-    .adr-body li { margin-bottom: 5px; }
-    .adr-role-list { margin: 8px 0 0; padding-left: 16px; font-size: 13px; line-height: 1.65; color: var(--c-primary); }
-    .adr-role-list li { margin-bottom: 6px; }
 
     @media (max-width: 760px) {
       .about-drawer { width: 100vw; box-shadow: none; }
@@ -2156,94 +2171,137 @@
     </div>
     <div class="about-drawer-body">
 
-      <div class="adr-fm">tier: public &nbsp;&nbsp; last_updated: 2026-05-18 &nbsp;&nbsp; focus: ai-experience-strategy, evidence-integrity, end-to-end-systems-thinking</div>
+      <pre class="md-fm">person: matt-kirkpatrick
+role: principal-product-designer
+tier: public
+last_updated: 2026-05-14
+focus_areas:
+  - ai-experience-strategy
+  - evidence-integrity
+  - end-to-end-systems-thinking</pre>
 
-      <h1 class="adr-title">About Matt Kirkpatrick</h1>
-      <p class="adr-intro">The shareable layer. Helps a collaborator decide whether to consult me and how to approach me. For the trusted-tier or full file, request via the about-me skill.</p>
-      <hr class="adr-rule">
+      <h1>About Matt Kirkpatrick — public</h1>
+      <p>The shareable layer. Helps a collaborator decide whether to consult me and how to approach me. For the trusted-tier or full file, request via the about-me skill.</p>
+      <hr>
 
-      <div class="adr-section">
-        <div class="adr-h2">How I think</div>
-        <div class="adr-body">
-          <p>I interrogate what data measures before accepting what it means. When someone presents a result, my first move is to check the metric, the attribution, the population, the filters. The number itself is rarely the issue; the gap between what the number measures and what's being claimed about it is where most decisions go wrong.</p>
-          <p>I think structurally before I think tactically. A problem in front of me is usually the surface of something deeper. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.</p>
-          <p>I build for durability, not just delivery. I look for the pattern that will hold after the immediate project is done. The framework, the principle, the rule that lets future decisions be made faster and more consistently.</p>
-          <p>I treat research as the primary input to strategy, not a validation step after design decisions are made. Research data feeds directly into the framing that drives design direction. When I co-create with researchers, they're co-authors of the strategy.</p>
-          <p>I know when influence is capped. There's a point in every program where additional effort doesn't produce additional return, usually because the partnership structure or org context won't carry what I'm trying to build. Recognizing that point and reallocating is part of how I operate, not a failure mode.</p>
-          <p>I move between registers fluently. Craft, strategy, business, data. Most people operate primarily in one. I read across all of them and know which one the room needs in the moment.</p>
-          <p>I think end-to-end. Boundaries between surfaces, teams, and stages are where things break. The handoffs, the transitions, the seams.</p>
-          <p>I separate what I know from what I'm told. Verbal claims, repeated assertions, and inherited assumptions get tested against documented sources.</p>
-          <p>I hold positions under pressure until the data resolves it. When I believe something is right and the evidence supports it, I stay with it through sustained skepticism and organizational resistance. I don't move off a position because the room is uncomfortable. I move when the data changes.</p>
-          <p>I correct misreads in public, with receipts. When someone states something inaccurate in a shared channel, I flag it directly and attach the source. Not to win an argument, but because bad data in a public thread becomes shared reality fast.</p>
-        </div>
-      </div>
+      <h2>How I think</h2>
+      <p>I interrogate what data measures before accepting what it means. When someone presents a result, my first move is to check the metric, the attribution, the population, the filters. The number itself is rarely the issue; the gap between what the number measures and what's being claimed about it is where most decisions go wrong.</p>
+      <p>I think structurally before I think tactically. A problem in front of me is usually the surface of something deeper. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.</p>
+      <p>I build for durability, not just delivery. I look for the pattern that will hold after the immediate project is done. The framework, the principle, the rule that lets future decisions be made faster and more consistently.</p>
+      <p>I treat research as the primary input to strategy, not a validation step after design decisions are made. Research data feeds directly into the framing that drives design direction. When I co-create with researchers, they're co-authors of the strategy.</p>
+      <p>I know when influence is capped. There's a point in every program where additional effort doesn't produce additional return, usually because the partnership structure or org context won't carry what I'm trying to build. Recognizing that point and reallocating is part of how I operate, not a failure mode.</p>
+      <p>I move between registers fluently. Craft, strategy, business, data. Most people operate primarily in one. I read across all of them and know which one the room needs in the moment.</p>
+      <p>I think end-to-end. Boundaries between surfaces, teams, and stages are where things break. The handoffs, the transitions, the seams.</p>
+      <p>I separate what I know from what I'm told. Verbal claims, repeated assertions, and inherited assumptions get tested against documented sources.</p>
 
-      <hr class="adr-rule">
+      <hr>
 
-      <div class="adr-section">
-        <div class="adr-h2">How I produce work</div>
-        <div class="adr-body">
-          <p>Show, not tell. I build the artifact that makes the case rather than rely on verbal advocacy alone.</p>
-          <p>Rigor is load-bearing. My standards are high because the audiences I can't be in front of require it. When my manager has to carry my case into rooms I'm not in, the artifact has to survive that handoff.</p>
-          <p>Attribution discipline. I separate direct ownership from framework contribution from context. I credit collaborators by name. I won't claim something I didn't drive.</p>
-          <p>Self-assessment is part of the work. Calibration docs, retros, and growth narratives aren't routine outputs. They're how I make my work legible to people who don't see it daily.</p>
-          <p>I draft for review, not approval. When I send something, I want a read on whether it lands.</p>
-          <p>Put me on the hardest problem. The most strategically demanding work is where I'm most useful, even when it's not the most visually complex.</p>
-          <p>AI is part of how I work every day. I use Claude to pressure-test ideas, accelerate synthesis, and sharpen my thinking before it goes into a room.</p>
-          <p>I prepare for rooms I won't be in. Before high-stakes reviews I build cheat sheets of likely pushback and pre-written responses, embedded directly in the Figma file being reviewed. The artifact has to survive the handoff.</p>
-          <p>I encode strategy into reusable systems. Mid-project, I build the framework, the instruction set, the rule so future collaborators can snap into the same mode without starting from scratch.</p>
-        </div>
-      </div>
+      <h2>How I produce work</h2>
+      <p>Show, not tell. I build the artifact that makes the case rather than rely on verbal advocacy alone.</p>
+      <p>Rigor is load-bearing. My standards are high because the audiences I can't be in front of require it. When my manager has to carry my case into rooms I'm not in, the artifact has to survive that handoff.</p>
+      <p>Attribution discipline. I separate direct ownership from framework contribution from context. I credit collaborators by name. I won't claim something I didn't drive.</p>
+      <p>Self-assessment is part of the work. Calibration docs, retros, and growth narratives aren't routine outputs — they're how I make my work legible to people who don't see it daily.</p>
+      <p>I draft for review, not approval. When I send something, I want a read on whether it lands.</p>
+      <p>Put me on the hardest problem. The most strategically demanding work is where I'm most useful, even when it's not the most visually complex.</p>
+      <p>AI is part of how I work every day. I use Claude to pressure-test ideas, accelerate synthesis, and sharpen my thinking before it goes into a room.</p>
 
-      <hr class="adr-rule">
+      <hr>
 
-      <div class="adr-section">
-        <div class="adr-h2">What I'm uniquely good at</div>
-        <div class="adr-body">
-          <p>Holding craft and strategy as the same practice. The craft rigor is what earns the standing to shape strategy.</p>
-          <p>Naming structural problems with no obvious owner. The ones the system has no natural mechanism to surface.</p>
-          <p>Building leverage artifacts. Things that change what other people are able to do, not just deliverables.</p>
-          <p>Data literacy for a designer. Indices, p-values in context, attribution models. I know what a test proves versus what someone is claiming it proves.</p>
-          <p>Translating design decisions into business language without losing the design logic.</p>
-          <p>Working cross-functionally in registers other designers don't usually reach.</p>
-          <p>Catching context mismatches before they become bad decisions. A finding validated on one surface doesn't transfer automatically to another. I flag this early, specifically, and with data.</p>
-          <p>Advocating for a position through sustained organizational resistance and being proven right by data. The Match CTA strategy is the clearest example: sustained skepticism from multiple directions, held position, validated at scale.</p>
-          <p>Distributing capability, not just doing the work. Early adopter who encodes workflows and shares them so others can replicate.</p>
-        </div>
-      </div>
+      <h2>What I'm uniquely good at</h2>
+      <p>Holding craft and strategy as the same practice. The craft rigor is what earns the standing to shape strategy.</p>
+      <p>Naming structural problems with no obvious owner. The ones the system has no natural mechanism to surface.</p>
+      <p>Building leverage artifacts. Things that change what other people are able to do, not just deliverables.</p>
+      <p>Data literacy for a designer. Indices, p-values in context, attribution models. I know what a test proves versus what someone is claiming it proves.</p>
+      <p>Translating design decisions into business language without losing the design logic.</p>
+      <p>Working cross-functionally in registers other designers don't usually reach.</p>
 
-      <hr class="adr-rule">
+      <hr>
 
-      <div class="adr-section">
-        <div class="adr-h2">Working preferences</div>
-        <div class="adr-body">
-          <ul>
-            <li>Lead with action, not planning narration</li>
-            <li>Direct is better than diplomatic. Specific is better than general.</li>
-            <li>Close the loop on dropped findings; flag things that go quiet</li>
-            <li>No trailing summaries unless asked</li>
-            <li>When something can be tested, test it before reporting it done</li>
-          </ul>
-        </div>
-      </div>
+      <h2>Working preferences</h2>
+      <ul>
+        <li>Lead with action, not planning narration</li>
+        <li>Direct is better than diplomatic. Specific is better than general.</li>
+        <li>Close the loop on dropped findings; flag things that go quiet</li>
+        <li>No trailing summaries unless asked</li>
+        <li>No em dashes; use commas, colons, or restructure</li>
+        <li>When something can be tested, test it before reporting it done</li>
+      </ul>
 
-      <hr class="adr-rule">
+      <hr>
 
-      <div class="adr-section">
-        <div class="adr-h2">Intuit historical context</div>
-        <div class="adr-body">
-          <p>Just under 9 years at Intuit, all on TurboTax. Started as a contractor on TurboTax.com entry points, then went full time. Path: DIY, Self-Employed, Full Service (from launch through scale), Manager 3 of Full Service design, TurboTax Business reimagining, Activate Experts top of funnel, T2A pre-auth and AI experience strategy.</p>
-          <p>Pre-Intuit: four years at Mirum, a global marketing agency.</p>
-          <ul>
-            <li>Principal Product Designer, T6 (Dec 2024 to present)</li>
-            <li>Manager 3, Product Design (May–Nov 2024): Full Service</li>
-            <li>Product Design Strategist, T6 (Jan 2023–Jun 2024): Full Service</li>
-            <li>Principal Product Designer, T5 (Aug 2021–Jan 2023): Full Service</li>
-            <li>Senior Product Designer (Dec 2017–Aug 2021): DIY, Self-Employed, Full Service</li>
-            <li>XD Interaction Designer, contract (Aug–Dec 2017): TurboTax.com entry points</li>
-          </ul>
-        </div>
-      </div>
+      <h2>What I'm currently building</h2>
+      <p>Skills shipped or scaffolding, intended to encode design's interpretive role in tooling:</p>
+      <ul>
+        <li><code>/visual-qa</code> — spec vs. implementation verification, shipped as alpha</li>
+        <li><code>/transferability-check</code> — does a research finding apply to this context, shipped as alpha</li>
+        <li><code>/claim-audit</code> — is a claim accurate against canonical sources, on fork, blocked on data access provisioning</li>
+        <li><code>/create-about-me</code>, <code>/offboard-program</code>, <code>/onboard-program</code> — knowledge transfer skills, scoped</li>
+      </ul>
+
+      <hr>
+
+      <h2>Intuit historical context</h2>
+      <p>Just under 9 years at Intuit, all on TurboTax. Started as a contractor on TurboTax.com entry points, then went full time. Path: DIY → Self-Employed → Full Service (from launch through scale) → Manager 3 of Full Service design → TurboTax Business reimagining → Activate Experts top of funnel → T2A pre-auth and AI experience strategy.</p>
+      <p>Pre-Intuit: four years at Mirum, a global marketing agency.</p>
+
+      <h3>Role history</h3>
+      <ul>
+        <li><strong>Principal Product Designer, T6 (Dec 2024 to present):</strong> TurboTax Business (Dec 2024–Aug 2025), then Activate Experts TOF (Aug 2025–present). Moving to T2A pre-auth AI strategy for FY27.</li>
+        <li><strong>Manager 3, Product Design, M3 (May–Nov 2024):</strong> Full Service.</li>
+        <li><strong>Product Design Strategist, T6 (Jan 2023–Jun 2024):</strong> Full Service.</li>
+        <li><strong>Principal Product Designer, T5 (Aug 2021–Jan 2023):</strong> Full Service.</li>
+        <li><strong>Senior Product Designer, T3 (Dec 2017–Aug 2021):</strong> DIY → Self-Employed → Full Service.</li>
+        <li><strong>XD Interaction Designer, contract (Aug–Dec 2017):</strong> TurboTax.com entry points.</li>
+      </ul>
+
+      <h3>Frameworks built</h3>
+      <ul>
+        <li><strong>Filter/Throttle</strong> (AE TOF): distinguishes CTA strategies that filter the cohort vs. throttle volume</li>
+        <li><strong>CTA-to-flow alignment</strong> (AE TOF): principle for matching CTA promise to flow destination</li>
+        <li><strong>Dual-engine</strong> (AE TOF Organic LP Recipe C): Match as precision filter for revenue quality, modular auth as volume throttle for franchise growth</li>
+        <li><strong>Canonical-first claim verification</strong> (across programs): canonical sources as truth, dashboards as evidence of what's being cited</li>
+      </ul>
+
+      <hr>
+
+      <h2>Vocabulary I use that's Intuit-specific</h2>
+      <p>T2A, T2S, T2C, RPn, TTO, CG, PDLC, PnP, MAO, FSO, GEO, CGDS, FMH, EVS, MAM/MAAM/PAM, ECC, ITC (index to control).</p>
+
+      <hr>
+
+      <h2>Collaborators</h2>
+      <p>References to other about-me files where they exist. Request via the system if a referenced person doesn't have a file yet.</p>
+
+      <p><strong>Leadership</strong></p>
+      <ul>
+        <li><strong>Laura Huston</strong> — Director, Design. Direct manager.</li>
+        <li><strong>Cesar Villegas</strong> — VP, Human Factors Development. Laura's manager.</li>
+      </ul>
+
+      <p><strong>Activate Experts TOF (Aug 2025–present)</strong></p>
+      <ul>
+        <li><strong>Aaron Dsouza</strong> — Sr. Staff PM. Co-driver on the AE TOF test portfolio.</li>
+        <li><strong>Jaiswin Sundararajan</strong> — Principal PM, TurboTax.com Growth. AE test list and design spec handoffs.</li>
+        <li><strong>Betsy Freeman</strong> — Senior Product Designer. Co-designer on AE TOF page options.</li>
+        <li><strong>Jordan Epstein</strong> — Sr. Staff PM. AE pre-auth match flow and virtual-expert turnaway design.</li>
+        <li><strong>Justin Li</strong> — Group Product Design Manager. AE pre-auth design validation.</li>
+      </ul>
+
+      <p><strong>TurboTax Business (Dec 2024–Aug 2025)</strong></p>
+      <ul>
+        <li><strong>Vivek Gupta</strong> — Principal PM, Business Tax. Biz Tax T2S/T2A strategy partner.</li>
+        <li><strong>Brandon Mitchell</strong> — Director, PM. Senior PM partner on Sole Prop Experimentation and TY25 Biz Tax target state.</li>
+        <li><strong>Jim Fell</strong> — Director, Design. Peer design director on Biz Tax / Assisted / Canada onsite.</li>
+      </ul>
+
+      <p><strong>3X / cgpm-open-market alpha</strong></p>
+      <ul>
+        <li><strong>Ryan Brown</strong> — Group Manager, PM. Pipeline owner.</li>
+        <li><strong>Maya Weinhart</strong> — Sr. TPM. Sprint coordination.</li>
+        <li><strong>Ngoc Tran</strong> — Sr. Design Researcher. Piloting /claim-audit and /transferability-check.</li>
+        <li><strong>Melrose Huang</strong> — Sr. XD Researcher. Piloting same.</li>
+        <li><strong>Audrey Fu</strong> — Product Designer. Co-author on agentic PDLC counter-proposal.</li>
+      </ul>
 
     </div>
   </div>
