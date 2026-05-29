@@ -747,13 +747,20 @@
       border-left: 1px solid var(--c-rule);
       box-shadow: -12px 0 40px rgba(0,0,0,0.18);
       transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      visibility: hidden;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0s linear 0.35s;
       z-index: 300;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
-    .about-drawer.open { transform: translateX(0); }
+    .about-drawer.open {
+      transform: translateX(0);
+      visibility: visible;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0s linear 0s;
+    }
 
     .about-drawer-head {
       display: flex;
@@ -863,7 +870,7 @@
         box-shadow: 0 -12px 40px rgba(0,0,0,0.2);
         transform: translateY(100%);
       }
-      .about-drawer.open { transform: translateY(0); }
+      .about-drawer.open { transform: translateY(0); visibility: visible; }
       .about-drawer-body {
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
