@@ -796,70 +796,54 @@
       scrollbar-width: thin;
     }
 
-    /* Drawer content — uses existing type tokens from style.css.
-       caption (14px/400): body text base
-       label  (12px/600/uppercase): section headings
-       body   (17px/400): h1 title, Figtree override */
+    /* Drawer content — plain document render, not a webpage component */
     .about-drawer-body,
     .about-drawer-body h1,
     .about-drawer-body h2 {
       font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    /* base = caption token */
-    .about-drawer-body {
-      font-size: 14px;
       font-weight: 400;
-      line-height: 1.5;
+      letter-spacing: 0;
+      text-transform: none;
       color: var(--c-primary);
     }
-    /* frontmatter block — caption-sized, secondary, subtle bg */
-    .md-fm {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.5;
-      color: var(--c-secondary);
-      background: var(--c-card-subsurface);
-      border: 1px solid var(--c-rule);
-      border-radius: 6px;
-      padding: 12px 14px;
-      margin-bottom: 20px;
-      white-space: pre;
-      overflow-x: auto;
+    .about-drawer-body {
+      font-size: 17px;
+      line-height: 1.6;
     }
-    /* h1 — body size (17px), label-weight bold, Figtree */
+    .md-fm {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--c-secondary);
+      margin-bottom: 24px;
+    }
     .about-drawer-body h1 {
       font-size: 17px;
       font-weight: 600;
       line-height: 1.3;
-      letter-spacing: 0;
-      margin: 0 0 6px;
+      margin: 0 0 8px;
     }
-    /* h2 — label token */
     .about-drawer-body h2 {
-      font-size: 12px;
+      font-size: 17px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      line-height: 1.5;
-      color: var(--c-secondary);
+      line-height: 1.3;
       margin: 24px 0 8px;
     }
     .about-drawer-body p {
-      font-size: 14px;
-      line-height: 1.5;
-      margin: 0 0 10px;
+      font-size: 17px;
+      line-height: 1.6;
+      margin: 0 0 16px;
     }
     .about-drawer-body hr {
       border: none;
       border-top: 1px solid var(--c-rule);
-      margin: 16px 0;
+      margin: 20px 0;
     }
     .about-drawer-body ul, .about-drawer-body li {
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 17px;
+      line-height: 1.6;
     }
-    .about-drawer-body ul { margin: 0 0 10px; padding-left: 18px; }
-    .about-drawer-body li { margin-bottom: 5px; }
+    .about-drawer-body ul { margin: 0 0 16px; padding-left: 20px; }
+    .about-drawer-body li { margin-bottom: 6px; }
     .about-drawer-body strong { font-weight: 600; }
 
     @media (max-width: 760px) {
@@ -2169,15 +2153,6 @@
       </button>
     </div>
     <div class="about-drawer-body">
-
-      <pre class="md-fm">person: matt-kirkpatrick
-role: principal-product-designer
-tier: public
-last_updated: 2026-05-14
-focus_areas:
-  - ai-experience-strategy
-  - evidence-integrity
-  - end-to-end-systems-thinking</pre>
 
       <h1>About Matt Kirkpatrick — public</h1>
       <p>The shareable layer. Helps a collaborator decide whether to consult me and how to approach me. For the trusted-tier or full file, request via the about-me skill.</p>
