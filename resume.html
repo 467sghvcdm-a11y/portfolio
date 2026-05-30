@@ -17,11 +17,19 @@
       --rule: #e0e0e0;
       --accent: #c0202e;
       --page-w: 760px;
+
+      /* Print type scale — denser than the site ramp; tidied to round steps */
+      --rfs-micro: 10px;  /* section labels (uppercase) */
+      --rfs-meta:  11px;  /* dates, company, level, award name */
+      --rfs-small: 12px;  /* contact, award detail, skills */
+      --rfs-body:  13px;  /* body copy, role descriptions */
+      --rfs-lead:  14px;  /* summary lead-in */
+      --rfs-name:  38px;  /* name */
     }
 
     body {
       font-family: 'Figtree', -apple-system, sans-serif;
-      font-size: 13.5px;
+      font-size: var(--rfs-body);
       line-height: 1.55;
       color: var(--ink);
       background: #f5f5f3;
@@ -48,7 +56,7 @@
 
     .r-name {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 38px;
+      font-size: var(--rfs-name);
       font-weight: 300;
       letter-spacing: -0.01em;
       line-height: 1;
@@ -57,7 +65,7 @@
 
     .r-contact {
       text-align: right;
-      font-size: 12px;
+      font-size: var(--rfs-small);
       color: var(--mid);
       line-height: 1.7;
     }
@@ -75,7 +83,7 @@
     }
 
     .r-section-label {
-      font-size: 9.5px;
+      font-size: var(--rfs-micro);
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.18em;
@@ -85,7 +93,7 @@
 
     /* ── Summary ── */
     .r-summary {
-      font-size: 14.5px;
+      font-size: var(--rfs-lead);
       line-height: 1.6;
       color: var(--mid);
       max-width: 580px;
@@ -108,7 +116,7 @@
     }
 
     .r-role-date {
-      font-size: 11px;
+      font-size: var(--rfs-meta);
       color: var(--faint);
       white-space: nowrap;
       padding-top: 2px;
@@ -120,7 +128,7 @@
     .r-role-body { flex: 1; }
 
     .r-role-company {
-      font-size: 11px;
+      font-size: var(--rfs-meta);
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.10em;
@@ -134,14 +142,14 @@
       margin-bottom: 5px;
     }
     .r-level {
-      font-size: 11px;
+      font-size: var(--rfs-meta);
       font-weight: 500;
       color: var(--faint);
       margin-right: 6px;
     }
 
     .r-role-desc {
-      font-size: 13px;
+      font-size: var(--rfs-body);
       color: var(--mid);
       line-height: 1.58;
     }
@@ -154,7 +162,7 @@
 
     .r-award-name {
       display: block;
-      font-size: 11px;
+      font-size: var(--rfs-meta);
       font-weight: 500;
       color: var(--accent);
       margin-bottom: 3px;
@@ -162,7 +170,7 @@
 
     .r-award-detail {
       display: block;
-      font-size: 12px;
+      font-size: var(--rfs-small);
       color: var(--mid);
       line-height: 1.55;
     }
@@ -180,7 +188,7 @@
     }
 
     .r-earlier-date {
-      font-size: 11px;
+      font-size: var(--rfs-meta);
       color: var(--faint);
       white-space: nowrap;
       width: 128px;
@@ -191,7 +199,7 @@
 
     .r-earlier-body {
       flex: 1;
-      font-size: 13px;
+      font-size: var(--rfs-body);
       color: var(--mid);
     }
 
@@ -208,7 +216,7 @@
     }
 
     .r-skill {
-      font-size: 12px;
+      font-size: var(--rfs-small);
       color: var(--mid);
       background: #f3f3f1;
       border-radius: 4px;

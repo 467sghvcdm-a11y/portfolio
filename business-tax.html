@@ -94,7 +94,7 @@
     .cs-back {
       position: fixed;
       top: 16px;
-      left: 40px;
+      left: 16px;
       z-index: 100;
       color: rgba(244,237,226,0.6);
       text-decoration: none;
@@ -107,8 +107,8 @@
       transition: color 150ms, background 150ms, border-color 150ms;
     }
     .cs-back:hover { color: #f4ede2; background: rgba(10,10,10,0.85); }
-    .cs-back.on-light { color: rgba(26,26,26,0.5); background: rgba(252,249,243,0.90); border-color: rgba(233,225,208,0.85); }
-    .cs-back.on-light:hover { color: rgba(26,26,26,0.85); background: rgba(252,249,243,0.98); }
+    .cs-back.on-light { color: rgba(0,0,0,0.5); background: rgba(252,249,243,0.82); border-color: rgba(0,0,0,0.06); }
+    .cs-back.on-light:hover { color: rgba(0,0,0,0.85); background: rgba(252,249,243,0.96); }
 
     .hero-body {
       flex: 1;
@@ -134,7 +134,7 @@
 
     .cs-title {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 64px;
+      font-size: var(--fs-7xl);
       color: var(--c-cream);
       max-width: 1000px;
     }
@@ -149,7 +149,7 @@
     .hero-foot b {
       display: block;
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 28px;
+      font-size: var(--fs-2xl);
       font-weight: 380;
       color: var(--c-cream);
       margin-top: 6px;
@@ -158,9 +158,9 @@
     }
 
     /* ── Body ── */
-    h3 { font-size: 28px; margin-bottom: 20px; }
+    h3 { font-size: var(--fs-2xl); margin-bottom: 20px; }
 
-    h4 { font-size: 20px; margin: 36px 0 12px; }
+    h4 { font-size: var(--fs-lg); margin: 40px 0 14px; }
 
     .cs-section {
       margin-top: 96px;
@@ -198,7 +198,7 @@
     /* ── Callout ── */
     .cs-callout {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 20px;
+      font-size: var(--fs-lg);
       font-weight: 300;
       font-style: italic;
       color: #1a1a1a;
@@ -212,7 +212,7 @@
     /* Spec/literal quote variant — body voice instead of editorial italic */
     .cs-callout.is-quote {
       font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 17px;
+      font-size: var(--fs-body);
       font-weight: 400;
       font-style: normal;
       line-height: 1.6;
@@ -228,7 +228,7 @@
       margin: 28px 0;
     }
     .cs-metrics-table th {
-      font-size: 12px;
+      font-size: var(--fs-label);
       font-weight: 600;
       text-transform: uppercase;
       color: var(--c-secondary);
@@ -244,7 +244,7 @@
     .cs-metrics-table td:first-child { color: #767676; }
     .cs-win { color: #1a1a1a !important; }
     .cs-itc {
-      font-size: 12px;
+      font-size: var(--fs-label);
       color: #767676;
       margin-left: 6px;
     }
@@ -260,7 +260,7 @@
     }
     .cs-dist-row { display: contents; }
     .cs-dist-pct {
-      font-size: 14px;
+      font-size: var(--fs-caption);
       color: var(--c-secondary);
       text-align: right;
       white-space: nowrap;
@@ -269,7 +269,7 @@
     .cs-dist-row.dominant .cs-dist-pct {
       font-family: 'Fraunces', Georgia, serif;
       font-weight: 300;
-      font-size: 24px;
+      font-size: var(--fs-xl);
       color: var(--accent);
     }
     .cs-dist-bar { display: none; }
@@ -290,7 +290,7 @@
     }
     .cs-provocation-list li:first-child { border-top: none; }
     .cs-provocation-list li:last-child { border-bottom: none; }
-    .cs-provocation-num { font-family: 'Fraunces', Georgia, serif; font-size: 20px; color: var(--c-secondary); }
+    .cs-provocation-num { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-lg); color: var(--c-secondary); }
 
     /* ── Artifact list ── */
     .cs-artifact-list {
@@ -323,7 +323,7 @@
     }
     .cs-altitude { background: var(--c-card-subsurface); padding: 28px 32px; }
     .cs-altitude-label { color: var(--accent); margin-bottom: 10px; }
-    .cs-altitude-title { font-family: 'Fraunces', Georgia, serif; font-size: 20px; margin-bottom: 12px; }
+    .cs-altitude-title { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-lg); margin-bottom: 12px; }
     .cs-altitude-desc { color: var(--c-secondary); }
 
     /* ── Images ── */
@@ -333,13 +333,6 @@
       margin: 36px min(0px, 40px - var(--card-h));
       width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
     }
-    figure.fig-flow {
-      margin-left: min(0px, 40px - var(--card-h));
-      margin-right: min(0px, 40px - var(--card-h));
-      width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
-      margin-top: 0;
-    }
-    figure.fig-flow img { border-radius: 8px; }
 
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
@@ -363,7 +356,7 @@
       content: counter(chapter, decimal-leading-zero);
       font-family: 'Fraunces', Georgia, serif;
       font-weight: 300;
-      font-size: 140px;
+      font-size: var(--fs-9xl);
       line-height: 0.82;
       letter-spacing: -0.04em;
       color: var(--c-cream);
@@ -385,7 +378,7 @@
         padding-right: 0;
         text-align: left;
         display: block;
-        font-size: 96px;
+        font-size: var(--fs-8xl);
         margin-bottom: 22px;
       }
     }
@@ -398,7 +391,7 @@
     }
     .cs-chapter-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
     .cs-chapter-title {
-      font-size: clamp(38px, 3.8vw, 52px);
+      font-size: clamp(var(--fs-4xl), 3.8vw, var(--fs-6xl));
       line-height: 1.04;
       color: var(--c-cream);
       margin-bottom: 22px;
@@ -428,7 +421,7 @@
 
     .cs-metric-val {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 64px;
+      font-size: var(--fs-7xl);
       font-weight: 300;
       color: #767676;
       line-height: 1.0;
@@ -437,22 +430,22 @@
     .cs-metric-val.hi { color: #1a1a1a; }
     .cs-metric-val.win { color: #007A66; }
     .cs-metric-val.neg { color: var(--accent); }
-    .cs-metric-sup { font-family: 'Figtree', sans-serif; font-size: 12px; color: #767676; font-weight: 400; margin-left: 4px; letter-spacing: 0.04em; }
+    .cs-metric-sup { font-family: 'Figtree', sans-serif; font-size: var(--fs-label); color: #767676; font-weight: 400; margin-left: 4px; letter-spacing: 0.04em; }
     .cs-metric-lbl { margin-top: 10px; }
     .cs-metric-ctx { color: var(--c-secondary); margin-top: 6px; }
 
     /* ── Takeaway ── */
     .cs-takeaway { margin-top: 72px; padding-top: 56px; }
-    .cs-takeaway-text { font-family: 'Fraunces', Georgia, serif; font-size: 32px; font-style: italic; max-width: 38ch; margin-bottom: 20px; }
-    .cs-takeaway-sub { font-size: 16px; color: #1a1a1a; max-width: 55ch; line-height: 1.5; }
+    .cs-takeaway-text { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-3xl); font-style: italic; max-width: 38ch; margin-bottom: 20px; }
+    .cs-takeaway-sub { font-size: var(--fs-small); color: #1a1a1a; max-width: 55ch; line-height: 1.5; }
 
     /* ── Next project ── */
     .cs-next { display: block; margin-top: 80px; padding-top: 32px; border-top: 1px solid #eee; text-decoration: none; color: inherit; }
     .cs-next:hover .cs-next-title { color: var(--accent); }
     .cs-next:hover .cs-next-arrow { transform: translateX(4px); color: var(--accent); }
     .cs-next-label { margin-bottom: 8px; }
-    .cs-next-title { font-family: 'Fraunces', Georgia, serif; font-size: 28px; font-weight: 380; transition: color 200ms ease; display: inline; }
-    .cs-next-arrow { font-size: 20px; color: #767676; transition: transform 200ms ease, color 200ms ease; display: inline-block; margin-left: 8px; vertical-align: middle; }
+    .cs-next-title { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-2xl); font-weight: 380; transition: color 200ms ease; display: inline; }
+    .cs-next-arrow { font-size: var(--fs-lg); color: #767676; transition: transform 200ms ease, color 200ms ease; display: inline-block; margin-left: 8px; vertical-align: middle; }
 
     /* ── Footer ── */
     .footer {
@@ -462,7 +455,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 32px 48px;
-      font-size: 12px;
+      font-size: var(--fs-label);
       color: rgba(244,237,226,0.55);
     }
     .copy-btn { background: none; border: none; cursor: pointer; padding: 15px; margin: -15px; border-radius: 4px; color: rgba(244,237,226,0.3); display: flex; align-items: center; transition: color 150ms, background 150ms; flex-shrink: 0; }
@@ -473,7 +466,6 @@
     /* ── Responsive ── */
 
     @media (max-width: 760px) {
-      .cs-back { left: 16px; }
       .pv-inner { padding: 6px 0 24px; }
       .card { --card-h: 40px; padding: 48px var(--card-h) 64px; box-shadow: none; }
       .hero { padding: 40px 40px 48px; margin: -6px 0 0; }
@@ -484,38 +476,36 @@
       .cs-chapter {
         padding: 72px 40px 32px;
       }
-      .cs-chapter-title { font-size: 40px; }
-      .cs-chapter-label { margin-bottom: 8px; }
-      .cs-chapter-title { margin-bottom: 12px; }
+      .cs-chapter-title { font-size: var(--fs-4xl); }
+      .cs-chapter-label { margin-bottom: 0; }
+      .cs-chapter-title { margin-bottom: 0; }
     }
 
     @media (max-width: 520px) {
-      .cs-section { margin-top: 64px; }
       .pv-inner { padding: 4px 0 24px; }
       .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
-      .cs-title { font-size: 44px; }
+      .cs-title { font-size: var(--fs-5xl); }
       .cs-chapter { padding: 56px 20px 24px; }
-      .cs-chapter::before { font-size: 72px; margin-bottom: 18px; }
-      .cs-chapter-title { font-size: 30px; }
+      .cs-chapter::before { font-size: var(--fs-7xl); margin-bottom: 18px; }
+      .cs-chapter-title { font-size: var(--fs-2xl); }
       .cs-chap-nav { left: 116px; right: 16px; transform: none; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
       .cs-chap-nav::-webkit-scrollbar { display: none; }
       .cs-chap-nav.nav-scrolled { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); }
       .cs-chap-nav.nav-at-end { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%); mask-image: linear-gradient(to right, transparent 0%, black 20%); }
       .hero-eyebrow::before { display: none; }
-      .cs-chap-nav.on-light { background: rgba(252,249,243,0.90); border-color: rgba(233,225,208,0.85); }
-      .cs-chap-nav.on-light .cs-chap-link { color: rgba(26,26,26,0.45); }
-      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(26,26,26,0.85); background: rgba(233,225,208,0.55); }
+      .cs-chap-nav.on-light { background: rgba(252,249,243,0.82); border-color: rgba(0,0,0,0.06); }
+      .cs-chap-nav.on-light .cs-chap-link { color: rgba(0,0,0,0.4); }
+      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(0,0,0,0.8); background: rgba(0,0,0,0.08); }
       .cs-altitude-grid { grid-template-columns: 1fr; }
       .cs-metrics-2, .cs-metrics-3, .cs-metrics-4 { grid-template-columns: 1fr; }
-      .cs-metric-val { font-size: 44px; }
+      .cs-metric-val { font-size: var(--fs-5xl); }
       .footer { position: relative; padding: 20px 20px; background: transparent; }
     }
   </style>
 </head>
 <body>
-  <script src="password-gate.js"></script>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
   <a href="index.html" class="cs-back caption">← Work</a>
   <nav class="cs-chap-nav" id="cs-chap-nav">
@@ -530,7 +520,7 @@
     <div class="hero" style="min-height: 0">
       <div class="hero-body" style="margin: 72px 0px 0px; gap: 8px">
         <div>
-          <p class="hero-eyebrow label" style="margin: 0px 0px 20px">TurboTax Business Tax</p>
+          <p class="hero-eyebrow label" style="margin: 0px 0px 20px">Business Tax</p>
           <h1 class="cs-title">The Product Was Broken Before They Got There</h1>
         </div>
         <div class="hero-foot label">
@@ -543,11 +533,7 @@
     <!-- Body -->
     <div class="card" id="intro">
 
-      <figure class="fig-flow">
-        <img src="assets/work-business-tax.jpg" alt="TurboTax Business Tax product screens" width="2048" height="784" loading="eager" decoding="async" style="max-height: 460px; object-fit: cover; object-position: center center; border-radius: 8px;">
-      </figure>
-
-      <h3>The problem</h3>
+      <h3>The problem no one had named</h3>
       <p>TurboTax had a starts problem in Business Tax. Customers were arriving at the business tax product and not starting. The program realigned around the metric. Fix starts.</p>
       <p>But starts wasn't the real problem.</p>
       <p>A sole proprietor and a self-employed filer file the exact same tax forms. They have the same tax situation. The only meaningful difference between them is which front door they walked through to reach TurboTax. Sole prop customers were being routed into TTO Premium, a product designed for individual filers, and then asked to navigate a business tax experience that assumed knowledge they didn't have, forced decisions that shouldn't exist, and ended with a pricing surprise they weren't prepared for.</p>
@@ -568,7 +554,7 @@
 
     <div class="cs-chapter" id="ch1">
         <div class="cs-chapter-label label">The cascade</div>
-        <h2 class="cs-chapter-title">The tests that bought time</h2>
+        <h2 class="cs-chapter-title">The tests that bought time.</h2>
         <div class="cs-chapter-sub">Four wins. One breakout. One honest loss that led to a structural reframe.</div>
       </div>
 
@@ -686,7 +672,7 @@
 
       <div class="cs-chapter" id="ch2">
         <div class="cs-chapter-label label">The bigger picture</div>
-        <h2 class="cs-chapter-title">Running two tracks simultaneously</h2>
+        <h2 class="cs-chapter-title">Running two tracks simultaneously.</h2>
         <div class="cs-chapter-sub">While the tests were moving metrics, a patterns library, a diagnostic, and a product vision were being built in parallel.</div>
       </div>
 
@@ -770,17 +756,11 @@
 
       <div class="cs-chapter" id="ch3">
         <div class="cs-chapter-label label">What I learned</div>
-        <h2 class="cs-chapter-title">Three altitudes, one season</h2>
+        <h2 class="cs-chapter-title">Three altitudes. One season.</h2>
         <div class="cs-chapter-sub">Vision, diagnostic, and execution: running in parallel, and connected.</div>
       </div>
 
       <div class="card">
-      <div class="cs-section">
-        <h3>What made it hard</h3>
-        <p>Business Tax was organizationally adolescent. Project briefs arrived incomplete. Scope commitments got made without design alignment. There was no established working model for when design got involved, who approved what, or what done meant. I had to build those agreements while simultaneously producing work.</p>
-        <p>The harder thing was the zero-sum framing baked into program metrics. Business tax starts and completions were measured in isolation from the broader TurboTax business, which meant routing personal tax customers to the right product looked like a loss even when it was the right outcome for both the customer and the business. Getting the analytics framing shifted so that business tax starts going down could be read as expected rather than as failure was a prerequisite for the design work to be evaluated correctly, and it took most of the first half of the season to establish.</p>
-      </div>
-
       <div class="cs-section">
 
         <div class="cs-altitude-grid">

@@ -31,6 +31,17 @@
       padding: 8px 12px 24px;
       position: relative;
       z-index: 1;
+      transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.drawer-open .pv-inner { transform: translateX(-220px); }
+
+    canvas.hero-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
     }
 
     /* ── Card ── */
@@ -43,38 +54,57 @@
       overflow: hidden;
     }
 
-    /* ── Hero ── */
+    /* ── Hero (matches case-study hero pattern) ── */
     .hero {
       background: transparent;
       color: #f4ede2;
+      min-height: 52vh;
       padding: 36px var(--card-h) 56px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      min-height: 28vh;
     }
-    .hero-body { display: flex; flex-direction: column; gap: 20px; }
+    .hero-body {
+      display: flex;
+      flex-direction: column;
+      margin-top: 72px;
+    }
     .hero-eyebrow {
-      display: flex; align-items: center; gap: 12px;
-      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: rgba(244,237,226,0.55);
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .hero-eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--accent); }
     .cs-title {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 52px;
+      font-size: var(--fs-7xl);
       font-weight: 300;
       line-height: 1.08;
       letter-spacing: -0.02em;
-      color: #f4ede2;
+      color: var(--c-cream);
       max-width: 18ch;
+      text-wrap: balance;
     }
     .hero-foot {
-      display: flex; gap: 32px; flex-wrap: wrap;
-      font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
-      text-transform: uppercase; color: rgba(244,237,226,0.45);
+      display: flex;
+      gap: 48px;
+      margin-top: 48px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
-    .hero-foot b { color: rgba(244,237,226,0.7); font-weight: 600; margin-left: 6px; }
+    .hero-foot b {
+      display: block;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: var(--fs-2xl);
+      font-weight: 380;
+      color: var(--c-cream);
+      margin-top: 6px;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      white-space: nowrap;
+    }
 
     /* ── Back pill ── */
     .cs-back {
@@ -86,7 +116,7 @@
       text-decoration: none;
       padding: 7px 14px;
       border-radius: 100px;
-      font-size: 13px;
+      font-size: var(--fs-caption);
       font-weight: 500;
       background: rgba(10,10,10,0.65);
       backdrop-filter: blur(12px);
@@ -100,7 +130,7 @@
     .essay { max-width: 660px; }
     .essay p {
       margin-top: 22px;
-      font-size: 17px;
+      font-size: var(--fs-body);
       line-height: 1.75;
       color: var(--c-primary);
     }
@@ -115,62 +145,176 @@
     }
     .essay-section p {
       margin-top: 20px;
-      font-size: 17px;
+      font-size: var(--fs-body);
       line-height: 1.75;
       color: var(--c-primary);
     }
     .essay-section p:first-child { margin-top: 0; }
     .essay-section h3 {
-      font-size: 22px;
+      font-size: var(--fs-xl);
       font-weight: 600;
       letter-spacing: -0.01em;
       margin-bottom: 16px;
     }
     .essay-section > p:first-of-type { margin-top: 16px; }
 
-    /* ── Skill file viewer ── */
+    /* ── Skill file trigger (terminal command, matches /about-matt) ── */
     .skill-file-toggle { margin-top: 24px; }
-    .skill-file-btn {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      background: none;
+    .skill-cmd-prompt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--c-card-subsurface);
+      border-radius: 8px;
       border: 1px solid var(--c-rule);
+      width: fit-content;
+      cursor: pointer;
+      transition: border-color 150ms, background 150ms;
+    }
+    .skill-cmd-prompt:hover { border-color: var(--accent); }
+    .skill-cmd-prefix {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: var(--fs-caption);
+      color: var(--c-secondary);
+      user-select: none;
+    }
+    .skill-cmd-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: var(--fs-caption);
+      font-weight: 400;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      letter-spacing: 0;
+      transition: opacity 150ms;
+    }
+    .skill-cmd-btn:hover { opacity: 0.7; }
+    .skill-cmd-btn.active { color: var(--c-secondary); cursor: default; }
+    .skill-cmd-enter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: var(--fs-label);
+      color: var(--c-secondary);
+      opacity: 0.5;
+      user-select: none;
+      transition: opacity 150ms;
+    }
+
+    /* ── Skill drawer (matches /about-matt drawer) ── */
+    .skill-drawer {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      bottom: 16px;
+      width: 460px;
+      background: var(--c-card-surface);
+      border: 1px solid var(--c-rule);
+      border-radius: 16px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.30);
+      transform: translateX(calc(100% + 32px));
+      visibility: hidden;
+      transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0s linear 0.42s;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .skill-drawer.open {
+      transform: translateX(0);
+      visibility: visible;
+      transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0s linear 0s;
+    }
+    .skill-drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px 0 20px;
+      height: 52px;
+      border-bottom: 1px solid var(--c-rule);
+      flex-shrink: 0;
+    }
+    .skill-drawer-filename {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: var(--fs-label);
+      color: var(--c-secondary);
+    }
+    .skill-drawer-filename svg { flex-shrink: 0; opacity: 0.5; }
+    .skill-drawer-close {
+      width: 30px;
+      height: 30px;
       border-radius: 6px;
-      padding: 6px 14px;
+      border: none;
+      background: none;
       cursor: pointer;
       color: var(--c-secondary);
-      transition: border-color 150ms, color 150ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 150ms, color 150ms;
+      flex-shrink: 0;
+    }
+    .skill-drawer-close:hover { background: var(--c-card-subsurface); color: var(--c-primary); }
+    .skill-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 28px 56px;
+      scrollbar-width: thin;
+    }
+    .skill-drawer-body,
+    .skill-drawer-body h1,
+    .skill-drawer-body h2,
+    .skill-drawer-body h3 {
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 400;
       letter-spacing: 0;
-    }
-    .skill-file-btn:hover { border-color: var(--c-primary); color: var(--c-primary); }
-    .skill-file-output {
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height 0.4s ease;
-    }
-    .skill-file-output.open { max-height: 600px; }
-    .skill-file-pre {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      line-height: 1.65;
+      text-transform: none;
       color: var(--c-primary);
+    }
+    .skill-drawer-body { font-size: var(--fs-body); line-height: 1.6; }
+    .skill-drawer-body h1 { font-size: var(--fs-body); font-weight: 600; line-height: 1.3; margin: 0 0 8px; }
+    .skill-drawer-body h2,
+    .skill-drawer-body h3 { font-size: var(--fs-body); font-weight: 600; line-height: 1.3; margin: 24px 0 8px; }
+    .skill-drawer-body p { font-size: var(--fs-body); line-height: 1.6; margin: 0 0 16px; }
+    .skill-drawer-body hr { border: none; border-top: 1px solid var(--c-rule); margin: 20px 0; }
+    .skill-drawer-body ul, .skill-drawer-body ol { margin: 0 0 16px; padding-left: 20px; }
+    .skill-drawer-body li { font-size: var(--fs-body); line-height: 1.6; margin-bottom: 6px; }
+    .skill-drawer-body strong { font-weight: 600; }
+    .skill-drawer-body code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      background: var(--c-card-subsurface);
+      border: 1px solid var(--c-rule);
+      border-radius: 4px;
+      padding: 1px 5px;
+    }
+    .skill-drawer-body pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: var(--fs-label);
+      line-height: 1.6;
       background: var(--c-card-subsurface);
       border: 1px solid var(--c-rule);
       border-radius: 8px;
-      padding: 24px 28px;
-      margin-top: 14px;
-      overflow-y: auto;
+      padding: 16px 18px;
+      margin: 0 0 16px;
       overflow-x: auto;
-      max-height: 560px;
       white-space: pre;
       tab-size: 2;
     }
+    .skill-drawer-body pre code { background: none; border: none; padding: 0; font-size: inherit; }
+    .skill-drawer-empty { color: var(--c-secondary); font-style: italic; }
 
     /* ── Skill label ── */
     .skill-label {
       display: inline-block;
       font-family: 'JetBrains Mono', 'Fira Code', monospace;
-      font-size: 13px;
+      font-size: var(--fs-caption);
       color: var(--accent);
       background: rgba(217,38,56,0.07);
       border: 1px solid rgba(217,38,56,0.15);
@@ -183,7 +327,7 @@
     /* ── Opening pull quote ── */
     .essay-lede {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 26px;
+      font-size: var(--fs-2xl);
       font-weight: 300;
       font-style: italic;
       line-height: 1.45;
@@ -200,7 +344,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 14px 40px;
-      font-size: 12px;
+      font-size: var(--fs-label);
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -220,22 +364,44 @@
     @media (max-width: 760px) {
       .cs-back { left: 16px; }
       .card { --card-h: 40px; padding: 48px var(--card-h) 64px; box-shadow: none; }
-      .hero { padding: 40px 40px 48px; min-height: 20vh; }
-      .cs-title { font-size: 40px; }
+      .hero { padding: 40px 40px 48px; min-height: 38vh; }
+      .hero-body { margin-top: 56px; }
+      .cs-title { font-size: var(--fs-4xl); }
+      .hero-foot { flex-wrap: wrap; gap: 16px 40px; }
       .footer { padding: 14px 20px; }
+
+      /* drawer → bottom sheet */
+      .skill-drawer {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 88dvh;
+        border-left: none;
+        border-top: 1px solid var(--c-rule);
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -12px 40px rgba(0,0,0,0.2);
+        transform: translateY(100%);
+      }
+      .skill-drawer.open { transform: translateY(0); visibility: visible; }
+      .skill-drawer-body { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+      body.drawer-open .pv-inner { transform: none; }
     }
     @media (max-width: 520px) {
       .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; }
-      .cs-title { font-size: 32px; }
-      .essay p, .essay-section p { font-size: 16px; }
-      .essay-lede { font-size: 22px; }
-      .essay-section h3 { font-size: 19px; }
+      .cs-title { font-size: var(--fs-3xl); }
+      .essay p, .essay-section p { font-size: var(--fs-small); }
+      .essay-lede { font-size: var(--fs-xl); }
+      .essay-section h3 { font-size: var(--fs-lg); }
     }
   </style>
 </head>
 <body>
   <script src="password-gate.js"></script>
+
+  <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
 
   <a href="index.html" class="cs-back">← Work</a>
 
@@ -243,10 +409,11 @@
 
     <div class="hero">
       <div class="hero-body">
-        <p class="hero-eyebrow">Writing</p>
+        <p class="hero-eyebrow label">Field notes</p>
         <h1 class="cs-title">What I learned building AI tools for my own design practice</h1>
         <div class="hero-foot label">
-          <span>Year<b>2026</b></span>
+          <span>Read<b>6 min</b></span>
+          <span>Built with<b>Claude</b></span>
         </div>
       </div>
     </div>
@@ -277,8 +444,11 @@
         <p>For qual claims, it routes to the underlying study artifact, sample size, methodology, and conditions. It also surfaces when two research groups produced contradicting findings on the same question — which is often more useful than the audit result itself.</p>
         <p>The output is a structured drift report and a corrected claim: the same thing the original claimant was trying to say, written with the qualifications the underlying evidence actually supports.</p>
         <div class="skill-file-toggle">
-          <button class="skill-file-btn" data-skill="claim-audit">view SKILL.md</button>
-          <div class="skill-file-output" id="sfo-claim-audit"></div>
+          <div class="skill-cmd-prompt" data-skill="claim-audit">
+            <span class="skill-cmd-prefix">></span>
+            <button class="skill-cmd-btn">cat claim-audit/SKILL.md</button>
+            <span class="skill-cmd-enter">↵ run</span>
+          </div>
         </div>
       </div>
 
@@ -296,8 +466,11 @@
         <p>Self-report produces what people wish were true about themselves. Observed behavior produces what's actually true.</p>
         <p>The file pairs with <code class="skill-label">/offboard-program</code> and <code class="skill-label">/onboard-program</code>. When you leave a program, offboard packages a slice of your about-me alongside the work context. When someone joins, they can load your about-me and start understanding how you work before your first meeting.</p>
         <div class="skill-file-toggle">
-          <button class="skill-file-btn" data-skill="create-about-me">view SKILL.md</button>
-          <div class="skill-file-output" id="sfo-create-about-me"></div>
+          <div class="skill-cmd-prompt" data-skill="create-about-me">
+            <span class="skill-cmd-prefix">></span>
+            <button class="skill-cmd-btn">cat create-about-me/SKILL.md</button>
+            <span class="skill-cmd-enter">↵ run</span>
+          </div>
         </div>
       </div>
 
@@ -307,8 +480,11 @@
         <p>If no package exists, it searches Slack, Drive, and Figma to reconstruct what it can and surfaces what's missing explicitly. It maps canonical sources into the workspace and writes a config block you can paste so every subsequent session starts with those sources already loaded. It loads about-me files for key collaborators before you meet them.</p>
         <p>The orientation document it produces includes a required "what's unknown" section — because an onboarding document that presents itself as complete is lying.</p>
         <div class="skill-file-toggle">
-          <button class="skill-file-btn" data-skill="onboard-program">view SKILL.md</button>
-          <div class="skill-file-output" id="sfo-onboard-program"></div>
+          <div class="skill-cmd-prompt" data-skill="onboard-program">
+            <span class="skill-cmd-prefix">></span>
+            <button class="skill-cmd-btn">cat onboard-program/SKILL.md</button>
+            <span class="skill-cmd-enter">↵ run</span>
+          </div>
         </div>
       </div>
 
@@ -318,8 +494,11 @@
         <p>The skill runs two Slack passes. The first searches your own messages for how you actually framed the work: the rationale you explained, the moments you pushed back, the frameworks you authored. The second searches the broader record for how others saw it: high-react threads, cross-functional acknowledgment, executive recognition. Then it pulls Drive documents, surfaces a source inventory, extracts the story structure, and waits for you to validate the extraction before writing any narrative prose.</p>
         <p>Memory produces generic case studies. Sources produce specific ones. The moments that make a portfolio entry compelling are almost always in the record. You just have to look.</p>
         <div class="skill-file-toggle">
-          <button class="skill-file-btn" data-skill="case-study-builder">view SKILL.md</button>
-          <div class="skill-file-output" id="sfo-case-study-builder"></div>
+          <div class="skill-cmd-prompt" data-skill="case-study-builder">
+            <span class="skill-cmd-prefix">></span>
+            <button class="skill-cmd-btn">cat case-study-builder/SKILL.md</button>
+            <span class="skill-cmd-enter">↵ run</span>
+          </div>
         </div>
       </div>
 
@@ -334,6 +513,66 @@
 
   </div>
 
+  <!-- ── Skill file sources (rendered into the drawer) ── -->
+  <!--
+    ───────────────────────────────────────────────────────────────────────
+    SKILL FILE SOURCES  ·  DEVELOPER: PASTE REAL CONTENT HERE
+    ───────────────────────────────────────────────────────────────────────
+    Each skill referenced by a "cat <skill>/SKILL.md" command on the page has
+    one <script type="text/markdown" data-skill="..."> slot below. The drawer
+    reads the raw text from the matching slot and renders it with the correct
+    styling automatically — DO NOT write HTML here, paste raw Markdown.
+
+    TO INSERT REAL CONTENT:
+      1. Find the slot whose data-skill matches the command
+         (claim-audit · create-about-me · onboard-program · case-study-builder).
+      2. Paste that skill's SKILL.md verbatim between the open/close tags.
+         Leading indentation is auto-stripped, so paste at column 0.
+      3. No other change needed — open the drawer to verify rendering.
+
+    SUPPORTED MARKDOWN (see renderMd() in the script block below):
+      # / ## / ###  headings   ·   - / * / 1.  lists   ·   --- horizontal rule
+      ```fenced code```   ·   `inline code`   ·   **bold**   ·   *italic*
+      [link](url)   ·   > blockquotes render as paragraphs
+
+    Until a slot is filled, that command shows a graceful
+    "<skill>/SKILL.md isn't available yet." empty state in the drawer.
+
+    NOTE: /transferability-check intentionally has NO command/slot — its skill
+    is not written yet. Add one (a .skill-cmd-prompt in its essay-section plus a
+    matching slot here) only once that SKILL.md exists.
+    ───────────────────────────────────────────────────────────────────────
+  -->
+  <script type="text/markdown" data-skill="claim-audit">
+<!-- PASTE claim-audit/SKILL.md HERE (raw Markdown) -->
+  </script>
+
+  <script type="text/markdown" data-skill="create-about-me">
+<!-- PASTE create-about-me/SKILL.md HERE (raw Markdown) -->
+  </script>
+
+  <script type="text/markdown" data-skill="onboard-program">
+<!-- PASTE onboard-program/SKILL.md HERE (raw Markdown) -->
+  </script>
+
+  <script type="text/markdown" data-skill="case-study-builder">
+<!-- PASTE case-study-builder/SKILL.md HERE (raw Markdown) -->
+  </script>
+
+  <!-- ── Skill file drawer (renders the inline SKILL.md sources above) ── -->
+  <div class="skill-drawer" id="skill-drawer" role="complementary" aria-label="Skill file">
+    <div class="skill-drawer-head">
+      <div class="skill-drawer-filename">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 1.5h6l3 3v8h-9v-11z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8.5 1.5v3h3" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        <span id="skill-drawer-name">SKILL.md</span>
+      </div>
+      <button class="skill-drawer-close" id="skill-drawer-close" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><line x1="2" y1="2" x2="12" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="2" x2="2" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="skill-drawer-body" id="skill-drawer-body"></div>
+  </div>
+
   <footer class="footer">
     <span>© 2026 Matt Kirkpatrick</span>
     <span class="footer-links">
@@ -346,44 +585,118 @@
   <script>
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
-  // Skill file viewer
+  // ── Starfield + meteors (matches case-study pages) ──
   (function () {
-    function escapeHtml(s) {
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let stars = [], meteors = [], frame = 0, raf = null;
+    function resize() {
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      stars = Array.from({ length: 180 }, () => ({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.1 + 0.2, opacity: Math.random() * 0.35 + 0.05, twinkleSpeed: Math.random() * 0.008 + 0.002, twinkleOffset: Math.random() * Math.PI * 2 }));
+      meteors = Array.from({ length: 28 }, () => makeMeteor(true));
     }
-    document.querySelectorAll('.skill-file-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var skill   = btn.dataset.skill;
-        var output  = document.getElementById('sfo-' + skill);
-        if (output.classList.contains('open')) {
-          output.classList.remove('open');
-          btn.textContent = 'view SKILL.md';
+    function makeMeteor(immediate) {
+      const angle = Math.PI / 8 + Math.random() * (Math.PI / 16), length = Math.random() * 200 + 40, speed = Math.random() * 1.0 + 0.3, opacity = Math.random() * 0.22 + 0.06, width = Math.random() * 1.4 + 0.4;
+      return { x: Math.random() * canvas.width * 1.4, y: immediate ? Math.random() * canvas.height : -length - Math.random() * canvas.height * 0.5, length, speed, opacity, angle, width };
+    }
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => { const op = s.opacity + Math.sin(frame * s.twinkleSpeed + s.twinkleOffset) * 0.08; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,255,255,${Math.max(0, op)})`; ctx.fill(); });
+      frame++;
+      meteors.forEach((m, i) => { const dx = Math.cos(m.angle) * m.length, dy = Math.sin(m.angle) * m.length, grad = ctx.createLinearGradient(m.x, m.y, m.x + dx, m.y + dy); grad.addColorStop(0, `rgba(255,255,255,0)`); grad.addColorStop(0.2, `rgba(255,255,255,${m.opacity * 0.3})`); grad.addColorStop(1, `rgba(255,255,255,${m.opacity})`); ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(m.x + dx, m.y + dy); ctx.strokeStyle = grad; ctx.lineWidth = m.width; ctx.stroke(); m.x += Math.cos(m.angle) * m.speed; m.y += Math.sin(m.angle) * m.speed; if (m.y > canvas.height + m.length || m.x > canvas.width + m.length) meteors[i] = makeMeteor(false); });
+      raf = requestAnimationFrame(draw);
+    }
+    let resizeRaf = 0;
+    window.addEventListener('resize', () => { if (resizeRaf) return; resizeRaf = requestAnimationFrame(() => { resizeRaf = 0; resize(); }); });
+    resize(); draw();
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(raf); raf = null; } else if (!raf) draw(); });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { cancelAnimationFrame(raf); raf = null; }
+  })();
+
+  // ── Skill file drawer (renders the inline <script type="text/markdown"> sources) ──
+  (function () {
+    var drawer  = document.getElementById('skill-drawer');
+    var body    = document.getElementById('skill-drawer-body');
+    var nameEl  = document.getElementById('skill-drawer-name');
+    var closeBtn= document.getElementById('skill-drawer-close');
+    var prompts = document.querySelectorAll('.skill-cmd-prompt');
+    var cache   = {};
+    var activePrompt = null;
+
+    function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function inline(s) {
+      return esc(s)
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    }
+    // minimal markdown → html: headings, hr, fenced code, lists, paragraphs
+    function renderMd(md) {
+      var lines = md.replace(/\r\n/g, '\n').split('\n');
+      var html = '', i = 0, list = null;
+      function closeList() { if (list) { html += '</' + list + '>'; list = null; } }
+      while (i < lines.length) {
+        var line = lines[i];
+        if (/^```/.test(line)) {
+          closeList();
+          var buf = []; i++;
+          while (i < lines.length && !/^```/.test(lines[i])) { buf.push(lines[i]); i++; }
+          html += '<pre><code>' + esc(buf.join('\n')) + '</code></pre>'; i++; continue;
+        }
+        if (/^\s*$/.test(line)) { closeList(); i++; continue; }
+        if (/^#{1,6}\s/.test(line)) { closeList(); var lvl = line.match(/^#+/)[0].length; var t = line.replace(/^#+\s/, ''); var tag = lvl <= 1 ? 'h1' : (lvl === 2 ? 'h2' : 'h3'); html += '<' + tag + '>' + inline(t) + '</' + tag + '>'; i++; continue; }
+        if (/^(\-\-\-+|\*\*\*+)\s*$/.test(line)) { closeList(); html += '<hr>'; i++; continue; }
+        if (/^\s*[-*+]\s+/.test(line)) { if (list !== 'ul') { closeList(); list = 'ul'; html += '<ul>'; } html += '<li>' + inline(line.replace(/^\s*[-*+]\s+/, '')) + '</li>'; i++; continue; }
+        if (/^\s*\d+\.\s+/.test(line)) { if (list !== 'ol') { closeList(); list = 'ol'; html += '<ol>'; } html += '<li>' + inline(line.replace(/^\s*\d+\.\s+/, '')) + '</li>'; i++; continue; }
+        closeList();
+        var para = [line]; i++;
+        while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#{1,6}\s|```|\s*[-*+]\s|\s*\d+\.\s|---)/.test(lines[i])) { para.push(lines[i]); i++; }
+        html += '<p>' + inline(para.join(' ')) + '</p>';
+      }
+      closeList();
+      return html;
+    }
+
+    function setActive(prompt) {
+      prompts.forEach(function (p) { p.querySelector('.skill-cmd-btn').classList.remove('active'); });
+      if (prompt) prompt.querySelector('.skill-cmd-btn').classList.add('active');
+      activePrompt = prompt;
+    }
+    function open(skill, prompt) {
+      var path = skill + '/SKILL.md';
+      nameEl.textContent = path;
+      drawer.classList.add('open');
+      document.body.classList.add('drawer-open');
+      setActive(prompt);
+      if (cache[skill]) { body.innerHTML = cache[skill]; body.scrollTop = 0; return; }
+      var src = document.querySelector('script[type="text/markdown"][data-skill="' + skill + '"]');
+      if (src) {
+        var raw = src.textContent.replace(/^\n/, '').replace(/^[ \t]+$/gm, '');
+        var min = Math.min.apply(null, raw.split('\n').filter(function (l) { return l.trim(); }).map(function (l) { return l.match(/^[ \t]*/)[0].length; }));
+        if (min > 0 && min < Infinity) raw = raw.split('\n').map(function (l) { return l.slice(min); }).join('\n');
+        // strip HTML comments (the dev "PASTE …" placeholder) before deciding if filled
+        var filled = raw.replace(/<!--[\s\S]*?-->/g, '').trim();
+        if (filled) {
+          var h = renderMd(filled);
+          cache[skill] = h; body.innerHTML = h; body.scrollTop = 0;
           return;
         }
-        if (output.querySelector('.skill-file-pre')) {
-          output.classList.add('open');
-          btn.textContent = 'close';
-          return;
-        }
-        btn.textContent = 'loading...';
-        btn.disabled = true;
-        fetch('assets/skills/' + skill + '.md')
-          .then(function (r) { return r.text(); })
-          .then(function (text) {
-            var pre = document.createElement('pre');
-            pre.className = 'skill-file-pre';
-            pre.textContent = text;
-            output.appendChild(pre);
-            output.classList.add('open');
-            btn.textContent = 'close';
-            btn.disabled = false;
-          })
-          .catch(function () {
-            btn.textContent = 'view SKILL.md';
-            btn.disabled = false;
-          });
+      }
+      body.innerHTML = '<p class="skill-drawer-empty">' + path + ' isn\u2019t available yet.</p>';
+    }
+    function close() { drawer.classList.remove('open'); document.body.classList.remove('drawer-open'); setActive(null); }
+
+    prompts.forEach(function (p) {
+      p.addEventListener('click', function () {
+        var skill = p.dataset.skill;
+        if (activePrompt === p && drawer.classList.contains('open')) { close(); return; }
+        open(skill, p);
       });
     });
+    closeBtn.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawer.classList.contains('open')) close(); });
   })();
   </script>
 

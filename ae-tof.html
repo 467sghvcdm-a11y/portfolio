@@ -106,8 +106,8 @@
       transition: color 200ms, background 200ms, border-color 200ms;
     }
     .cs-back:hover { color: #f4ede2; background: rgba(10,10,10,0.85); }
-    .cs-back.on-light { color: rgba(26,26,26,0.5); background: rgba(252,249,243,0.90); border-color: rgba(233,225,208,0.85); }
-    .cs-back.on-light:hover { color: rgba(26,26,26,0.85); background: rgba(252,249,243,0.98); }
+    .cs-back.on-light { color: rgba(0,0,0,0.5); background: rgba(252,249,243,0.82); border-color: rgba(0,0,0,0.06); }
+    .cs-back.on-light:hover { color: rgba(0,0,0,0.85); background: rgba(252,249,243,0.96); }
 
     .hero-body {
       flex: 1;
@@ -138,9 +138,11 @@
 
     .cs-title {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 64px;
+      font-size: var(--fs-7xl);
+      line-height: 1.08;
       color: var(--c-cream);
       max-width: 1000px;
+      text-wrap: balance;
     }
 
     .hero-foot {
@@ -153,7 +155,7 @@
     .hero-foot b {
       display: block;
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 28px;
+      font-size: var(--fs-2xl);
       font-weight: 380;
       color: var(--c-cream);
       margin-top: 6px;
@@ -163,9 +165,9 @@
     }
 
     /* ── Body ── */
-    h3 { font-size: 28px; margin-bottom: 18px; }
+    h3 { font-size: var(--fs-2xl); margin-bottom: 18px; }
 
-    h4 { font-size: 20px; margin: 36px 0 12px; }
+    h4 { font-size: var(--fs-lg); margin: 36px 0 12px; }
 
     .cs-result { margin: 32px 0 12px; display: flex; align-items: center; gap: 10px; }
     .cs-result::before {
@@ -176,8 +178,6 @@
       background: var(--c-forest);
       flex-shrink: 0;
     }
-    .cs-result.is-fail { color: #d92638; background: rgba(217, 38, 56, 0.08); border-color: rgba(217, 38, 56, 0.25); }
-    .cs-result.is-fail::before { background: #d92638; }
 
     .cs-section {
       margin-top: 96px;
@@ -240,7 +240,7 @@
       content: counter(chapter, decimal-leading-zero);
       font-family: 'Fraunces', Georgia, serif;
       font-weight: 300;
-      font-size: 140px;
+      font-size: var(--fs-9xl);
       line-height: 0.82;
       letter-spacing: -0.04em;
       color: var(--c-cream);
@@ -262,14 +262,15 @@
         padding-right: 0;
         text-align: left;
         display: block;
-        font-size: 96px;
-        margin-bottom: 22px;
+        font-size: var(--fs-8xl);
+        line-height: 1;
+        margin-bottom: 16px;
       }
     }
     .cs-chapter-label {
       /* Inherits .label (12px Figtree 600 uppercase + tracking) — override color + layout */
       color: var(--accent);
-      margin-bottom: 22px;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -282,14 +283,18 @@
     }
     .cs-chapter-title {
       /* Inherits global h2: Fraunces 300, letter-spacing -0.02em */
-      font-size: clamp(38px, 3.8vw, 52px);
-      line-height: 1.04;
+      font-size: clamp(var(--fs-4xl), 3.8vw, var(--fs-6xl));
+      line-height: 1.18;
       color: var(--c-cream);
-      margin-bottom: 22px;
+      margin-bottom: 16px;
       text-wrap: balance;
     }
     .cs-chapter-sub {
-      /* Inherits body Figtree 16px / 1.5 — override color + width */
+      /* Lede beneath the chapter title — a clear step below the serif title
+         so hierarchy holds even on mobile where the title clamps to its min.
+         Looser leading so the multi-line sentence breathes. */
+      font-size: var(--fs-lg);
+      line-height: 1.55;
       color: var(--c-cream);
       max-width: 56ch;
     }
@@ -303,7 +308,7 @@
     /* ── Callout ── */
     .cs-callout {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 20px;
+      font-size: var(--fs-lg);
       font-weight: 300;
       font-style: italic;
       color: #1a1a1a;
@@ -331,7 +336,7 @@
 
     .cs-metric-val {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 64px;
+      font-size: var(--fs-7xl);
       font-weight: 300;
       color: #767676;
       line-height: 1.0;
@@ -340,7 +345,7 @@
     .cs-metric-val.hi { color: #1a1a1a; }
     .cs-metric-val.win { color: #007A66; }
     .cs-metric-val.neg { color: var(--accent); }
-    .cs-metric-sup { font-family: 'Figtree', sans-serif; font-size: 12px; color: #767676; font-weight: 400; margin-left: 4px; letter-spacing: 0.04em; }
+    .cs-metric-sup { font-family: 'Figtree', sans-serif; font-size: var(--fs-label); color: #767676; font-weight: 400; margin-left: 4px; letter-spacing: 0.04em; }
     .cs-metric-lbl { margin-top: 10px; }
     .cs-metric-ctx { color: var(--c-secondary); margin-top: 6px; }
 
@@ -348,7 +353,7 @@
        a heading label + a row of two smaller paired values + a caption. */
     .cs-metric-head { margin-top: 0; margin-bottom: 12px; }
     .cs-metric-row { display: flex; gap: 20px; margin-bottom: 10px; }
-    .cs-metric-val.sm { font-size: 28px; }
+    .cs-metric-val.sm { font-size: var(--fs-2xl); }
 
     /* Small caption tag tied to a metric row (e.g. cohort label) */
     .cs-metric-tag { margin-top: -8px; margin-bottom: 20px; }
@@ -359,7 +364,7 @@
     .cs-inline-stat strong {
       display: block;
       font-family: 'Fraunces', Georgia, serif;
-      font-size: 28px;
+      font-size: var(--fs-2xl);
       font-weight: 300;
       color: #1a1a1a;
       margin-bottom: 2px;
@@ -374,27 +379,26 @@
       width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
     }
 
-
     /* ── Recipe pairs ── */
     .cs-recipe-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
     .cs-recipe-label { margin-bottom: 10px; }
-    .cs-recipe-label .accent { color: var(--c-primary); text-transform: none; font-size: 14px; font-weight: 400; letter-spacing: 0; line-height: 1.5; margin-left: 8px; }
+    .cs-recipe-label .accent { color: var(--c-primary); text-transform: none; font-size: var(--fs-caption); font-weight: 400; margin-left: 8px; }
     .cs-recipe img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
     /* ── Principles matrix ── */
-    .cs-matrix { width: 100%; border-collapse: collapse; font-size: 14px; margin: 28px 0; }
+    .cs-matrix { width: 100%; border-collapse: collapse; font-size: var(--fs-caption); margin: 28px 0; }
     .cs-matrix th, .cs-matrix td { padding: 14px 18px 14px 0; text-align: left; border-bottom: 1px solid var(--c-rule); vertical-align: top; line-height: 1.55; }
     .cs-matrix tbody tr:last-child th, .cs-matrix tbody tr:last-child td { border-bottom: none; }
-    .cs-matrix th, .cs-matrix td.row-label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--c-secondary); }
+    .cs-matrix th, .cs-matrix td.row-label { font-size: var(--fs-label); font-weight: 600; text-transform: uppercase; color: var(--c-secondary); }
     .cs-matrix th { border-bottom: 2px solid #eee; padding-bottom: 10px; }
     .cs-matrix th.acc { color: var(--accent); border-bottom-color: var(--accent); }
     .cs-matrix td.row-label { white-space: nowrap; padding-right: 24px; }
     .cs-matrix td { color: #767676; }
 
     /* ── Deployment table ── */
-    .cs-deploy-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 20px 0; }
+    .cs-deploy-table { width: 100%; border-collapse: collapse; font-size: var(--fs-caption); margin: 20px 0; }
     .cs-deploy-table th, .cs-deploy-table td { padding: 12px 0; border-bottom: 1px solid var(--c-rule); text-align: left; font-weight: 400; vertical-align: top; }
-    .cs-deploy-table thead th { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--c-secondary); border-bottom-color: #e0e0e0; }
+    .cs-deploy-table thead th { font-size: var(--fs-label); font-weight: 600; text-transform: uppercase; color: var(--c-secondary); border-bottom-color: #e0e0e0; }
     .cs-deploy-table tbody th { color: var(--c-secondary); width: 160px; }
     .cs-deploy-table td { color: var(--c-primary); }
 
@@ -405,28 +409,28 @@
     .cs-split-label.done { color: #1a1a1a; }
     .cs-split-label.pending { color: #767676; }
     .cs-split-list { list-style: none; }
-    .cs-split-list li { font-size: 14px; color: #767676; padding: 7px 0; border-bottom: 1px solid var(--c-rule); line-height: 1.4; }
+    .cs-split-list li { font-size: var(--fs-caption); color: #767676; padding: 7px 0; border-bottom: 1px solid var(--c-rule); line-height: 1.4; }
     .cs-split-list li:last-child { border-bottom: none; }
 
     /* ── Numbered list ── */
     .cs-provocation-list { list-style: none; margin: 24px 0; }
-    .cs-provocation-list li { display: grid; grid-template-columns: 36px 1fr; gap: 20px; align-items: start; padding: 20px 0; border-top: 1px solid #eee; font-size: 16px; line-height: 1.5; color: #767676; }
+    .cs-provocation-list li { display: grid; grid-template-columns: 36px 1fr; gap: 20px; align-items: start; padding: 20px 0; border-top: 1px solid #eee; font-size: var(--fs-small); line-height: 1.5; color: #767676; }
     .cs-provocation-list li:first-child { border-top: none; }
     .cs-provocation-list li:last-child { border-bottom: none; }
-    .cs-provocation-num { font-family: 'Fraunces', Georgia, serif; font-size: 20px; color: var(--c-secondary); }
+    .cs-provocation-num { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-lg); color: var(--c-secondary); }
 
     /* ── Takeaway ── */
     .cs-takeaway { margin-top: 120px; padding-top: 64px; }
-    .cs-takeaway-text { font-family: 'Fraunces', Georgia, serif; font-size: 32px; font-style: italic; max-width: 38ch; margin-bottom: 20px; }
-    .cs-takeaway-sub { font-size: 16px; color: #1a1a1a; max-width: 55ch; line-height: 1.5; }
+    .cs-takeaway-text { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-3xl); font-style: italic; max-width: 38ch; margin-bottom: 20px; }
+    .cs-takeaway-sub { font-size: var(--fs-small); color: #1a1a1a; max-width: 55ch; line-height: 1.5; }
 
     /* ── Next project ── */
     .cs-next { display: block; margin-top: 80px; padding-top: 32px; border-top: 1px solid #eee; text-decoration: none; color: inherit; }
     .cs-next:hover .cs-next-title { color: var(--accent); }
     .cs-next:hover .cs-next-arrow { transform: translateX(4px); color: var(--accent); }
     .cs-next-label { margin-bottom: 8px; }
-    .cs-next-title { font-family: 'Fraunces', Georgia, serif; font-size: 28px; font-weight: 380; transition: color 200ms ease; display: inline; }
-    .cs-next-arrow { font-size: 20px; color: #767676; transition: transform 200ms ease, color 200ms ease; display: inline-block; margin-left: 8px; vertical-align: middle; }
+    .cs-next-title { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-2xl); font-weight: 380; transition: color 200ms ease; display: inline; }
+    .cs-next-arrow { font-size: var(--fs-lg); color: #767676; transition: transform 200ms ease, color 200ms ease; display: inline-block; margin-left: 8px; vertical-align: middle; }
 
     /* ── Footer ── */
     .footer {
@@ -436,7 +440,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 32px 48px;
-      font-size: 12px;
+      font-size: var(--fs-label);
       color: rgba(244,237,226,0.55);
     }
     .copy-btn { background: none; border: none; cursor: pointer; padding: 15px; margin: -15px; border-radius: 4px; color: rgba(244,237,226,0.3); display: flex; align-items: center; transition: color 150ms, background 150ms; flex-shrink: 0; }
@@ -444,65 +448,51 @@
     .copy-btn.copied { color: #4ade80; }
     .copy-btn svg { display: block; }
 
-    /* ── Matrix mobile (stacked cards, shown ≤760px) ── */
-    .cs-matrix-mobile { display: none; flex-direction: column; gap: 12px; margin: 28px 0; }
-    .cs-matrix-card { background: var(--c-card-subsurface); border-radius: 8px; padding: 20px 24px; }
-    .cs-matrix-card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-primary); margin-bottom: 14px; }
-    .cs-matrix-card-title.acc { color: var(--accent); }
-    .cs-matrix-card dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 14px; margin: 0; }
-    .cs-matrix-card dt { color: var(--c-secondary); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding-top: 3px; white-space: nowrap; }
-    .cs-matrix-card dd { color: var(--c-secondary); margin: 0; line-height: 1.5; }
-
     /* ── Responsive ── */
 
     @media (max-width: 760px) {
-      .cs-back { left: 16px; }
       .pv-inner { padding: 6px 0 24px; }
       .card { --card-h: 40px; padding: 48px var(--card-h) 64px; box-shadow: none; }
       .hero { padding: 40px 40px 48px; margin: -6px 0 0; }
       .hero-body { margin-top: 56px; }
       .hero-foot { flex-wrap: wrap; gap: 16px 40px; }
       .cs-metrics-3, .cs-metrics-4 { grid-template-columns: repeat(2, 1fr); }
+      .cs-back { left: 16px; }
       /* Chapter intermissions: stack numeral above content, align with card body */
       .cs-chapter {
         padding: 72px 40px 32px;
       }
-      .cs-chapter-title { font-size: 40px; }
-      .cs-chapter-label { margin-bottom: 8px; }
-      .cs-chapter-title { margin-bottom: 12px; }
-      .cs-matrix { display: none; }
-      .cs-matrix-mobile { display: flex; }
+      .cs-chapter-title { font-size: var(--fs-4xl); }
+      .cs-chapter-label { margin-bottom: 16px; }
+      .cs-chapter-title { margin-bottom: 16px; }
     }
 
     @media (max-width: 520px) {
-      .cs-section { margin-top: 64px; }
-      .cs-takeaway { margin-top: 64px; }
       .pv-inner { padding: 4px 0 24px; }
       .card { --card-h: 20px; padding: 40px var(--card-h) 56px; }
       .hero { padding: 40px 20px 40px; margin: -4px 0 0; }
       .hero-body { margin-top: 48px; }
-      .cs-title { font-size: 44px; }
+      .cs-title { font-size: var(--fs-5xl); }
       .cs-chapter { padding: 56px 20px 24px; }
-      .cs-chapter::before { font-size: 72px; margin-bottom: 18px; }
-      .cs-chapter-title { font-size: 30px; }
+      .cs-chapter::before { font-size: var(--fs-7xl); margin-bottom: 18px; }
+      .cs-chapter-title { font-size: var(--fs-2xl); }
       .cs-chap-nav { left: 116px; right: 16px; transform: none; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%); mask-image: linear-gradient(to right, black 70%, transparent 100%); }
       .cs-chap-nav::-webkit-scrollbar { display: none; }
       .cs-chap-nav.nav-scrolled { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 20%, black 70%, transparent 100%); }
       .cs-chap-nav.nav-at-end { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%); mask-image: linear-gradient(to right, transparent 0%, black 20%); }
       .hero-eyebrow::before { display: none; }
-      .cs-chap-nav.on-light { background: rgba(252,249,243,0.90); border-color: rgba(233,225,208,0.85); }
-      .cs-chap-nav.on-light .cs-chap-link { color: rgba(26,26,26,0.45); }
-      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(26,26,26,0.85); background: rgba(233,225,208,0.55); }
+      .cs-chap-nav.on-light { background: rgba(252,249,243,0.82); border-color: rgba(0,0,0,0.06); }
+      .cs-chap-nav.on-light .cs-chap-link { color: rgba(0,0,0,0.4); }
+      .cs-chap-nav.on-light .cs-chap-link.active { color: rgba(0,0,0,0.8); background: rgba(0,0,0,0.08); }
       .cs-metrics-2, .cs-metrics-3, .cs-metrics-4 { grid-template-columns: 1fr; }
       .cs-recipe-pair { grid-template-columns: 1fr; }
       .cs-split { grid-template-columns: 1fr; }
-      .cs-metric-val { font-size: 44px; }
+      .cs-metric-val { font-size: var(--fs-5xl); }
       .footer { position: relative; padding: 20px 20px; background: transparent; }
     }
   </style>
 </head>
 <body>
-  <script src="password-gate.js"></script>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
   <a href="index.html" class="cs-back caption">← Work</a>
   <nav class="cs-chap-nav" id="cs-chap-nav">
@@ -519,7 +509,7 @@
       <div class="hero-body" style="gap: 8px">
         <div>
           <p class="hero-eyebrow label">Activate Experts</p>
-          <h1 class="cs-title">How TurboTax reimagined the front door for local in-person tax help</h1>
+          <h1 class="cs-title">How TurboTax reimagined the front door for expert tax help</h1>
         </div>
         <div class="hero-foot label">
           <span>Role<b>Design Lead</b></span>
@@ -530,11 +520,7 @@
 
     <div class="card" id="intro">
 
-      <figure>
-        <img src="assets/store-interior.webp" alt="Inside a TurboTax storefront" width="1920" height="1281" decoding="async" fetchpriority="high" style="max-height: 460px; object-fit: cover; object-position: center 80%;">
-      </figure>
-
-      <h3>The front door's job wasn't to persuade. It was to recognize the customer who'd already decided</h3>
+      <h3>The entire job of the page is to get the right person to start. Not just any person.</h3>
 
       <div class="cs-metrics cs-metrics-3">
         <div class="cs-metric win">
@@ -551,31 +537,22 @@
         </div>
       </div>
 
-      <p>TurboTax operates 500+ branded storefronts nationwide. Each one is a fixed cost: staff, leases, local advertising written into the unit economics. The digital storefront is the front door to that network. It decides whether the customer who found TurboTax online books an appointment, calls, or keeps scrolling.</p>
-
-      <div style="margin: 36px 0; max-width: 680px;">
-        <img src="assets/expert-session.webp" alt="A TurboTax expert working with a customer" width="2400" height="1601" loading="lazy" decoding="async" style="width: 100%; height: auto; display: block; border-radius: 8px;">
-      </div>
-
-      <p>The customer arriving is what the team called an Efficiency Value Seeker: someone who has already decided to hand off their taxes. They're not comparing TurboTax to TaxAct. They're comparing it to sitting in a CPA's office. The page's job isn't to sell them on expert help. It's to recognize they've already made that decision, and not fumble the moment.</p>
-
-      <h3>The problem</h3>
-      <p>When I arrived, there was no complete picture of what was live, what was in test, and what was baseline across any of the six page types. Search optimization, paid search, and product teams were each making design decisions from their own vantage point, optimizing for their own metrics, with no shared model for what these pages were actually trying to accomplish. The program was running tests against surfaces nobody had fully mapped.</p>
-      <p>The measurement model compounded it. These pages were being evaluated against time-to-start, a metric captured far downstream across flows owned by multiple teams. A click on a top-of-funnel call to action and a completed start are separated by experiences design doesn't control. That finding restructured how every test hypothesis that followed was framed.</p>
+      <figure>
+        <img width="2048" height="784" decoding="async" fetchpriority="high" src="assets/ae-tof/page-templates.jpg" alt="AE page templates">
+      </figure>
 
       <p>As the design lead for the AE front door, I was responsible for the entry experience of over half a million weekly visitors. Every CTA, every flow, every surface decision has direct downstream revenue consequences. Design as a precision instrument, not a finish.</p>
-
       <p>This case study covers one tax season. One measurement audit that changed what the program was optimizing for. Seven tests built on that foundation. And one failure test that made everything else more credible.</p>
     </div>
 
     <div class="cs-chapter" id="ch1">
         <div class="cs-chapter-label label">Foundation</div>
-        <h2 class="cs-chapter-title">Building for scale and velocity</h2>
+        <h2 class="cs-chapter-title">Building for scale and velocity.</h2>
         <div class="cs-chapter-sub">Before any test could run, the program needed infrastructure it didn't have.</div>
       </div>
 
       <div class="card">
-        <h3>A component library built to ship</h3>
+        <h3>A modular system built for velocity</h3>
         <p>To achieve the velocity required for peak season, we had to stop building individual pages and start building a modular system. I architected the first AE component library: a single unified source of truth across every AE surface.</p>
         <p>This wasn't aesthetic consistency. It was operational leverage. Recipe pivots that used to take weeks took days.</p>
         <figure>
@@ -590,11 +567,18 @@
           <figcaption>13+ AE page templates.</figcaption>
         </figure>
 
+        <h3>The goal was not to persuade. It was to not break the decision already forming.</h3>
+        <p>Our target customer wants human expertise with digital speed. They've already decided they want a tax expert. They're not comparison shopping. They're looking for confirmation they're in the right place.</p>
+        <p>The page serves two personas at once: the delegator seeking validation that the right expert is available, and the autonomous shopper seeking agency over how to proceed. Every design decision was made in service of that dual psychology.</p>
+        <figure>
+          <img width="2048" height="519" loading="lazy" decoding="async" src="assets/ae-tof/customer.jpg" alt="Target customer archetype">
+          <figcaption>The efficiency value seeker: already decided, looking for confirmation. Not comparison shopping.</figcaption>
+        </figure>
       </div>
 
       <div class="cs-chapter" id="ch2">
         <div class="cs-chapter-label label">Preseason</div>
-        <h2 class="cs-chapter-title">What we were actually measuring</h2>
+        <h2 class="cs-chapter-title">What we were actually measuring.</h2>
         <div class="cs-chapter-sub">The top-of-funnel (TOF) pages were being judged by the outcome of a journey they don't fully control.</div>
       </div>
 
@@ -608,10 +592,8 @@
           <div class="cs-inline-stat caption"><strong>12–15</strong>screens per experience</div>
         </div>
 
-        <figure style="display: flex; flex-direction: column; gap: 8px;">
-          <img width="3318" height="1760" loading="lazy" decoding="async" src="assets/ae-tof/T2S-1.png" alt="Schedule appointment flow audit">
-          <img width="3164" height="1972" loading="lazy" decoding="async" src="assets/ae-tof/T2S-2.png" alt="Start online flow audit">
-          <img width="2086" height="2050" loading="lazy" decoding="async" src="assets/ae-tof/T2S-3.png" alt="Match for free now flow audit">
+        <figure>
+          <img width="1184" height="1850" loading="lazy" decoding="async" src="assets/ae-tof/t2s.png" alt="Time to start audit map">
           <figcaption>The visual complexity is intentional. The mess is the point. Optimizing a single TOF metric against this surface area is structurally flawed.</figcaption>
         </figure>
 
@@ -626,12 +608,12 @@
 
       <div class="cs-chapter" id="ch3">
         <div class="cs-chapter-label label">Scale</div>
-        <h2 class="cs-chapter-title">Field-testing choice architecture</h2>
+        <h2 class="cs-chapter-title">Field-testing choice architecture.</h2>
         <div class="cs-chapter-sub">With infrastructure built, a clear customer, and honest measurement, we were ready to move.</div>
       </div>
 
       <div class="card">
-        <h3>Storefront</h3>
+        <h3>Test 1: Storefront</h3>
         <p>Our customers had already decided they wanted an expert. So why were we making them schedule a meeting to prove it?</p>
         <p>The assumption: the primary barrier wasn't the product, it was process ambiguity. Appointment scheduling requires commitment to a specific time, person, and location before the customer knows who they're committing to. The hypothesis: replacing the high-friction scheduling CTA with an immediate expert-matching experience would unlock latent demand from customers who wanted expert help but were stopped by appointment friction.</p>
 
@@ -666,12 +648,12 @@
 
       <div class="cs-chapter" id="ch4">
         <div class="cs-chapter-label label">Strategy</div>
-        <h2 class="cs-chapter-title">Four tests, one principle</h2>
+        <h2 class="cs-chapter-title">Four tests. One principle.</h2>
         <div class="cs-chapter-sub">Match worked on the storefront. Would it work on traffic that hadn't already decided?</div>
       </div>
 
       <div class="card">
-        <h3>Organic LP, dual-engine discovery</h3>
+        <h3>Test 5023: Organic LP, dual-engine discovery</h3>
         <p>We ran what looked like the same test on a different surface and got a different answer. That contradiction was the finding. The Storefront worked because intent was already named. The Organic LP is a different moment. We weren't testing two recipes. We were measuring two engines built for two different objectives.</p>
 
         <div class="cs-metrics cs-metrics-2">
@@ -698,10 +680,8 @@
           </div>
         </div>
 
-        <h4 class="cs-result badge">Result: Two recipes, two engines. Both deployed.</h4>
-
       <div class="cs-section">
-        <h3>Localization</h3>
+        <h3>Test 5012: Localization</h3>
         <p>The assumption: local content plus Match should be additive. If customers respond to expertise, they respond more when that expertise feels like it belongs to their specific market.</p>
         <p>Localized content alone (Recipe B) won in both NY and LA. Adding Match on top diluted the gains. Recipe C delivered less than half the Full Service completion lift of Recipe B in NY (+215% vs. +643%).</p>
 
@@ -723,13 +703,11 @@
           </div>
         </div>
 
-        <h4 class="cs-result badge">Result: Recipe B won. Localized content alone outperformed localized content + Match.</h4>
-
         <p>On the storefront, Match works because the customer arrived with expert intent already formed. On a category landing page, the customer is still orienting. Match asks for a commitment the page has not yet earned.</p>
       </div>
 
       <div class="cs-section">
-        <h3>CTA Isolation</h3>
+        <h3>Test 5041: CTA Isolation</h3>
         <p>Leadership directed a generic Get Started CTA across all recipes to isolate the modular auth flow's performance. The intent was methodological. What the data revealed had nothing to do with the flow.</p>
 
         <div class="cs-metrics cs-metrics-2">
@@ -768,12 +746,10 @@
             <div class="cs-metric-ctx caption">Lower friction tolerance. Lighter entry wins. ~$760K scaling estimate.</div>
           </div>
         </div>
-
-        <h4 class="cs-result badge">Result: Generic CTA collapsed Full Service mix. Audience composition shifted.</h4>
       </div>
 
       <div class="cs-section">
-        <h3>The failure test</h3>
+        <h3>Test 5176: The failure test</h3>
         <p>We routed AE page visitors directly to the FS in-product flow, bypassing the CTA filtering step, on the assumption that a page visit signals expert intent. Both recipes missed on revenue per visitor, down 15% vs. control. Test stopped.</p>
 
         <div class="cs-recipe-pair">
@@ -787,9 +763,7 @@
           </div>
         </div>
 
-        <h4 class="cs-result is-fail badge">Result: Both recipes missed. −15% revenue per visitor, test stopped.</h4>
-
-        <p>CTA Isolation stripped the qualifying signal. The failure test bypassed the qualifying step entirely. Two tests, same principle.</p>
+        <p>5041 stripped the qualifying signal from the CTA. 5176 bypassed the qualifying step entirely. Two tests, same principle.</p>
 
         <div class="cs-callout">Page visit is not intent. The CTA is where intent gets named. Self-selection before commitment is the architecture that protects revenue quality.</div>
 
@@ -799,7 +773,7 @@
 
       <div class="cs-chapter" id="ch5">
         <div class="cs-chapter-label label">Outcomes</div>
-        <h2 class="cs-chapter-title">Framework to deployment to principle</h2>
+        <h2 class="cs-chapter-title">Framework to deployment to principle.</h2>
         <div class="cs-chapter-sub">How it shipped, what it proved, and what it leaves behind.</div>
       </div>
 
@@ -828,8 +802,6 @@
           </div>
         </div>
 
-        <h4 class="cs-result badge">Result: Recipe B won. +9% revenue per visitor. Match held without appointments.</h4>
-
       </div>
 
       <div class="cs-section">
@@ -856,7 +828,7 @@
       </div>
 
       <div class="cs-section">
-        <h3>End of season: traffic down. The funnel got better, not bigger</h3>
+        <h3>End of season: traffic down. The funnel got better, not bigger.</h3>
         <p>Units up 56% vs. prior year while traffic was down 7%. The funnel converted a larger share of a smaller traffic base.</p>
 
         <div class="cs-metrics cs-metrics-4">
@@ -882,13 +854,6 @@
           </div>
         </div>
 
-      </div>
-
-      <div class="cs-section">
-        <h3>What made it hard</h3>
-        <p>The program sat at an intersection of too many teams with legitimate but competing interests: search optimization, paid search, expert matching, Full Service product, content design, and engineering all had access to these pages and all measured success differently. The design approver role I held formally was structurally real but operationally contested. Mandates arrived from senior leadership that overrode working agreements already in place.</p>
-        <p>Search and content teams redesigned approved pages without design involvement after senior leadership and VP approval had already been secured. Two weeks of design time went to search optimization feature work with no committed path to production, a risk flagged at kickoff that proceeded anyway. I documented the breakdown formally. The documentation created accountability but didn't recover the time or the design coherence of the pages that shipped without it.</p>
-        <p>The documentation debt made everything harder. The program was running tests against a baseline nobody had fully mapped. Building a complete end-to-end audit under two-day time pressure for a VP review was what made the rest of the season coherent, but it consumed capacity that should have been available from day one.</p>
       </div>
 
       <div class="cs-subsection-label label">Principles</div>
@@ -934,36 +899,6 @@
           </tbody>
         </table>
 
-        <div class="cs-matrix-mobile">
-          <div class="cs-matrix-card">
-            <div class="cs-matrix-card-title acc">Match Filter</div>
-            <dl>
-              <dt>Best for</dt><dd>High-intent surfaces (Storefront, post-decision PPC)</dd>
-              <dt>Optimizes for</dt><dd>Revenue quality, ARPC, FS mix</dd>
-              <dt>Trade-off</dt><dd>Lower top-of-funnel volume</dd>
-              <dt>Strategic role</dt><dd>Precision filter</dd>
-            </dl>
-          </div>
-          <div class="cs-matrix-card">
-            <div class="cs-matrix-card-title">Modular Post-Auth Throttle</div>
-            <dl>
-              <dt>Best for</dt><dd>Volume-driving organic surfaces</dd>
-              <dt>Optimizes for</dt><dd>Total franchise starts, T2S volume</dd>
-              <dt>Trade-off</dt><dd>Lower revenue per visitor</dd>
-              <dt>Strategic role</dt><dd>Volume engine</dd>
-            </dl>
-          </div>
-          <div class="cs-matrix-card">
-            <div class="cs-matrix-card-title">Modular Pre-Auth Filter</div>
-            <dl>
-              <dt>Best for</dt><dd>Mid-orientation surfaces (CLPs with localized content)</dd>
-              <dt>Optimizes for</dt><dd>Self-selected entry without premature commitment</dd>
-              <dt>Trade-off</dt><dd>Slower commitment moment</dd>
-              <dt>Strategic role</dt><dd>Soft qualifier</dd>
-            </dl>
-          </div>
-        </div>
-
         <h3>Three principles that came out of the season</h3>
         <ul class="cs-provocation-list">
           <li>
@@ -1008,6 +943,8 @@
             </ul>
           </div>
         </div>
+
+        <div class="cs-callout">4.9 stars. 90% recommend. The design exists. This is a business investment decision, not a design gap.</div>
 
         <h3>What I'd do differently</h3>
         <ul class="cs-provocation-list">

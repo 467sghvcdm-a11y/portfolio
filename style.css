@@ -7,6 +7,14 @@
   padding: 0;
 }
 
+/* Disable mobile text auto-inflation so every ramp size renders at its
+   true value in narrow viewports/iframes — no silent ~1.2× scaling. */
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 /* ─────────────────────────────────────
    Color tokens
 ───────────────────────────────────── */
@@ -22,6 +30,26 @@
   --c-card-surface:    #fcf9f3;  /* primary card bg */
   --c-card-subsurface: #f4ede2;  /* callouts/quotes/insets — one tonal step from surface */
   --c-rule:            #e9e1d0;  /* warm hairline that reads on bone */
+
+  /* ─────────────────────────────────────
+     Type scale — single source of truth.
+     Every font-size across the site references one of these steps.
+     Resume (print doc) runs its own tighter --rfs-* scale.
+  ───────────────────────────────────── */
+  --fs-label:   12px;   /* uppercase labels, badges, footers, table heads, mono chrome */
+  --fs-caption: 14px;   /* captions, nav, small UI text, fine print */
+  --fs-small:   16px;   /* dense / secondary body, tables */
+  --fs-body:    17px;   /* default body copy */
+  --fs-lg:      20px;   /* large body, small headings (h4), pull quotes */
+  --fs-xl:      24px;   /* card titles, sub-headings */
+  --fs-2xl:     28px;   /* deks, section headings (h3), ledes */
+  --fs-3xl:     32px;   /* statement / takeaway text */
+  --fs-4xl:     38px;   /* page section headings (h2) */
+  --fs-5xl:     44px;   /* large display (mobile titles, big metrics) */
+  --fs-6xl:     52px;   /* chapter titles */
+  --fs-7xl:     64px;   /* case-study titles, hero metrics */
+  --fs-8xl:     96px;   /* hero display headline */
+  --fs-9xl:    140px;   /* decorative chapter numerals */
 }
 
 /* ─────────────────────────────────────
@@ -29,7 +57,7 @@
 ───────────────────────────────────── */
 body {
   font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 17px;
+  font-size: var(--fs-body);
   line-height: 1.6;
   color: var(--c-primary);
 }
@@ -47,7 +75,7 @@ h1, h2, h3, h4, h5, h6 {
 h3, h4, h5, h6 { line-height: normal; }
 
 p {
-  font-size: 17px;
+  font-size: var(--fs-body);
   line-height: 1.6;
   color: var(--c-primary);
   margin-bottom: 22px;
@@ -57,7 +85,7 @@ p:last-child { margin-bottom: 0; }
 strong { font-weight: 600; }
 
 figcaption {
-  font-size: 14px;
+  font-size: var(--fs-caption);
   line-height: 1.5;
   color: var(--c-secondary);
   margin-top: 10px;
@@ -70,7 +98,7 @@ figcaption {
 /* caption — 14px body-weight text; default primary, secondary via .t-secondary */
 .caption {
   font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 14px;
+  font-size: var(--fs-caption);
   font-weight: 400;
   line-height: 1.5;
   color: var(--c-primary);
@@ -79,7 +107,7 @@ figcaption {
 /* label — 12px all-caps utility label; default secondary, overrides via color modifier */
 .label {
   font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 12px;
+  font-size: var(--fs-label);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -93,7 +121,7 @@ figcaption {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: var(--fs-label);
   font-weight: 600;
   line-height: 1.5;
   color: var(--c-forest);
