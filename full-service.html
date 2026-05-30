@@ -371,6 +371,7 @@
       margin-bottom: 12px;
     }
     .cs-quote-attr { font-size: var(--fs-caption); color: var(--c-secondary); }
+    .cs-recognition-badge { width: 72px; height: 72px; display: block; margin: 24px 0 20px; }
 
     /* ── Era divider ── */
     .cs-era {
@@ -602,10 +603,18 @@
       <div class="cs-section">
         <h4>Onboarding</h4>
         <p>The first, and most contested, place that conviction had to be defended was the pre-signup experience.</p>
+        <figure class="fig-flow">
+          <img src="assets/fs-onboarding.png" alt="Full Service onboarding flow" width="6950" height="1752" loading="lazy" decoding="async">
+          <figcaption>The onboarding sequence. Each question was easy to answer and calibrated commitment before an expert's time was committed.</figcaption>
+        </figure>
         <p>Senior leadership held a strong prior: more screens meant more abandonment. Every screen was an opportunity to drop off, so fewer screens before the expert connection meant more completions. The direction from the top was to reduce steps in the funnel. We had to test it.</p>
         <p>I pushed back that this was a different type of product. TurboTax Live Full Service wasn't a self-serve flow where friction was purely cost. It was a service that required customer participation to work. Customers who arrived at an expert without documents, without a realistic sense of how long the session would take, without a genuine intent to finish that day. Those customers weren't saving time by connecting faster. They were shifting the cost of their unpreparedness onto the expert's clock.</p>
         <p>The design argument was that preparation should feel like progress, not a barrier. I structured the onboarding questions to be easy to answer. Customers already knew the answers. Moderated research sessions validated what the design intended: customers didn't experience the questions as friction. They experienced them as investment. The more they put in, the more committed they felt to the outcome. The psychological pull was deliberate.</p>
         <div class="cs-callout">Not all friction is bad. The onboarding wasn't slowing customers down. It was selecting for the ones who would finish.</div>
+        <figure class="fig-flow">
+          <img src="assets/fs-questions.png" alt="Intake qualification questions in the onboarding flow" width="5854" height="1648" loading="lazy" decoding="async">
+          <figcaption>The intake questions. Easy to answer, already known — designed to feel like investment, not interrogation.</figcaption>
+        </figure>
         <p>The same research surfaced exactly what customers needed to feel confident enough to start: who they'd connect with, when, how long, how much, and why being present while the expert prepared mattered. I pushed toward specificity over hedging. Concrete time estimates. Clear descriptions of the session format. Direct language about what the customer needed to have ready. The core tension was honesty against conversion: more information upfront risked scaring people off. The data pointed toward more. I held that line.</p>
       </div>
 
@@ -628,6 +637,9 @@
             of all documents acquired before expert connection by TY22
           </div>
         </div>
+        <figure class="fig-ui">
+          <img src="assets/fs-checklist-v2.png" alt="Document checklist designs side by side" width="2873" height="2095" loading="lazy" decoding="async">
+        </figure>
         <p>The checklist design evolved considerably across three years. By Tax Year 2023 I was driving a full simplification of how document statuses were tracked: collapsing overlapping states, automating where the system could make determinations on its own, eliminating manual steps wherever possible. Each simplification connected directly to a measurable reduction in session time. The expert's document management experience and the customer's same-day completion rate were the same problem. Cleaning up one improved the other.</p>
       </div>
 
@@ -641,6 +653,10 @@
         <h4>The handoff</h4>
         <p>In the original model, the tax prep assistant's job ended with intake. I redesigned it to end with handoff, the bridge between the two products.</p>
         <p>The rebuilt experience had one goal: get the customer document-ready, confirm they were willing to connect now, and transfer them directly to an expert on the same call. Central to this was a readiness confirmation step where customers explicitly affirmed they were ready. It looked like friction on paper. It was doing selection work before an expert's time was committed. The connect-now / connect-later offer structure honored customers who couldn't connect immediately. By Tax Year 2023, 79% connected immediately, 14% scheduled for later, and 7% booked a specific appointment.</p>
+        <figure class="fig-ui">
+          <img src="assets/fs-tpa-handoff.png" alt="Tax prep assistant handoff interface" width="2400" height="1800" loading="lazy" decoding="async">
+          <figcaption>The rebuilt tax prep assistant handoff. The readiness confirmation step is the pivot point between intake and expert connection.</figcaption>
+        </figure>
         <p>Working with operations and service delivery surfaced a recurring boundary question: what belongs in the product, and what belongs in service operations. Guidance that lives in the product requires an engineering deploy to update. When service delivery needs to adjust what assistants say mid-season, that timeline doesn't work. I pushed for a model where the product provided structure and the service team owned the content within it. That boundary held when operational needs changed mid-season.</p>
       </div>
 
@@ -648,6 +664,10 @@
         <h4>Expert-facing tools</h4>
         <p>A significant share of the leverage lived on the expert side, the second product.</p>
         <p>I maintained the end-to-end experience documentation used to train thousands of tax experts going into each season. I directed the redesign of the expert accuracy review flow, consolidating overlapping check categories into a simpler flow with clearer purpose at each step and automation where the system could make its own determinations. I flagged that the vast majority of experts accepted the system's default filing method recommendation without reviewing it. An entire manual selection screen that could be eliminated.</p>
+        <figure class="fig-ui">
+          <img src="assets/fs-expert-iep.png" alt="Expert Integrated Experience Platform" width="2734" height="1802" loading="lazy" decoding="async">
+          <figcaption>The expert-facing platform. Accuracy review, document status, and session management consolidated into one view.</figcaption>
+        </figure>
         <p>Early in this period I caught that an emerging AI workstream had been designed for the customer-facing experience with no design work started for the expert side. I escalated it, got the workstream expanded, and helped stand up the expert-side design effort before the season started. Two-sided products require two-sided design.</p>
       </div>
 
@@ -748,16 +768,21 @@
           </div>
         </div>
         <p>Average return completion time went from 22 days to a few hours. Same-day margin increased 97%. On April 15, 58,000 customers started (double the prior year), 11,000 completed returns (266% above), and 17,000 live expert calls were handled (325% above).</p>
+        <figure class="fig-ui">
+          <img src="assets/fs-filed-v2.png" alt="Expert engagement view and customer mobile confirmation screen" width="3411" height="2267" loading="lazy" decoding="async">
+        </figure>
       </div>
 
       <div class="cs-section">
         <h3>What made it hard</h3>
         <p>Full Service had no single team with a mandate over the end-to-end experience. The customer product, the expert platform, training, quality, and service delivery each owned a piece, with no natural coordination between them. Decisions that looked right on one side had consequences on the other that nobody was tracking. I became connective tissue across all of them without authority over any single part.</p>
         <p>The harder thing was that direction changed frequently based on leadership prior rather than experiment results. The conviction that preparation before connection was the mechanism had to be defended repeatedly. This included a formal test from senior leadership designed to prove the opposite. Holding that position through the test and being proven right by the data was as much of the work as the design itself.</p>
+        <p>And the problem kept changing shape. Every experiment surfaced a new unhappy path: customers who showed up without documents, customers who dropped mid-session, experts who adapted the same-day model in ways nobody anticipated. There was no stable version of the problem. Just a succession of new ones as the model scaled, each requiring the same discipline of testing before assuming.</p>
       </div>
 
       <div class="cs-section">
         <h3>The recognition</h3>
+        <img class="cs-recognition-badge" src="assets/scott-cook-award.png" alt="Scott Cook Innovation Award" width="300" height="300">
         <p>The Scott Cook Innovation Award was presented at the Q2 Intuit State of the Company meeting. Scott Cook cited the team's day-one mindset: treating the problem as if TurboTax Live were being built from scratch rather than incrementally improved.</p>
         <div class="cs-quotes">
           <div class="cs-quote">
