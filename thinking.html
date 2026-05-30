@@ -544,19 +544,1359 @@
     ───────────────────────────────────────────────────────────────────────
   -->
   <script type="text/markdown" data-skill="claim-audit">
-<!-- PASTE claim-audit/SKILL.md HERE (raw Markdown) -->
+---
+name: claim-audit
+status: alpha
+lifecycle: develop
+description: >
+  Audits customer or business claims against the underlying source data —
+  qualitative or quantitative — and produces a structured comparison of the
+  claim as stated vs. what the source actually supports. Catches "claim drift,"
+  where a study finding or a metric gets compressed into a stronger statement
+  than the data allows. Works for any designer in any program via a one-time
+  setup flow that captures program-specific data sources, partners, and
+  evidence norms. Outputs are framed as "evidence integrity for my own work,"
+  not as ammunition against the claimant. Typical trigger phrases include
+  'check this claim', 'audit this finding', 'does the data actually say that',
+  'where is this from', 'verify this stat', 'is this transferable'.
+  Do NOT use for: subjective design feedback (use @design-critique), live
+  implementation verification (use @visual-qa), or running new research
+  (use @research-interview / @ids:research).
+knowledge:
+  - config/user-profile.yaml
+  - config/settings.yaml
+  - workspace/projects/  # per-program configs live in user's personal workspace
+next_steps:
+  - "@research-interview — if the audit surfaces a gap that requires new qual research, run this next"
+  - "@ids:research — for structured qual synthesis once new research is gathered"
+  - "@design-critique — once claim is validated and design rationale is being drafted"
+  - "@transferability-check — paired skill; once the audit passes, transferability-check evaluates whether the validated claim applies to the current decision context"
+upstream_integrations:
+  - "AI research-running tools (e.g. 3X hackathon tool by Ngoc Tran & Melrose Huang) — treat their outputs as canonical qual sources provided they cite underlying study artifacts"
+---
+
+# Claim Audit
+
+Compare a customer or business claim against its underlying source data and produce a structured drift assessment — what the claim says vs. what the source actually supports. Works for both quantitative claims (test results, funnel metrics, attribution) and qualitative claims (research findings, customer themes, VoC summaries).
+
+> **Attribution:** Original skill. Designed for the CG PDLC pipeline — sits across the full lifecycle as a evidence integrity check. Output is consumed by the designer for their own rationale documentation, and optionally shared with researchers, DS partners, or leadership.
+>
+> **Framing principle:** All outputs are positioned as the user maintaining evidence rigor in their own work, not as a critique of the person making the claim. Functionally identical to a rebuttal, politically deployable as self-discipline.
+
+## When to Use
+
+- Before incorporating someone else's claim into your own design rationale, deck, or doc
+- Before stating a customer or business claim in stakeholder communication
+- When a claim is being used to justify a decision and you want to verify the supporting evidence
+- When a finding is being applied to a context different from where it was measured (transferability question — pair with `@transferability-check` if available)
+- As a pre-CER / pre-readout check on customer or quant claims in the deck
+- When inheriting a "customer truth" or "the data shows" claim from upstream documentation
+
+## When NOT to Use
+
+- The claim is a stated hypothesis or strategy POV (not yet evidence-backed by design — don't audit hypotheses against data that doesn't exist)
+- You're doing primary research, not auditing — use `@research-interview` or `@ids:research`
+- You're evaluating the *design itself* against principles — use `@design-critique`
+- You're checking a live build against the design spec — use `@visual-qa`
+- The claim is about engineering implementation quality — use `@launch-readiness`
+
+## Design Philosophy: Canonical-First
+
+The skill is built around a structural reality of CG's data infrastructure: **the same-named metric can mean materially different things in different views, because analysts ship personal-logic dashboards as if they were authoritative**. ECC alignment is aspirational rather than enforced. A claim cited from a Qlik or Tableau dashboard may be internally consistent but not reconciled to canonical.
+
+The skill addresses this by always anchoring to the canonical layer first — ECC where possible, the `cgds:` reference skills where ECC doesn't cover the question, documented research artifacts for qual claims. Dashboards and personal analyst views are treated as **evidence of what's being cited**, not as truth-sources in their own right. The audit standard is always "does this match the canonical definition?"
+
+For claims that cannot be anchored to a canonical metric — counterfactuals, novel framings, constructs presented as if measured — the audit's strongest finding is precisely that fact. The claim cannot be verified by data alone, regardless of which dashboard the claimant looked at.
+
+The audit's other durable contribution is its **navigation layer**: for any claim the user audits, the skill surfaces where the canonical truth-source lives, which dashboards report adjacent metrics, who owns those dashboards, and what known fragmentation issues exist. Most designers and PMs can't answer those questions on their own — and answering them is half the daily-data-use problem at CG. The skill, used over time, builds the user's literacy of the CG data ecosystem.
+
+## Settings Awareness
+
+Read `config/settings.yaml` before producing output:
+- `output.verbosity` — concise: drift assessment + corrected claim only; standard: full structured comparison; detailed: includes raw source data and methodology trace
+- `output.default_format` — markdown file (`claim-audit-report.md`) or inline artifact
+
+Read `config/user-profile.yaml` for:
+- Designer's program(s) — determines which `knowledge/programs/<program>/claim-audit-config.yaml` to load
+- Connected MCPs — determines which data sources the skill can reach (Databricks, Amplitude, HeyMarvin, etc.)
+
+## First-Run Setup
+
+On first invocation, the skill triggers `claim-audit-setup` (see [references/setup-flow.md](references/setup-flow.md)) to capture program-specific context. The setup writes to the user's personal workspace at `workspace/projects/<program-slug>/claim-audit-config.yaml` and runs once per program. Subsequent runs read from the config.
+
+The skill is designed for any user in any program at CG. It ships without curated program configs and makes no assumptions about which programs exist or what data infrastructure they use. Each user describes their own context through the setup flow. The repo includes one annotated example config (`references/example-config.yaml`) for reference only.
+
+Setup captures:
+1. **Program identification** — name, designer's role, strategic focus areas
+2. **Data sources for quant claims** — which warehouses (Databricks, Amplitude, ECC), canonical tables, accepted attribution models, relevant `cgds:` helper skills
+3. **Data sources for qual claims** — research platforms (HeyMarvin, UserTesting), past research repositories (Drive folders, NotebookLM corpora), customer segments in scope
+4. **Recurring artifacts that contain claims worth auditing** — weekly readouts, strategy docs, experiment readouts
+5. **Partners** — designated researcher(s), DS partner(s), PM/PD relationships
+6. **Confidence thresholds for this program** — required evidence level for design rationale, for stakeholder communication, program-specific norms
+
+The setup also detects available MCPs and adapts the skill's reach to what's connected. If Databricks is not available, the skill warns that quant audits requiring Databricks tables will be unavailable until configured, and walks the user through enabling it from the cgpm-open-market connectors template.
+
+## Process
+
+### Step 1 — Determine Mode
+
+The skill operates in three modes. Auto-detect from the input phrasing, or ask:
+
+| Mode | Trigger | Output |
+|------|---------|--------|
+| **Auditing** | User is examining a claim made by someone else, or considering inheriting one | Drift assessment + corrected claim with proper qualifications |
+| **Authoring** | User is writing their own claim and wants to validate it before stating | Confidence-labeled claim with source citation built in |
+| **Gap surfacing** | User is working on a design decision and wants to surface which claims they'd need to support it | Prioritized list of evidence gaps + suggested next moves |
+
+### Step 2 — Parse the Claim
+
+Capture from input:
+1. **Claim as stated** — verbatim quote if available
+2. **Claim type** — quant, qual, or hybrid (e.g. survey results expressing customer sentiment)
+3. **Source pointer** — deck slide, Slack message, doc URL, study ID, dashboard link, or "unknown / not cited"
+4. **Context where claim is being used** — design decision it's supporting, audience it'll be presented to, stakes (informational / decisional / strategic)
+
+### Step 3 — Canonical Anchor Check (run first, always)
+
+Before any drift checking, the audit's first job is to identify whether the claim can be anchored to a **canonical source**. The CG data ecosystem is fragmented — analysts ship personal-logic dashboards as if they were authoritative, ECC alignment is aspirational rather than enforced, and the same-named metric can mean materially different things in different views. The audit's first move is to surface where the canonical truth-source lives for this claim, and whether the claim's cited source agrees with it.
+
+**Canonical sources, in order of precedence:**
+1. **ECC (Executive Command Center)** — the canonical layer for cross-product TT metrics. If a claim is about a metric ECC reports, ECC is the anchor.
+2. **cgds skills** — `cgds:metric-lookup`, `cgds:scorecard-sample-queries`, `cgds:business-glossary`, `cgds:funnel-metrics`, `cgds:itt-calculation`, `cgds:tto-key-tables`, `cgds:cjdm-tables`. These skills exist precisely because the analyst-personal-logic problem is recognized; they publish the canonical definitions and queries.
+3. **Documented research artifacts** — for qual claims, a HeyMarvin study, NotebookLM corpus entry, or program research repository.
+
+**Canonical anchor check process:**
+
+1. **Identify the metric or measure cited.** What is the claim actually a claim about? "AE units" → which canonical metric (S2C? Completes? Auth+Start chain?)? "T2A" → what definition? "Customers want X" → what study?
+2. **Route to the canonical layer.** Call the relevant cgds skill (or qual repository) to surface the canonical definition.
+3. **Determine whether a canonical anchor exists for this exact claim.** Three possible states:
+   - **Anchored:** the claim maps cleanly to a canonical metric or study. Audit can proceed against canonical.
+   - **Adjacent:** the claim doesn't map cleanly, but a related canonical metric exists. Audit proceeds against the closest canonical with the gap explicitly noted.
+   - **No canonical anchor:** the claim is a construct (e.g. counterfactual attribution like "SEO-led work contributed 25% of units") that cannot be anchored to any canonical metric. The audit's strongest finding is this fact, and the claim cannot be verified by data alone.
+
+**Output of canonical anchor check (always included in audit):**
+
+| Canonical anchor | Status | Notes |
+|------------------|--------|-------|
+| Canonical metric identified | [yes / adjacent / no] | [which metric, or "construct does not map"] |
+| Canonical definition pulled | [yes / no] | [source: ECC, cgds:metric-lookup, etc.] |
+| Claim's cited source matches canonical | [yes / no / N/A] | [if no: where do they disagree?] |
+
+### Step 4 — Source Interrogation
+
+Based on canonical anchor status and available MCPs, route the source interrogation:
+
+**For quant claims with a canonical anchor:**
+- Pull the canonical definition and current value via the relevant cgds skill
+- If the claim cites a specific source (dashboard, query, deck), pull or inspect that source too
+- Compare: claim value vs. canonical value vs. cited-source value (three-way comparison)
+- Call cgds sub-skills as helpers based on program config:
+  - `cgds:metric-lookup` — canonical metric definition (always first)
+  - `cgds:scorecard-sample-queries` — canonical ECC scorecard SQL
+  - `cgds:business-glossary` — term-level definitions
+  - `cgds:mix-adjustment` — if the claim is a comparison and composition shifts are plausible
+  - `cgds:itt-calculation` — if claim is against a target/forecast
+  - `cgds:funnel-metrics` — for stage definitions
+  - `cgds:pre-auth-vs-post-auth` — if the claim's table layer is ambiguous
+  - (Plus any program-specific cgds skills from the config)
+- Verify: source table, date range, cohort definition, metric definition, sample/power if test result, mix-adjustment status, attribution model
+
+**For quant claims anchored to a non-canonical dashboard (Qlik, Tableau, personal analyst workbook):**
+- The dashboard is evidence of what's being cited — not the audit's truth-source
+- Identify which canonical metric the dashboard *should* match if it were ECC-aligned
+- Inspect the dashboard for its construction logic: filters applied, date range, segments included/excluded, calculated fields, annotations or caveats in the view
+- If MCP access to the dashboard system exists (Tableau MCP, etc.), pull the dashboard's current state and metadata programmatically; otherwise, walk the user through a structured manual inspection
+- Compare: dashboard's number vs. canonical metric value
+- If they disagree, surface the gap as a finding — the claim is anchored to a non-canonical view that has not been reconciled to ECC
+
+**For quant claims with no canonical anchor (constructs, counterfactuals, novel framings):**
+- The audit's strongest finding is the absence of a canonical anchor
+- Identify what canonical metrics are *adjacent* to the claim — what could be measured that would inform the construct?
+- For counterfactual claims ("if X hadn't happened, we'd have had Y fewer units"), surface that the claim requires either a test, a holdout, or a model with stated assumptions — and ask whether any of those exist
+- The audit output explicitly states the claim cannot be verified by data alone, and walks through what would be required to construct supporting evidence
+
+**For qual claims:**
+- If source is identified (e.g. HeyMarvin study ID): pull the study artifact, sample size, methodology, conditions
+- If source is unidentified: use program config to search past research repositories (Drive folders, NotebookLM, HeyMarvin library)
+- Verify: study ID, sample size, conditions, method, recency, customer segments in scope
+
+**For hybrid claims (e.g. "85% of customers prefer X" from a survey):**
+- Route to both quant and qual checks
+- Verify quant (sample size, methodology, statistical confidence) AND qual (question wording, response options, segment composition)
+
+### Step 4.5 — Navigation Layer (for any user)
+
+The skill answers a question most designers and PMs can't answer on their own: **for a claim about [topic], where does the canonical truth-source live, who owns the relevant artifacts, and what known fragmentation issues exist?**
+
+This navigation output is included in every audit, regardless of mode. It is one of the skill's most durable contributions — over time, it builds the user's literacy of the CG data ecosystem and reduces the per-claim research burden.
+
+**Navigation output (always included):**
+
+| Question | Answer |
+|----------|--------|
+| Canonical truth-source for this claim type | [ECC / cgds:metric-lookup / specific research study / "no canonical exists"] |
+| Adjacent canonical metrics | [list with brief descriptions] |
+| Known dashboards reporting this metric | [list, with owner if known from program config] |
+| Known analyst owners | [from program config, if applicable] |
+| Known fragmentation issues for this metric | [from cgds skills or program config known_definition_pitfalls] |
+| Other places this claim might be cited | [past CER decks, exec updates, etc. from program config] |
+
+### Step 5 — Run the Drift Check
+
+Compare claim as stated to what the canonical source (or closest adjacent canonical) actually supports. Identify drift along these dimensions:
+
+**Magnitude drift:**
+- Numbers rounded up, intervals widened, sample sizes implied larger than actual
+
+**Specificity drift:**
+- Conditions stripped from the claim (segment, surface, time period, device)
+- Caveats dropped (concurrent experimentation, known confounds)
+
+**Attribution drift:**
+- Causation implied where correlation was measured
+- Single-factor attribution where multiple factors contributed
+- Different attribution model than the canonical definition
+
+**Population drift:**
+- Aggregate cited to justify segment-specific decision
+- Segment-specific finding generalized to aggregate population
+- Customer-type drift (one type's behavior applied to another)
+
+**Freshness drift:**
+- Stale numbers cited as current
+- Outdated study findings cited without acknowledging period
+
+**Definition drift:**
+- Metric defined one way at canonical source, interpreted another way in claim
+- Same metric name but different table/source than claimant assumes
+- Non-canonical dashboard reporting a number that does not match ECC's canonical definition
+
+**Canonical-anchor drift:** (specific to claims that cannot be anchored to a canonical metric)
+- Claim is a construct (counterfactual, novel framing) presented as if measured
+- Required underlying tests, holdouts, or models do not exist
+- Claim is non-falsifiable as stated
+
+**Dashboard drift:** (specific to claims anchored to Qlik, Tableau, or analyst-personal dashboards)
+- **Filter drift** — dashboard viewed with one filter state; claim cites a number from a different state
+- **View drift** — claim cites aggregate when dashboard surfaces segment, or vice versa
+- **Snapshot drift** — claim cites a value that was true on day of viewing but dashboard has since updated
+- **Annotation drift** — dashboard caveats in footnotes or sub-headers stripped when the number was quoted
+- **Construction drift** — dashboard's calculated fields, segment definitions, or attribution rules differ from canonical; the dashboard's number is internally consistent but not ECC-aligned
+
+### Step 6 — Produce the Output
+
+**For auditing mode:**
+
+```markdown
+# Claim Audit: [short claim description]
+
+**Date:** [date]
+**Claim type:** [quant / qual / hybrid]
+**Source consulted:** [source pointer + verified at]
+**Program context:** [program name from config]
+
+## Claim as stated
+
+> "[verbatim claim or close paraphrase]"
+
+## Canonical anchor check
+
+| Canonical anchor | Status | Notes |
+|------------------|--------|-------|
+| Canonical metric identified | [yes / adjacent / no] | [which metric, or "construct does not map"] |
+| Canonical definition pulled | [yes / no] | [source: ECC, cgds:metric-lookup, etc.] |
+| Claim's cited source matches canonical | [yes / no / N/A] | [if no: where do they disagree?] |
+
+## Navigation
+
+| Question | Answer |
+|----------|--------|
+| Canonical truth-source for this claim type | [ECC / cgds skill / specific study / "no canonical exists"] |
+| Adjacent canonical metrics | [list] |
+| Known dashboards reporting this metric | [list, with owner if known] |
+| Known analyst owners | [from config] |
+| Known fragmentation issues | [from cgds skills or config] |
+| Other places this claim might be cited | [from config] |
+
+## What the canonical source actually supports
+
+[Structured breakdown of what the canonical data or study actually shows. For quant: canonical metric value with proper qualification — date range, cohort, attribution, definition, sample. For qual: the actual finding with conditions, sample size, methodology, segments.]
+
+## What the claim's cited source actually supports (if different from canonical)
+
+[If the claim cited a non-canonical dashboard or query, what that source actually shows — and how it differs from canonical. This section is often the most useful — it's where dashboard drift, construction drift, and definition drift get surfaced.]
+
+## Drift assessment
+
+| Drift type | Detected | Severity | Notes |
+|------------|----------|----------|-------|
+| Magnitude | [yes/no] | [minor / material / severe] | [details] |
+| Specificity | [yes/no] | [minor / material / severe] | [details] |
+| Attribution | [yes/no] | [minor / material / severe] | [details] |
+| Population | [yes/no] | [minor / material / severe] | [details] |
+| Freshness | [yes/no] | [minor / material / severe] | [details] |
+| Definition | [yes/no] | [minor / material / severe] | [details] |
+| Canonical-anchor | [yes/no] | [minor / material / severe] | [for constructs / counterfactuals] |
+| Dashboard (filter / view / snapshot / annotation / construction) | [yes/no] | [minor / material / severe] | [if claim anchored to a dashboard] |
+
+**Overall:** [Correct within tolerance / Directionally correct but overstated / Directionally correct with material qualifications missing / Materially wrong / Unsupported by source / Construct not verifiable by data alone]
+
+## Corrected claim (suggested)
+
+> "[Reworded claim with proper qualifications, source citation, and confidence level appropriate to the underlying evidence]"
+
+## Confidence ladder
+
+Where this claim sits after audit:
+- [ ] **1 — Stakeholder hypothesis** (no evidence)
+- [ ] **2 — Secondary signal** (indirect or anecdotal evidence)
+- [ ] **3 — Triangulated qual or quant** (specific evidence, limited generalizability)
+- [ ] **4 — Validated qual + quant** (both methods, transferable conditions)
+
+## Suggested use
+
+[Plain-language guidance: can the user incorporate this claim into their work? Under what qualifications? Should they flag the drift to the researcher / DS partner / claimant? Or just maintain a more accurate version for their own use?]
+```
+
+**For authoring mode:**
+
+Same template, but the user is iterating *toward* a defensible claim rather than auditing an existing one. Output is the confidence-labeled claim plus the source citation embedded.
+
+**For gap surfacing mode:**
+
+```markdown
+# Evidence Gaps: [design decision being supported]
+
+**Design decision:** [what the user is trying to support]
+**Customer claims this would require:** [list]
+**Quant claims this would require:** [list]
+
+## Existing evidence
+
+[What's already available in the program's data and research repositories]
+
+## Gaps
+
+[Specific claims that lack supporting evidence — prioritized]
+
+## Suggested next moves
+
+[For each gap: pull existing signal (which source), run cheap study (suggested method), or flag as unsupported and proceed with explicit hypothesis status]
+```
+
+### Step 6 — Save the Output
+
+Save as `claim-audit-report.md` in the same directory as the work being supported (e.g. the deck folder, the design rationale doc, the project workspace). Include the date and a short title in the filename if multiple audits will live in the same directory: `claim-audit-2026-05-12-seo-attribution.md`.
+
+## Special Cases
+
+### Documented research being overridden by undocumented assertion
+
+A specific high-stakes pattern. A senior stakeholder makes a directional qual claim — about customer priority, preference, hierarchy, or need — that contradicts what documented research actually concluded. The claim is plausible-sounding. It gets repeated. Over time, repetition substitutes for evidence and the claim becomes organizational orthodoxy. Strategic decisions get made against it. The documented research, which had the right answer, sits unused in a Drive folder.
+
+This is functionally a contradiction between **stakeholder-level 1 confidence** (hypothesis) and **canonical-level 4 confidence** (validated qual + quant). The audit's job is to surface that confidence gap as a structural fact, not to argue with the claimant.
+
+**Detection:**
+- During the Canonical Anchor Check, the skill flags when the canonical source *exists* and the claim *contradicts it* — distinct from "no canonical anchor" (SEO 25% case)
+- Hierarchy drift, methodology drift, and aggregation drift are common drift types in this case
+
+**Output emphasis for this case:**
+- The audit's strongest finding is the direct contradiction between the claim and documented research
+- The corrected claim is the documented research finding, with full citation
+- The "Suggested use" section emphasizes the political deployability:
+  - Build a durable record (date, context, who heard it) every time the claim is repeated
+  - Generate a researcher feedback note so the canonical-research owner knows their work is being overridden
+  - Anchor your own design rationale to the canonical research with explicit citation — don't argue against the claim, cite the documented finding
+  - Share the audit with the designated researcher partner; they have standing to defend their own methodology
+  - For high-stakes cases, share with design leadership (Laura or equivalent in program config) as an evidence-integrity concern, not as critique of the claimant
+
+**Why this matters structurally:**
+This is the failure mode where research investment is wasted at scale. CG funds research. Researchers do good work. Findings get documented. Then verbal assertion overrides those findings in practice, and the research budget effectively produced nothing. The skill, used routinely, creates organizational friction against this dynamic. It doesn't fix it. But it makes every override visible and citeable, which is the precondition for fixing it.
+
+### Contradicting findings between research groups (e.g. product research vs. marketing research)
+
+A related pattern that often explains *how* the previous case arises. CG typically has multiple research functions — product/design research, marketing research, sometimes a separate brand or insights team. Each group runs its own studies, often using different methodologies, sampling different populations, asking different questions. The findings frequently contradict each other.
+
+A stakeholder hearing a finding from one group (often the one most accessible to leadership) may sincerely repeat it as "what customers want" without realizing the other group's research found something different. The compressed-claim problem then compounds: not only is a stakeholder repeating an undocumented version of a finding, the finding itself is contested between research groups.
+
+**Detection:**
+- During the Canonical Anchor Check, the skill searches **all** documented research repositories in the program config, not just the one most accessible
+- When the skill finds contradicting findings on the same question, that contradiction becomes a first-class part of the audit output — neither finding gets privileged over the other on the basis of which was heard louder
+- The skill explicitly identifies which research group produced each finding, and the methodology / sample / question / segment that distinguishes them
+
+**Output emphasis for this case:**
+- A new section in the audit output: **Contradicting canonical findings**
+- For each contradicting finding: source, methodology, sample, segment scope, question asked, conclusion
+- Analysis of why the findings differ — different segments? different question framings? different methods? Each contradiction has structural reasons that are themselves the finding
+- The "Suggested use" section recommends:
+  - Do not adopt either finding as singular truth; both are partial views
+  - Surface the contradiction explicitly in any design rationale that touches the question
+  - Where the contradicting findings reflect a real methodological gap (e.g. marketing research asks "would you value speed?" — a leading question; product research asks "what is most important to you?" — open-ended), the audit names the methodological asymmetry
+  - Where possible, propose a joint research action — a single study that resolves the contradiction — and route to both research groups
+- This is also a case where partner workflows matter — the audit can generate notes to **both** research groups so they each know their finding is being contradicted by the other
+
+**Why this matters structurally:**
+Contradicting research findings between groups are a chronic feature of CG, not a bug to be fixed by individual designers. The skill's job is not to adjudicate which group is right. The skill's job is to make the contradiction *visible* every time a claim is made — so that strategic decisions are made with explicit awareness of the disagreement, rather than by default-favoring whichever finding was heard first or loudest.
+
+Over time, routine surfacing of these contradictions creates pressure for the two research groups to coordinate methodologies, or at minimum to publish their findings with enough methodological detail that downstream users can interpret which finding applies to which decision context. That's a meaningful structural contribution.
+
+### Program config implications
+
+Both special cases above depend on the program config capturing **all** research sources, not just the ones most accessible to the designer. The setup flow's qual section should explicitly prompt:
+
+- "Are there multiple research groups producing findings for this program? (e.g. product research, marketing research, brand insights, etc.) — list each separately"
+- "Where do each group's findings live? (separate repositories, different platforms, different cadences)"
+
+Without this, the skill defaults to whichever research source is most accessible, and the contradicting-findings case is invisible.
+
+### AI-assisted research output as a source
+
+A growing share of research findings at CG come from AI-assisted workflows — synthesis tools, theming tools, interview-analysis tools, cross-study summarization. Some of these are first-party tools shipped through the cgpm-open-market pipeline (e.g. research-running tools being built in the 3X PM/XD hackathon). Others are ad-hoc uses of Claude or other AI by individual researchers and designers.
+
+AI-assisted research output is not categorically more or less trustworthy than human-produced research, but it has a distinct set of confidence considerations that the audit should treat as first-class:
+
+**Distinct trust dimensions for AI-assisted findings:**
+- **Source-anchoring** — did the AI tool anchor its synthesis to canonical study artifacts, or to whatever it had easiest access to? Claims sourced from AI synthesis without explicit canonical anchoring should be flagged as having weaker provenance than the underlying studies they summarize.
+- **Confidence calibration** — AI outputs tend to read with uniform confidence regardless of underlying evidence strength. A 4-confidence claim and a 1-confidence claim, both produced by AI, can sound equally authoritative. The audit should re-anchor confidence to the underlying evidence, not to the rhetorical confidence of the AI output.
+- **Aggregation transparency** — did the AI surface contradictions in the underlying research (e.g. between product and marketing research groups), or did it flatten them into a single confident-sounding finding? The latter is a serious failure mode and should be flagged as aggregation drift.
+- **Methodological erasure** — AI synthesis often strips methodological caveats (sample size, conditions, segments) from individual studies when aggregating. The audit should require those caveats to be reconstructed before treating AI-synthesized claims as canonical.
+
+**Upstream integration:**
+The skill is designed to route to upstream AI research tools as canonical sources when they're available and when their outputs are themselves anchored to canonical studies. Specifically:
+- If a research-running tool ships in the cgpm pipeline (e.g. the 3X hackathon tool by Ngoc Tran and Melrose Huang), `/claim-audit` should treat its outputs as legitimate qual sources *provided they cite underlying study artifacts*. Outputs without underlying study citations are treated as synthesis hypotheses, not canonical findings.
+- Where possible, `/claim-audit` and upstream research tools should share a common confidence framework (the 4-level ladder used throughout this skill) and a common config schema for research groups, so that confidence labels travel cleanly between tools.
+
+**Coordination note:**
+Skills that audit research output and skills that produce research output address adjacent parts of the same evidence-integrity problem. They should be designed to interoperate from the start, not to overlap or compete. If you are building or maintaining a research-running tool, contact the maintainer of this skill (and vice versa) to align on shared infrastructure before either tool ships widely.
+
+## Output Format Details
+
+See [references/output-templates.md](references/output-templates.md) for full templates for each mode.
+
+## Scale-Adaptive Behavior
+
+- **Single claim audit:** Inline output. No need for a saved file unless the user wants a defensible artifact.
+- **Deck or document scan:** Produce a multi-claim audit report with a findings index. Group by severity (claims that materially affect a decision vs. claims that are background context).
+- **Pre-readout review:** Run against the full deck. Flag any claim without a source citation or with a detected drift. Produce a "claims requiring correction" list before the readout.
+
+## Common Pitfalls
+
+- **Routing to the wrong data source.** The biggest risk. If the skill pulls from MAM when the claim's grain is MAAM, the output number will be confidently wrong. The skill should always show its work — which tables, date range, attribution model — and require human sign-off before any audit output is treated as final.
+- **Treating the skill's output as the rebuttal.** The output is *your verification* of the evidence, not a public document. How you use it (cite it, share it, hold it in reserve) is a separate judgment call. The political framing of "evidence integrity for my own work" only holds if you actually use it that way.
+- **Auditing claims that don't need auditing.** Not every claim in a deck is decision-affecting. Focus the audit on claims that are being used to justify resource allocation, design direction, or stakeholder commitments. Background context claims rarely warrant the effort.
+- **Mistaking absence of source for absence of validity.** A claim without a cited source isn't automatically wrong — sometimes the source exists but wasn't cited. The skill should ask before declaring "unsupported."
+- **Confidence inflation by skill output.** Once the skill produces a structured comparison, there's a temptation to treat the corrected claim as authoritative. The corrected claim is still subject to all the same source-quality questions as the original. State your confidence honestly.
+- **Skipping the political framing.** Especially when auditing claims by senior stakeholders. The skill's value depends on being usable without burning relationships. If the output reads as "the VP is wrong," the skill becomes a weapon and gets banned. Frame as "before I incorporate this into my own work, here's what the source actually supports."
+
+## Design System Evolution
+
+The skill is intentionally program-agnostic. It does not ship with curated configs for specific CG programs and makes no assumptions about which programs are canonical. Each user builds their own config through setup, based on their actual context.
+
+Over time, as more designers across CG adopt the skill, users on the same program can share their configs informally — comparing data sources, attribution norms, known pitfalls, and rigor requirements. This makes the evidence infrastructure of each program more explicit and easier for new designers to onboard into. That's a structural contribution to how customer claims propagate across CG, but it emerges from use rather than being baked in.
+
+## Working With Partners
+
+### Researchers
+- Setup captures the designated researcher(s) for the program
+- When the skill detects a qual claim citing a study, it can generate a "researcher feedback note" — short message to the researcher flagging how their study is being cited and whether the citation is faithful to the original finding
+- When the skill surfaces an evidence gap, it can generate a "researcher conversation prep" artifact — one-pager teeing up a conversation about whether to study the question, with design context and existing signal pre-loaded
+- This makes the skill amplifying rather than replacing for researchers — they get visibility into how findings are used downstream and pre-scoped intake for new studies
+
+### DS partners
+- Setup captures the designated DS partner(s) for the program
+- For quant claims that the audit flags as definition-drift or attribution-drift, the skill can optionally generate a "DS clarification request" — a structured ask that surfaces the ambiguity without challenging the original analysis
+
+### Leadership claims
+- The skill does not attempt to "rebut" leadership claims as a feature
+- Outputs are always framed as the user's own evidence-integrity check
+- If the audit reveals material drift in a high-profile leadership claim, the skill suggests holding the audit output for use if the claim is invoked against a decision the user wants to challenge — not for proactive correction
+
+## Roadmap
+
+**v1 (implemented):**
+- Setup flow + program config schema
+- MCP detection and graceful degradation
+- Quant audit (Databricks, Amplitude — when available; Tableau, Splunk as MCPs are added)
+- Qual audit (HeyMarvin, NotebookLM, Drive research repositories)
+- Hybrid claim audit (survey, NPS/PRS, GTKM data)
+- All three modes (auditing, authoring, gap surfacing)
+- Researcher and DS feedback note generation
+- Deck-scan mode (multi-claim audit against a single document)
+
+**v2 (planned):**
+- Auto-detection of claims in a Slack thread or Google Doc (scan + audit pipeline)
+- Confidence ladder learning — skill learns the user's typical confidence calibration over time and flags claims that diverge
+- Cross-program claim transfer (paired with `@transferability-check`)
+- "Claim drift alert" — proactive flag when a claim cited in one of the user's docs is being compressed in a downstream doc
+
   </script>
 
   <script type="text/markdown" data-skill="create-about-me">
-<!-- PASTE create-about-me/SKILL.md HERE (raw Markdown) -->
+---
+name: create-about-me
+status: alpha
+lifecycle: develop
+description: >
+  Generates a structured about-me file capturing how a person thinks,
+  produces work, operates with other functions, and what they are uniquely
+  good at. The interpretive layer of who someone is as a collaborator,
+  not a clone of their Insight or Slack profile. Works for any role:
+  designer, PM, engineer, researcher, manager, analyst, leader. Designed
+  to be created once and refined over time as Claude builds context with
+  the user across sessions. Output splits into three tiers (public,
+  trusted, private) with user control over what goes into each. Paired
+  with /offboard-program and /onboard-program for knowledge transfer
+  across program transitions and reorgs.
+  Typical trigger phrases include 'create my about-me', 'build an about-me
+  file for me', 'help me document how I work', 'set up my profile for
+  onboarding'. Do NOT use for: replacing Insight or HR profiles (those
+  capture role/title/team and should be linked, not duplicated),
+  performance review documentation (use calibration tools), or one-off
+  collaboration briefs (those are program-specific, not personal).
+knowledge:
+  - config/user-profile.yaml
+  - config/settings.yaml
+next_steps:
+  - "@offboard-program — once an about-me file exists, use this when transitioning out of a program to package program knowledge alongside a relevant slice of your about-me for the next person"
+  - "@onboard-program — when joining a new program, this skill pulls about-me files for the people you'll work with, including yours so they can be referenced"
+---
+
+# Create About-Me
+
+Generate a structured about-me file that captures how a person thinks, produces work, and collaborates. Output is split into three tiers (public, trusted, private) with the user controlling what goes into each.
+
+> **Attribution:** Original skill. Part of the about-me knowledge transfer system. Designed to make program transitions and reorgs less lossy by capturing the interpretive layer of who someone is as a collaborator. This is the layer that doesn't fit in any existing profile system.
+
+## When to Use
+
+- Creating an about-me file for the first time
+- Refreshing an existing about-me after a meaningful change in role, scope, or operating context
+- Onboarding a new collaborator who would benefit from understanding how the user works
+- Preparing for a program transition (offboarding) where the about-me feeds into the handoff package
+- When the user explicitly asks to document how they work
+
+## When NOT to Use
+
+- Replacing or duplicating Insight, Workday, LinkedIn, or Slack profile content (those are the source for role/title/team; this skill links to them, doesn't replace them)
+- Performance review or calibration documentation (use dedicated tools for that)
+- One-off collaboration briefs that are program-specific rather than person-specific
+- Generating profiles for people who haven't asked for one (this is self-authored only)
+
+## Philosophy: The Interpretive Layer
+
+Existing profile systems answer "who is this person and what do they do." This skill answers "how does this person think and how do I work with them effectively."
+
+The value comes from observations only visible after working with someone over time: how they reason through ambiguity, where they have leverage and friction with other functions, what they're uniquely good at, blind spots they've come to recognize, working preferences that aren't formalized anywhere.
+
+Claude is uniquely positioned to capture this because it builds context with a person across many sessions. The skill draws from that accumulated context, plus the user's own articulation, plus data sources where appropriate (Slack collaboration history, memory files, calibration docs). It does not invent. When context is insufficient, it asks.
+
+The about-me file is a personal artifact. The user owns it, controls what tier each piece of content sits in, and decides what travels and where.
+
+## Settings Awareness
+
+Read `config/settings.yaml` before producing output:
+- `output.verbosity` — concise: minimal viable file, public tier only; standard: all three tiers, recommended defaults; detailed: all three tiers with extensive prompts for elaboration
+- `output.location` — where to save the generated files (default: `workspace/about-me/`)
+
+Read `config/user-profile.yaml` for:
+- User name, role, current focus areas (used to seed the file)
+- Connected MCPs (used to determine which data sources can be drawn from)
+
+## Process
+
+### Step 1 — Establish what's already known
+
+Before asking anything:
+
+1. **Run `/consolidate-memory` first.** This tidies and sharpens whatever is already on disk before drafting begins. Stale or overlapping memory files produce a weaker draft. Consolidating first means the skill works from the cleanest possible baseline.
+
+2. **Scan for existing context:**
+- **Explicitly read CLAUDE.md** from the current working directory and from `~/.claude/CLAUDE.md` if it exists. Do not assume this file has been loaded — read it directly before proceeding.
+- Check for an existing about-me file at the expected location. If one exists, treat this as a refresh, not a fresh creation
+- Check memory files for stored user context
+- Check any project-level memory for stated working preferences
+- Check past artifacts (calibration docs, retros, growth decks) in the workspace that may already articulate how the user works
+
+**If Slack is connected, run targeted searches before drafting anything.** Do not treat Slack as a passive source — actively search for signals about this specific person. Run all of the following:
+- Messages the user sent that got reactions, replies, or visible traction — signals of ideas that landed
+- Threads where the user reframed a problem, shifted a discussion, or challenged a direction
+- Messages where others tag the user for expertise, ask for their opinion, or bring them in to unblock something
+- Shoutouts, callouts, retro recognition, launch posts, or end-of-season messages mentioning the user
+- How others introduce or describe the user to new people or in cross-functional contexts
+- The user's own messages in design reviews, planning threads, and strategy discussions — these reveal how they think and what they prioritize
+
+This Slack mining should happen before drafting "how I think," "how I produce work," and "what I'm uniquely good at." The signal is there — the skill just has to look for it.
+
+**If memory is not found:** Surface this explicitly before proceeding. Tell the user: "I don't have memory files for you yet — the output will be lighter without accumulated context. Consider enabling memory and building some context across sessions before running the full skill. I can still produce a draft from Slack and CLAUDE.md, but it won't reflect the depth that comes from working together over time."
+
+Surface what was found before asking. The user should never be asked to repeat what Claude already knows.
+
+3. **Optional: pull context from Claude.ai projects.**
+
+Claude Code cannot access Claude.ai chat history. If the user works in Claude.ai projects, those conversations may contain valuable context — how they think, decisions made, working preferences, programs worked on — that isn't available here.
+
+Ask the user: "Do you use Claude.ai projects? If so, I can generate a prompt you can paste into each one to bring that context into this session."
+
+If yes:
+- Ask which projects are relevant (there may be multiple)
+- Generate this prompt for the user to paste into each project:
+
+> "Summarize everything you know about me from our conversations in this project. Include: how I think and approach problems, how I produce work, my working preferences, what programs or projects I've been working on, key decisions I've made or been part of, relationships and collaborators I've mentioned, and anything about how I like to operate that would help a new collaborator work with me effectively. Be specific — use examples from our actual conversations, not generalizations."
+
+- Wait for the user to paste the response(s) back, one per project
+- Ingest all responses as source context before drafting
+
+If no: skip entirely. Do not pressure the user to use Claude.ai if they don't.
+
+This step is optional. Some users will have rich Claude.ai project history; others won't use it at all. The skill works without it.
+
+### Step 2 — Confirm scope of the file
+
+Ask the user:
+1. Is this a first-time creation or a refresh?
+2. What's the most important reason for creating this now? (Onboarding a new collaborator, preparing for a program transition, general durability, other)
+3. Should the file include the three-tier structure (public, trusted, private), or just one tier for now?
+
+Respect the answer. Don't push to include more than the user wants.
+
+**If this is a refresh:** Do not re-walk every section. Instead, diff the existing file against what's currently known from memory, Slack, Drive, and any Claude.ai project responses. Surface only what has changed or drifted — new programs, new collaborators, new frameworks, sections that are now stale or inaccurate. Present the delta to the user: "Here's what I think has changed since your last update. Does this look right?" Ask only about the gaps and changes, not everything already confirmed.
+
+After the user confirms the delta, show the full updated public tier as it will appear post-edit — the same final gate that applies to new creation (see Step 3). Do not save any changes to the public file until the user explicitly approves the assembled result. Update `last_updated` in frontmatter on save.
+
+### Step 3 — Draft the public tier first
+
+The public tier is the lowest-risk layer and the most useful for collaborator decision-making. Drafting it first builds momentum and gives the user something concrete to react to.
+
+**Honor the tier scope set in Step 2.** If the user said "public only," do not draft or show trusted or private tier content at all — not even as suggestions. If they said "all three tiers," proceed through all. If they said "just trusted for now," skip public and private. The user's answer in Step 2 is a hard constraint, not a preference to be nudged around.
+
+Public tier sections (recommended defaults, user can override per section):
+- Role, level, team, manager, current programs, past programs, focus areas (pull from existing sources; ask only for gaps)
+- **How I think**, **How I produce work**, and **What I'm uniquely good at** — these three sections follow the same evidence-first pattern:
+
+  **Source mining (run before drafting any of these three sections):**
+  Before drafting, mine all available sources for evidence:
+  1. **CLAUDE.md and memory files:** Extract stated preferences, working patterns, and any self-descriptions the user has already written.
+  2. **Slack signals (if connected):** Search for: messages where the user is tagged for expertise or brought in to unblock something; threads where the user reframes a problem or shifts the direction of a discussion; compliments, callouts, retro shoutouts, and launch recognition; how others introduce or describe the user to new people. These are the clearest external signal of how the user actually thinks and what they're actually good at.
+  3. **Feedback artifacts (if available):** Search Drive and the workspace for calibration docs, growth decks, peer feedback, performance narratives, and retros. Feedback written by others is often the most accurate articulation of someone's strengths — more reliable than self-report.
+
+  **Drafting from evidence:**
+  Use what was found to generate draft content for each section. Where evidence is direct (e.g. a calibration doc says "X is uniquely good at making complex tradeoffs legible to non-technical stakeholders"), use it verbatim or lightly paraphrased. Where evidence is inferential (e.g. Slack patterns suggest the user tends to reframe problems structurally), surface it as an observation for the user to confirm.
+
+  **Confirmation — only ask about what can't be assumed:**
+  When evidence is strong and direct (verbatim from a calibration doc, a clear Slack pattern with multiple instances, language the user wrote themselves), write it into the draft without asking. Do not confirm what is already obvious from sources — that creates friction for no reason.
+
+  Only ask when:
+  - Evidence is inferential or thin (one Slack message, an indirect signal)
+  - Two sources conflict
+  - The section has genuine gaps that can't be filled from available context
+
+  When asking is necessary, use multiple choice generated from actual evidence — not open-ended questions. Open-ended questions produce vague, socially acceptable answers. Specific options drawn from real sources produce accurate ones. The user selects what fits, rejects what doesn't, adds anything missing.
+
+  Example format when confirmation is needed:
+  > I found a few patterns I'm less certain about — want to confirm these before I include them:
+  > - A. [specific inferential observation from one source]
+  > - B. [specific inferential observation from another source]
+  > - C. None of these / tell me what's missing
+
+  Aim for 4–6 options maximum. Always include a write-in option. If context is rich, skip this step entirely and go straight to showing the draft.
+
+  **Fill in the blanks:**
+  After drafting, surface only what genuinely couldn't be sourced. Ask those gaps as multiple choice where possible, open-ended only as a last resort.
+
+- Working preferences (pull from CLAUDE.md, memory, observed patterns; confirm via multiple choice where options can be generated)
+- Historical context (pull from LinkedIn-style summary if user provides one; otherwise ask)
+- Vocabulary specific to the user's org (pull from existing CLAUDE.md or memory)
+- Collaborators (pull from Slack collaboration history if available, with cross-reference placeholders)
+
+For each drafted section, show the user the draft and ask:
+- Is this accurate?
+- What's missing?
+- Should this stay public, move to trusted, or move to private?
+
+Default tier is public for these sections, but the user can override per section.
+
+**Before moving to Step 4, show the complete assembled public tier draft and require explicit approval.** This is a final gate — the user has confirmed each section individually, but the assembled file reads differently than the parts. Ask:
+
+> "Here's the full public tier as it will appear. This is what you'd share with a collaborator or load into a shared registry. Read it as a whole — does anything land differently together than it did section by section? Anything you want to pull back, adjust, or move to a different tier before we lock it?"
+
+Do not proceed to the trusted tier or save any files until the user explicitly approves the assembled public draft. This gate applies every time the public tier is created or updated — including refresh runs.
+
+### Step 4 — Draft the trusted tier
+
+Trusted tier is for content the user would share point-to-point with a direct collaborator but not put in a public registry.
+
+Trusted tier sections (recommended defaults):
+- How I operate with other functions (PM, DS, Research, Engineering, Leadership)
+- What to tell a new collaborator about working with me
+- Known patterns and blind spots
+- What I'm not interested in
+
+Same pattern: draft from context, show user, ask for accuracy/gaps/tier confirmation.
+
+### Step 5 — Draft the private tier (optional)
+
+Private tier is local-only content the user wants to load into their own Claude sessions but never share. Skip if the user opts out.
+
+Private tier sections (suggestions, all optional):
+- Political read on the org
+- Exhaustion signals and energy management
+- Uncited observations the user finds useful for their own thinking
+
+Claude does not auto-populate this tier from observations. Instead, ask the user a few targeted prompting questions to help them populate it — most people won't fill in blank templates on their own, but will answer a direct question.
+
+For each section the user opts to include, ask one of the following:
+
+**Political read on the org:**
+- "What's your current read on the org that you wouldn't say in a meeting?"
+- "What do you think is going to change in the next 6 months that most people don't see coming yet?"
+- "Where are the real decisions being made right now — and by whom?"
+
+**Exhaustion signals and energy management:**
+- "What kind of work drains you faster than anything else?"
+- "What's a sign that you're running low — something you'd notice before others do?"
+- "What do you do to recover? What helps you reset between intense stretches?"
+
+**Uncited observations:**
+- "What do you believe about how this org actually works that you've never put in a doc?"
+- "What's something you've learned about working here that would take a new person two years to figure out on their own?"
+- "What pattern have you noticed that you keep coming back to, even if you can't fully explain it yet?"
+
+If the user skips a section, skip it. Don't pressure. These are prompts to unlock reflection, not required fields. After the user answers, write the response in the file in the user's own words — don't paraphrase or editorialize.
+
+### Step 6 — Save the files with tier markers
+
+Save as three separate files in the configured location:
+- `<person-slug>.public.md` — public tier with frontmatter `tier: public`
+- `<person-slug>.trusted.md` — trusted tier with frontmatter `tier: trusted`
+- `<person-slug>.private.md` — private tier with frontmatter `tier: private`
+
+Each file should have:
+- Frontmatter with person identifier, tier, last_updated date
+- `next_refresh_recommended` field in frontmatter — set to one of: next major program transition, next reorg, or start of next fiscal year (whichever is soonest). Surface this to the user at the end of the session so they know when to run the skill again.
+- A header noting which tier the file represents and what that means for sharing
+- The relevant sections, with section-level tier markers if a section's tier differs from the file's default
+
+### Step 7 — Surface follow-up actions
+
+After saving:
+- Confirm where the files are saved
+- Tell the user how to load them into Claude sessions (CLAUDE.md reference, memory pointer)
+- Tell the user how to update them in the future (re-run the skill, edit directly, etc.)
+- If the user has cross-references to other people who don't have about-me files yet, offer to push request notifications via the request flow
+- **Set expectations about depth.** Tell the user: "This is a foundation, not a finished product. The first run produces a solid structure but the interpretive depth — how you think, what you're uniquely good at, blind spots you've developed — gets richer as Claude builds context with you across sessions. Run this again after a few months of working together and the output will be noticeably sharper. The file is designed to grow."
+
+## Output Format Details
+
+See [references/output-templates.md](references/output-templates.md) for the detailed templates for each tier.
+
+## Trust and Control Defaults
+
+The skill enforces these defaults:
+
+- **Per-field control.** Every section, every field gets a tier recommendation but the user accepts or overrides per item. No bulk auto-classification.
+- **Visible tiers.** Each file's tier is in the frontmatter and the header. Section-level tier markers are added when a section's tier differs from the file default.
+- **Default deny on uncertainty.** If the user doesn't respond clearly when asked about a tier, the content stays private. Never auto-classify upward.
+- **Explicit consent for upgrades.** Moving content from private to public requires a clear user action.
+- **No invention.** If Claude doesn't have observation-based context for a field, ask the user. Don't fabricate.
+
+## Common Pitfalls
+
+- **Inventing content.** Claude should not generate observation-based sections (how I think, blind spots) without actual context or user input. If context is insufficient, ask. Filling in plausible-sounding content erodes trust.
+- **Auto-classifying tier upward.** Default deny on uncertainty. When in doubt, the content is private.
+- **Replacing profile systems.** This file is the interpretive layer above existing profiles, not a replacement. Pull role/title/team from authoritative sources; don't re-create them.
+- **Over-asking.** If Claude already has the answer from memory, Slack, or accumulated context, don't ask. Surface what's known and ask only for gaps.
+- **Treating it as one-and-done.** The file should be updated as observations accumulate. The skill supports refresh runs that diff against the existing file.
+
+## Pairing with /offboard-program and /onboard-program
+
+These three skills work together:
+
+1. `/create-about-me` — generates the personal context file (run once, refresh periodically)
+2. `/offboard-program` — when leaving a program, packages program-specific knowledge along with a relevant slice of the user's about-me for the next person
+3. `/onboard-program` — when joining a program, pulls about-me files for collaborators in the new program, plus any handoff package from the previous owner
+
+The about-me file is the human-context layer. The program handoff is the work-context layer. Together they make program transitions less lossy.
+
+## Roadmap
+
+**v1 (current):**
+- Three-tier file generation
+- Per-field tier control
+- Draft-from-context with user confirmation
+- Cross-reference placeholders for other about-me files
+
+**v2 (planned):**
+- Request flow: if a referenced person doesn't have an about-me, push a request to them via Slack
+- Auto-refresh prompts: skill detects when a meaningful change has occurred (new role, new program, new collaborators) and asks the user if a refresh is needed
+- Audit log of who pulled which tier of the file via onboarding skills
+- Per-recipient tier overrides for trusted-tier sharing
+- Integration with the central about-me registry for discoverability across the org
+
+**v3 (planned): the recommendation surface**
+
+The about-me file becomes a queryable input to the skill catalog, personalizing what each user sees:
+
+- **Side-output during skill run.** After the about-me is saved, surface a "skills relevant to how you work" section. Recommendations matched against focus areas, working preferences, frameworks, and operating patterns in the user's file. Each recommendation includes a "why this matched" explanation.
+- **Persistent catalog personalization.** Skill catalog UI reads the user's about-me and reorders / annotates results based on relevance. Same skills, different presentation per person. Role tags become one signal among many, not the determining one.
+- **Card personalization.** Skill cards explain not just "what this skill does" but "what this skill does for you" — connecting capability to known patterns in the user's about-me. Informative and lightly persuasive without being pushy.
+- **Serendipity mode.** Explicit "show me things outside my pattern" toggle so the recommender doesn't entrench narrowness. Recommendation engines that only show you more of what you already like produce narrow people. Catalog should help users see what they're missing, not just what fits.
+- **Closed-loop refresh.** The catalog notices when a user installs and runs skills that aren't in their stated focus areas. Surfaces that as a signal the about-me may be out of date. Offers a refresh.
+
+**Metadata approach.** Skill metadata for matching is extracted from each skill's SKILL.md at query time (or cached and invalidated on file change), not hand-coded. The SKILL.md already contains description, when-to-use, when-not-to-use, process, and output — enough natural language for a capable extractor to infer operating patterns, focus areas, and problem types. Zero metadata maintenance burden on skill authors; metadata stays in sync with skill content automatically.
+
   </script>
 
   <script type="text/markdown" data-skill="onboard-program">
-<!-- PASTE onboard-program/SKILL.md HERE (raw Markdown) -->
+---
+name: onboard-program
+status: alpha
+lifecycle: develop
+description: >
+  Configures a Claude workspace when a person is joining a new program.
+  Finds available handoff material from the previous owner, loads about-me
+  files for key collaborators, maps canonical sources (Figma files, Drive
+  docs, Slack channels, Amplitude dashboards) into the workspace, and
+  produces a day-one orientation summary. Scale-adaptive: works with a rich
+  handoff package, a sparse one, or none at all. Paired with
+  /create-about-me and /offboard-program for full knowledge transfer across
+  program transitions and reorgs.
+  Typical trigger phrases include 'I just joined this program', 'help me
+  ramp on this', 'onboard me', 'set up my workspace for this program',
+  'I'm the new DRI for'. Do NOT use for: ramping on a codebase or
+  technical system (that's a different problem), general research on an
+  unfamiliar topic, or creating program documentation that should exist
+  regardless of transition.
+knowledge:
+  - config/user-profile.yaml
+  - config/settings.yaml
+next_steps:
+  - "@create-about-me — once onboarded, create or refresh your own about-me file so the people you're working with have access to how you operate"
+  - "@offboard-program — when it's your turn to leave this program, use this skill to package what you've learned"
+---
+
+# Onboard Program
+
+Configure your Claude workspace when joining a new program. Find available handoff material, load collaborator context, map canonical sources, and produce a day-one orientation.
+
+> **Attribution:** Original skill. Part of the about-me knowledge transfer system. Designed to reduce the ramp time that comes with every program transition — by making the outgoing person's context findable and loadable, rather than relying on memory and ad hoc Slack messages.
+
+## When to Use
+
+- Joining a new program as DRI, design lead, PM, or any role with ongoing ownership
+- Taking over a program from a previous owner (post-reorg, post-departure, post-leave)
+- Starting a new assignment where an existing program has history worth understanding
+- Returning to a program after a gap (the same sources apply)
+
+## When NOT to Use
+
+- Ramping on a codebase or technical system (different problem; use repo documentation and code exploration tools)
+- General research on a topic the user is unfamiliar with (use web search and synthesis tools)
+- Creating program documentation that should exist regardless of transition (fix the documentation problem directly)
+- Short-term involvement in a program where the user is contributing but not owning
+
+## Philosophy: Scale-Adaptive Ramp
+
+The most useful onboarding skill works whether or not there's a rich handoff package waiting. Most transitions don't come with a complete package. The skill's job is to make the best use of what's available, be explicit about what's missing, and give the user a working workspace regardless of input richness.
+
+Scale-adaptive means:
+- **Rich handoff (offboard-program package exists):** Load all five sections, configure canonical sources, produce orientation summary from the package
+- **Sparse handoff (some docs exist, no structured package):** Pull what's available from Drive/Slack/Figma, ask the user to fill gaps, produce a partial orientation with clear "unknown" markers
+- **No handoff (starting fresh or inheriting a stale program):** Pull what's discoverable from program channels and docs, ask the user what they know, produce a foundation document with placeholders for the incoming person to fill
+
+The skill is honest about what it doesn't know. Plausible-sounding content is worse than empty sections.
+
+## Settings Awareness
+
+Read `config/user-profile.yaml` before starting:
+- Connected MCPs (determines which sources can be pulled automatically)
+- Current programs (checks whether the user is already configured for this program)
+- Workspace location (determines where workspace configs are saved)
+
+Read `config/settings.yaml` for:
+- `output.verbosity` — concise: orientation summary only; standard: full workspace config with orientation; detailed: full config with extended context for each source
+
+## Process
+
+### Step 1 — Identify the program and available material
+
+Before asking anything, **run `/consolidate-memory` first.** Clean memory means the skill can surface what's already known about the program and its collaborators before prompting the user for context they've already provided elsewhere.
+
+Then ask the user:
+1. Which program are you joining?
+2. Who was the previous owner, if known?
+3. Was there a handoff package created (via /offboard-program)? If so, where is it?
+4. Is there a program channel, canonical Figma file, or Drive doc you already know about?
+
+In parallel, scan available sources:
+- Search Slack (if connected) for channels matching the program name
+- Search Drive (if connected) for documents matching the program name
+- Check workspace memory and CLAUDE.md for any existing program context
+- Check if an offboard-program package exists at the expected location
+
+Surface what was found before asking more. Don't ask for what can be discovered.
+
+### Step 2 — Load the handoff package (if available)
+
+If an offboard-program package exists, load and parse each section:
+
+- **work-context.md** — extract: program overview, current status, what's been tried, canonical source mapping, key metrics
+- **relationship-context.md** — extract: partner names and roles, how to work with each person, who to loop in and when (load as trusted context, not public)
+- **political-context.md** — extract: what's been surfaced to leadership, how it landed, what's unresolved (load as trusted context)
+- **about-me-slice.md** — extract: how the previous owner operated on this program, working preferences that shaped the program
+- **open-threads.md** — extract: pending decisions, outstanding asks, things needing immediate action
+
+Present each section to the user as a brief summary. Ask: Does any of this conflict with what you already know? Is there anything you want to flag for follow-up?
+
+If no package exists, proceed to Step 3.
+
+### Step 3 — Map canonical sources
+
+Build a canonical source map for the workspace. This is the most durable output of the onboarding — it tells Claude (and the user) where to go for authoritative information about this program.
+
+For each source category, check if the handoff package has it. If not, ask the user or search:
+
+- **Figma:** file ID(s), relevant pages or frames, what each file covers
+- **Drive:** doc IDs for in-flight docs, slide decks, data docs, retro files
+- **Slack:** primary channel ID, secondary channels, DM contacts for key partners
+- **Amplitude:** dashboard links or IDs for the program's primary metrics
+- **Other tools:** Jira/Linear tickets, Confluence pages, any other systems in active use
+
+Format the source map as a CLAUDE.md block the user can paste into their workspace config:
+
+```yaml
+# <Program Name> Canonical Sources
+figma:
+  - id: <file-id>
+    description: <what it is>
+    notes: <page or frame context if relevant>
+drive:
+  - id: <doc-id>
+    description: <what it is>
+slack:
+  - channel: <channel-id>
+    name: <channel-name>
+    description: <primary use>
+```
+
+### Step 4 — Load collaborator context
+
+For each key partner in the program (from the handoff package, or from the user's input), check whether an about-me file exists.
+
+If an about-me file exists for a collaborator:
+- Load the public tier into the workspace context
+- Note that a trusted tier may exist and offer to load it if the user has access
+- Surface the most relevant sections: how they think, what they value, working preferences
+
+If no about-me file exists for a collaborator:
+- Add them to a "context gaps" list
+- Optionally: offer to send a request via Slack asking if they'd be willing to share one (future feature)
+
+For the user's own about-me: check if one exists. If not, surface the recommendation to run /create-about-me before the first cross-functional meeting.
+
+### Step 5 — Produce the orientation summary
+
+Synthesize available material into a day-one orientation document. This is what the user reads first.
+
+Orientation structure:
+- **What this program is** (1-2 sentences, pulled from work context)
+- **Where things stand** (current season status, what's in flight, what's coming)
+- **The three things to know first** (synthesized from open threads + political context + relationship context — the highest-priority context for day one)
+- **Who to talk to in the first week** (key partners, in order of urgency, with what to cover with each)
+- **Where everything lives** (canonical source map summary, with links)
+- **What's unknown** (explicit list of context gaps — questions the user should try to answer in the first two weeks)
+
+The "What's unknown" section is required. An onboarding document that presents itself as complete is lying. Being explicit about gaps helps the user know where to direct their ramp energy.
+
+### Step 6 — Configure the workspace
+
+Write the workspace configuration changes to the appropriate files:
+
+- Update CLAUDE.md with the canonical source map block (Step 3)
+- Add a memory pointer for this program to MEMORY.md if the user uses the memory system
+- Save the orientation summary to `workspace/<program-slug>/orientation.md`
+- Save any loaded handoff sections to `workspace/<program-slug>/handoff/` with their original file names
+
+Confirm what was written and where.
+
+### Step 7 — Surface follow-up actions
+
+After configuring the workspace:
+- List context gaps (partners without about-me files, missing canonical sources, open threads needing immediate action)
+- Remind the user to run /create-about-me if they don't have an about-me file
+- If there are open threads with deadlines, offer to add them to a task list
+- Confirm that when it's their turn to transition off this program, /offboard-program is how to package what they've learned
+
+## Output Format Details
+
+The orientation summary is a markdown document saved to the workspace. Header format:
+
+```markdown
+---
+program: <program name>
+onboarded: <user name>
+onboard-date: <YYYY-MM-DD>
+source: <"handoff-package" | "sparse" | "no-handoff">
+last-updated: <YYYY-MM-DD>
+---
+
+# <Program Name> — Orientation
+
+> Onboarded: <date>. Source richness: <rich / sparse / none>. Context gaps: <count>.
+```
+
+The "source richness" and "context gaps" markers help the user calibrate how much to rely on this document versus their own investigation.
+
+## Trust and Control Defaults
+
+- **Relationship and political context stay trusted-tier.** Content loaded from trusted-tier handoff sections is not surfaced in public outputs or shared without explicit user action.
+- **About-me files are pulled, not pushed.** The skill loads collaborator about-me files the user has access to. It doesn't request or retrieve files without the user's awareness.
+- **Context gaps are explicit.** Missing context is labeled as missing, not filled with plausible content.
+- **No invention.** If a section can't be populated from available sources or user input, it's marked as a gap. Never generate plausible-sounding content to fill blanks.
+
+## Common Pitfalls
+
+- **Treating a sparse handoff as if it were rich.** When the available material is thin, the orientation should reflect that. A document that sounds confident when the underlying material is sparse misleads the user.
+- **Skipping the "What's unknown" section.** This section is the most useful part of the orientation for the user's first two weeks. Don't skip it because it's uncomfortable to surface gaps.
+- **Loading trusted-tier content into public contexts.** Relationship and political context from the handoff package is shared point-to-point for this transition only. It shouldn't surface in shared docs, meeting notes, or other outputs without the user's explicit decision.
+- **Missing the about-me step.** The incoming person's own about-me file is as important as the context they receive. If the user doesn't have one, or it's out of date, flag that before the first cross-functional meeting.
+
+## Pairing with /create-about-me and /offboard-program
+
+The three skills work as a sequence:
+
+1. `/create-about-me` — generates the personal context file. The incoming person should have one before their first cross-functional meeting.
+2. `/offboard-program` — run by the person leaving. Produces the handoff package this skill consumes.
+3. `/onboard-program` — this skill. Run by the person joining.
+
+The sequence closes the loop: the outgoing person documents what they know, the incoming person loads it, and the incoming person builds their own about-me for the next transition.
+
+## Scale-Adaptive Summary
+
+| Input richness | What the skill does |
+|---|---|
+| Full offboard-program package | Loads all five sections, configures sources, produces full orientation |
+| Some docs, no package | Pulls from Drive/Slack/Figma, asks user for gaps, produces partial orientation with explicit gap markers |
+| Nothing | Asks user for what they know, searches available sources, produces foundation doc with placeholders |
+
+## Roadmap
+
+**v1 (current):**
+- Package loading and parsing (five sections from offboard-program)
+- Canonical source map configuration
+- Collaborator about-me loading (public tier)
+- Orientation summary generation
+- Workspace configuration writes
+
+**v2 (planned):**
+- Automated source discovery: scan Slack and Drive for the program without requiring the user to provide IDs
+- About-me request flow: if a collaborator doesn't have an about-me, send a request via Slack
+- Handoff package registry: search for packages by program name rather than requiring a file path
+- Gap closing: track context gaps over time and close them as the user learns more
+
+**v3 (planned):**
+- Bidirectional sync with offboard-program: incoming person's questions feed back to outgoing person for clarification
+- Orientation refresh: skill detects when the orientation is stale (new collaborators, new season) and offers an update
+- Completeness scoring: estimates ramp completeness based on what's been loaded vs. what's missing
+
   </script>
 
   <script type="text/markdown" data-skill="case-study-builder">
-<!-- PASTE case-study-builder/SKILL.md HERE (raw Markdown) -->
+---
+name: case-study-builder
+status: alpha
+lifecycle: ship-learn
+description: >
+  Reconstructs what actually happened on a project and produces a
+  first-person narrative draft grounded in real sources — Slack threads,
+  end-of-season docs, Drive artifacts, and linked data. Output is suitable
+  for portfolio work, performance reviews, and award nominations. The skill
+  pulls from available connected sources first; it does not rely on memory
+  or require the user to narrate the whole project from scratch.
+  Typical trigger phrases: 'build a case study for', 'write up my work on',
+  'help me document what I did on', 'draft a portfolio entry for', 'write
+  my performance narrative for'.
+  Do NOT use for: real-time project status (use @stakeholder-update),
+  post-sprint retrospectives (use @retrospective), or launch communications
+  (use @launch-post).
+knowledge:
+  - config/user-profile.yaml
+  - config/settings.yaml
+next_steps:
+  - "@writing-clearly — tighten prose and remove filler before sharing"
+  - "@exec-communicator — adapt the narrative for a senior leadership audience"
+  - "@stakeholder-update — extract the key metrics into a current status format"
+  - "@add-knowledge — log durable insights from this project to the knowledge base"
+---
+
+# Case Study Builder
+
+Reconstruct what happened on a project from primary sources and produce a first-person narrative draft ready for portfolio, performance review, or award nomination. The skill does the archaeology; you validate and refine.
+
+## When to Use
+
+- Building a portfolio entry for a completed project
+- Writing your performance review narrative for a specific piece of work
+- Drafting supporting material for an award nomination
+- Preparing a case study for an interview or design review
+- Capturing a project story before it fades from memory or Slack is purged
+
+## When NOT to Use
+
+- Real-time project status — use `@stakeholder-update`
+- Post-sprint retrospective focused on process improvement — use `@retrospective`
+- Launch announcement or press-ready communication — use `@launch-post`
+- Broad career narrative across many projects — run this skill once per project, then synthesize
+
+## Process
+
+### Step 1 — Define the project and output mode
+
+Ask the user:
+
+| Question | Why it matters |
+|----------|---------------|
+| What's the project name or shorthand? | Seeds all source searches |
+| What's this for? (Portfolio / Perf review / Award nom / Other) | Determines narrative frame, tone, and emphasis |
+| Roughly when did it run? (Season, quarter, or date range) | Scopes Slack and doc searches |
+| Who else was core to the work? | Adds names to Slack search, avoids over-attributing to the user |
+| Is there a specific outcome or metric you want to anchor on? | Optional, but surfaces what the user already considers the headline |
+
+If the user provides Drive links, Slack channel names, or a doc list upfront, accept those as the source list and skip Step 2 for any source already provided.
+
+### Step 2 — Source archaeology (run before drafting anything)
+
+Pull from every connected source. Do not rely on what the user remembers.
+
+#### Slack (if connected)
+Run two distinct passes. The first pass finds the user's own voice; the second finds how others saw the work. Both are required — ship-its and kudos threads alone produce a thin, generic draft.
+
+**Pass 1 — Mine the user's own messages (do this first)**
+Search `from:<@user_id> [project keywords]` for messages the user sent. Look for:
+- Threads where the user explained their design rationale, framing, or intent
+- Moments where the user pushed back, challenged a direction, or reframed a problem
+- Messages where the user asked for alignment before designing — signals of real ownership
+- DMs where the user processed the work candidly (often more revealing than public threads)
+- The user's own descriptions of what was hard, what surprised them, or what they'd do differently
+- Frameworks, taxonomies, principles, or decision criteria the user authored
+
+These messages are the primary evidence for the "Approach" and "What Made It Hard" sections. They show how the user actually thought, not just what shipped. Quote them directly where possible — they are more credible than paraphrasing.
+
+**Pass 2 — Find how others saw the work**
+Search the project name and key people in `#` channels and DMs:
+- Launch or milestone announcements referencing the project
+- Threads where the user explained, defended, or advanced the work in public channels
+- Decision points — moments where direction changed or a call was made
+- Reactions and replies signaling traction (high-react threads, threads with leadership responding)
+- Shoutouts, kudos, or end-of-season recognition mentioning the work or the user
+- Messages where cross-functional partners (DS, Eng, Research, PM) acknowledged the design contribution explicitly
+- Award announcements, State of the Company callouts, or executive attribution
+
+For each relevant thread found, extract:
+- Date
+- What was shared or decided
+- Who else was in the room (or thread)
+- Outcome or response
+
+#### Google Drive (if connected)
+Search for documents related to the project:
+- Strategy docs, PRDs, design briefs, research readouts
+- End-of-season summaries or EOS decks
+- Experiment write-ups or A/B results tied to the project
+- Award nominations already submitted for adjacent work
+- Metrics dashboards or data pulls linked from Slack
+
+For each doc found, extract the sections most relevant to: what was the problem, what was the approach, what was the outcome.
+
+#### Memory and CLAUDE.md
+Check memory files and CLAUDE.md for any stored context on this project before asking the user. Surface what's already known — do not ask the user to repeat it.
+
+#### Amplitude / metrics (if relevant and connected)
+If the project has a measurable outcome (conversion, engagement, revenue, NPS), pull or reference the relevant chart. Note the metric name, baseline, and outcome.
+
+**Surface the source inventory before drafting.** Tell the user what was found and where gaps exist:
+
+```markdown
+### Source Inventory
+
+| Source | What was found | Confidence |
+|--------|---------------|-----------|
+| Slack: #t2a-strategy | 12 threads, Jan–Mar 2026 | High |
+| Drive: EOS deck (TY25) | 3 slides covering this initiative | Medium |
+| Memory: project_fy27_preauth_t2a.md | Design principles, KPIs | High |
+| Amplitude | No direct chart found — metric TBD | Low |
+
+**Gaps:** [What's missing and how to fill it — link, channel name, or a question to the user]
+```
+
+Do not proceed to drafting until the user confirms the source inventory or adds missing sources.
+
+### Step 3 — Extract the story structure
+
+From the sources gathered, extract answers to these questions. Synthesize from evidence; do not invent:
+
+**Problem**
+- What was the situation or pain going into this project?
+- Why did it matter? What was at stake?
+- Was there a specific trigger (data, customer research, strategic shift)?
+
+**Role & Contribution**
+- What specifically did *this person* contribute? (vs. team, vs. the broader initiative)
+- What decisions were theirs to make?
+- Where did they have to push, persuade, or create something from scratch?
+
+**Approach**
+- How did they frame or frame-shift the problem?
+- What methods or tools did they use?
+- What was the key design or strategic move?
+- What was tried and changed?
+
+**Outcome**
+- What shipped, changed, or moved?
+- What are the measurable results? (quantitative where possible)
+- What happened downstream — decisions unlocked, work influenced, strategy shifted?
+- How did others respond (stakeholders, partners, customers)?
+
+**What made it hard**
+- What constraints, ambiguity, or blockers existed?
+- What would have gone wrong without this person's involvement?
+
+Fill a structured extraction table before writing narrative prose:
+
+```markdown
+### Story Extraction
+
+**Problem:** [1-2 sentences from sources]
+**Why it mattered:** [business or customer stakes, from sources]
+**My role:** [specific, first-person contribution]
+**Approach:** [key move or method, grounded in evidence]
+**Outcome:** [measurable result or observable change]
+**What made it hard:** [constraint or complexity worth naming]
+**Best quote or moment from sources:** [direct quote from Slack, doc, or recognition]
+```
+
+Show this extraction to the user for validation before writing the narrative. Ask:
+- Is this accurate to what happened?
+- What's missing or understated?
+- What should be cut (belongs to team, not to you)?
+
+### Step 4 — Draft the narrative
+
+Write in first person. Ground every claim in what was found in Step 2. Do not editorialize beyond what the sources support.
+
+Adjust tone and emphasis based on the output mode selected in Step 1:
+
+| Mode | Narrative frame | Emphasis | Length |
+|------|----------------|----------|--------|
+| **Portfolio** | Craft + impact | Design decisions, process, visual thinking | 400–600 words + artifacts list |
+| **Perf review** | Contribution + scope | Specific actions, influence, measurable outcomes | 250–400 words, tight bullets for each dimension |
+
+#### Portfolio format
+```markdown
+## [Project Name]
+
+**[One-line tagline capturing the challenge and outcome]**
+
+---
+
+### The Problem
+
+[2-3 sentences: the situation, why it mattered, what was unclear or broken]
+
+### My Approach
+
+[3-4 sentences: how I framed it, key design move, what I tried and changed. Specific and concrete.]
+
+### What Shipped
+
+[1-2 sentences: the tangible output — feature, system, framework, recommendation]
+
+### Outcome
+
+[2-3 sentences: measurable result, stakeholder impact, downstream effect. Lead with numbers where possible.]
+
+### What I Learned
+
+[1-2 sentences: honest reflection on what was hard, what shifted my thinking]
+
+---
+
+**Artifacts:** [List of links to Figma, Drive, or other outputs if available]
+**Skills demonstrated:** [List 3-5: e.g., Systems thinking, Cross-functional influence, Research synthesis]
+**Team:** [Other core contributors — give credit explicitly]
+```
+
+#### Performance review format
+```markdown
+## [Project Name] — [Perf Period]
+
+**What I did:** [1 sentence, first person, active verb]
+
+**Scope and influence:** [Who and what was affected beyond my immediate team]
+
+**Key contributions:**
+- [Specific action with observable outcome]
+- [Specific action with observable outcome]
+- [Specific action with observable outcome]
+
+**Outcome:** [Metric or observable result, with baseline where possible]
+
+**Behaviors demonstrated:** [Map to the relevant competency framework if known]
+```
+
+
+### Step 5 — Validate and refine
+
+After producing the draft, ask the user:
+1. Does this accurately represent what happened?
+2. Are there any claims that feel unsupported or overstated?
+3. Is there a moment, decision, or insight that's missing?
+4. Does the level of personal credit feel accurate — not too much, not too little?
+
+Make edits based on feedback. Do not make silent changes to facts or metrics.
+
+### Step 6 — Offer to persist
+
+After the user approves:
+- Offer to save the draft to `workspace/case-studies/[project-slug]-[mode].md`
+- Offer to log any durable project insights to the knowledge base via `@add-knowledge`
+
+## Scale-Adaptive Behavior
+
+| Signal | Size | Behavior |
+|--------|------|----------|
+| Small, contained project; single quarter | **Light** | Streamlined extraction, one output mode, skip gaps inventory detail |
+| Multi-quarter initiative with measurable outcomes | **Standard** | Full source archaeology, structured extraction table, one primary + one alternate format |
+| Major multi-season initiative, exec-visible work | **Deep** | Full process, explicit quote mining from Slack/docs, two drafts (raw + refined), offer to connect to `@exec-communicator` for senior framing |
+
+## Settings Awareness
+
+Read `config/settings.yaml` before producing output:
+- `output.verbosity` — `concise`: extraction table + one lean draft; `detailed`: full source inventory, extraction table, narrative draft with revision notes
+- `output.show_next_steps` — include or skip follow-up skill suggestions
+
+Read `config/user-profile.yaml` for:
+- Name and role (used in first-person voice calibration)
+- Current programs and workstreams (seeds source searches)
+
+## Common Pitfalls
+
+- **Drafting before sourcing.** Never write narrative prose until the source inventory is complete and the story extraction is validated. Narrative built on memory alone tends to be generic and misses the specific moments that make a case study compelling.
+- **Over-attributing.** Design work is almost always collaborative. Be precise about what was the user's contribution vs. the team's. Giving shared work to one person erodes the credibility of the whole document.
+- **Under-attributing.** The inverse: cases where the user carried something and the draft obscures it by hedging. The extraction step surfaces the specific moments — use them.
+- **Inventing outcomes.** If a metric isn't in the sources, say "outcome data not available" or ask the user. Do not fill in plausible numbers.
+- **Including circumstantial context that isn't part of the design story.** Reorgs, team changes, and org-level events are not design contributions — they are circumstances. If the work ended for structural reasons rather than design reasons, that belongs in a conversation, not a portfolio entry. Cut it.
+- **Burying the hard part.** Portfolio entries land harder when they name the constraint, the ambiguity, or the moment of genuine difficulty. That's what distinguishes the entry from a list of shipped features.
+- **Generic language.** "Led cross-functional collaboration" and "drove alignment" mean nothing. Specific: "Ran six alignment sessions with DS and Eng to establish a common framing before writing a line of spec." Source the specifics from Slack and docs.
+- **Including candid in-progress quotes that don't belong in finished work.** Slack is full of honest, unguarded moments — expressions of confusion, frustration, or uncertainty that were appropriate in context but undermine a portfolio entry. Quote from sources that show reasoning and decision-making, not raw processing. If a quote reveals how the user thinks through complexity, use it. If it just reveals that something was hard in the moment, cut it.
+
+## Related Skills
+
+- `@retrospective` — if the project needs a process lens rather than a narrative lens
+- `@writing-clearly` — tighten any draft this skill produces
+- `@exec-communicator` — adapt the narrative for a formal leadership or exec audience
+- `@experiment-writeup` — if the project is primarily an A/B test or experiment
+- `@launch-post` — if the output is a public or internal announcement rather than a personal narrative
+
   </script>
 
   <!-- ── Skill file drawer (renders the inline SKILL.md sources above) ── -->
