@@ -2016,6 +2016,8 @@ Read `config/user-profile.yaml` for:
         var raw = src.textContent.replace(/^\n/, '').replace(/^[ \t]+$/gm, '');
         var min = Math.min.apply(null, raw.split('\n').filter(function (l) { return l.trim(); }).map(function (l) { return l.match(/^[ \t]*/)[0].length; }));
         if (min > 0 && min < Infinity) raw = raw.split('\n').map(function (l) { return l.slice(min); }).join('\n');
+        // strip YAML frontmatter (--- ... ---) before rendering
+        raw = raw.replace(/^---[\s\S]*?---\n?/, '');
         // strip HTML comments (the dev "PASTE …" placeholder) before deciding if filled
         var filled = raw.replace(/<!--[\s\S]*?-->/g, '').trim();
         if (filled) {
