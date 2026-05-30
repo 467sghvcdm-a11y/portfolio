@@ -373,6 +373,24 @@
     .cs-quote-attr { font-size: var(--fs-caption); color: var(--c-secondary); }
     .cs-recognition-badge { width: 72px; height: 72px; display: block; margin: 24px 0 20px; }
 
+    /* ── Video ── */
+    .cs-video {
+      margin: 36px 0;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+    }
+    .cs-video video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .cs-video figcaption {
+      background: var(--c-card-subsurface);
+      border-top: 1px solid var(--c-rule);
+      padding: 12px 16px;
+    }
+
     /* ── Era divider ── */
     .cs-era {
       margin-top: 72px;
@@ -599,6 +617,13 @@
     <div class="card">
       <p>Same Day Full Service was two products that had to stay in sync: what the customer saw and did, and what the tax prep assistant and expert needed to complete a return in a single session. No single team owned both. I designed across both, which meant every decision had to hold up on two axes at once.</p>
       <p>The conviction running through all of it: customers who were prepared to complete a return were worth more than customers who were fast to connect. Preparation before connection was the unlock. That conviction was contested. Defending it, from the design level up to leadership, was as much of the work as the design itself.</p>
+
+      <figure class="cs-video">
+        <video controls preload="metadata" poster="">
+          <source src="assets/fs-how-it-works.mp4" type="video/mp4">
+        </video>
+        <figcaption>How TurboTax Live Full Service works — the customer-facing experience from start to filed return.</figcaption>
+      </figure>
 
       <div class="cs-section">
         <h4>Onboarding</h4>
