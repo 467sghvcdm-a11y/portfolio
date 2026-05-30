@@ -192,6 +192,24 @@
     /* ── Reading column cap ── */
     .card :is(p, h3, h4, .cs-callout) { max-width: 680px; }
 
+    /* ── Figures ── */
+    figure { margin: 36px 0; }
+    figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
+    figcaption { font-size: var(--fs-caption); color: var(--c-secondary); margin-top: 10px; line-height: 1.5; }
+    /* Full-bleed — expands into card gutters like the carousel */
+    figure.fig-flow {
+      margin-left: min(0px, 40px - var(--card-h));
+      margin-right: min(0px, 40px - var(--card-h));
+      width: calc(100% + 2 * max(0px, var(--card-h) - 40px));
+    }
+    figure.fig-flow img { border-radius: 0; }
+    /* UI screenshots — full card content width */
+    figure.fig-ui { max-width: 100%; }
+    figure.fig-ui img { border-radius: 0; }
+    /* Portrait or small UI — constrained further */
+    figure.fig-sm { max-width: 400px; }
+    figure.fig-sm img { border-radius: 0; }
+
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
     .pv-inner { counter-reset: chapter; }
@@ -496,6 +514,10 @@
     <!-- Overview card -->
     <div class="card" id="intro">
 
+      <figure class="fig-flow">
+        <img src="assets/fs-hero.jpg" alt="Customer matched with a tax expert in TurboTax Full Service" width="2320" height="1548" loading="eager" decoding="async" style="max-height: 460px; object-fit: cover; object-position: center center; border-radius: 8px;">
+      </figure>
+
       <h3>Customers weren't comparing us to a digital competitor. They were comparing us to sitting in their CPA's office.</h3>
 
       <div class="cs-metrics cs-metrics-4" style="margin: 40px 0 56px">
@@ -726,6 +748,12 @@
           </div>
         </div>
         <p>Average return completion time went from 22 days to a few hours. Same-day margin increased 97%. On April 15, 58,000 customers started (double the prior year), 11,000 completed returns (266% above), and 17,000 live expert calls were handled (325% above).</p>
+      </div>
+
+      <div class="cs-section">
+        <h3>What made it hard</h3>
+        <p>Full Service had no single team with a mandate over the end-to-end experience. The customer product, the expert platform, training, quality, and service delivery each owned a piece, with no natural coordination between them. Decisions that looked right on one side had consequences on the other that nobody was tracking. I became connective tissue across all of them without authority over any single part.</p>
+        <p>The harder thing was that direction changed frequently based on leadership prior rather than experiment results. The conviction that preparation before connection was the mechanism had to be defended repeatedly. This included a formal test from senior leadership designed to prove the opposite. Holding that position through the test and being proven right by the data was as much of the work as the design itself.</p>
       </div>
 
       <div class="cs-section">

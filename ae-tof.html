@@ -520,7 +520,11 @@
 
     <div class="card" id="intro">
 
-      <h3>The entire job of the page is to get the right person to start. Not just any person.</h3>
+      <figure>
+        <img src="assets/store-interior.webp" alt="Inside a TurboTax storefront" width="1920" height="1281" decoding="async" fetchpriority="high" style="max-height: 460px; object-fit: cover; object-position: center 80%;">
+      </figure>
+
+      <h3>The front door's job wasn't to persuade. It was to recognize the customer who'd already decided</h3>
 
       <div class="cs-metrics cs-metrics-3">
         <div class="cs-metric win">
@@ -537,9 +541,17 @@
         </div>
       </div>
 
-      <figure>
-        <img width="2048" height="784" decoding="async" fetchpriority="high" src="assets/ae-tof/page-templates.jpg" alt="AE page templates">
-      </figure>
+      <p>TurboTax operates 500+ branded storefronts nationwide. Each one is a fixed cost: staff, leases, local advertising written into the unit economics. The digital storefront is the front door to that network. It decides whether the customer who found TurboTax online books an appointment, calls, or keeps scrolling.</p>
+
+      <div style="margin: 36px 0; max-width: 680px;">
+        <img src="assets/expert-session.webp" alt="A TurboTax expert working with a customer" width="2400" height="1601" loading="lazy" decoding="async" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+      </div>
+
+      <p>The customer arriving is what the team called an Efficiency Value Seeker: someone who has already decided to hand off their taxes. They're not comparing TurboTax to TaxAct. They're comparing it to sitting in a CPA's office. The page's job isn't to sell them on expert help. It's to recognize they've already made that decision, and not fumble the moment.</p>
+
+      <h3>The problem</h3>
+      <p>When I arrived, there was no complete picture of what was live, what was in test, and what was baseline across any of the six page types. Search optimization, paid search, and product teams were each making design decisions from their own vantage point, optimizing for their own metrics, with no shared model for what these pages were actually trying to accomplish. The program was running tests against surfaces nobody had fully mapped.</p>
+      <p>The measurement model compounded it. These pages were being evaluated against time-to-start, a metric captured far downstream across flows owned by multiple teams. A click on a top-of-funnel call to action and a completed start are separated by experiences design doesn't control. That finding restructured how every test hypothesis that followed was framed.</p>
 
       <p>As the design lead for the AE front door, I was responsible for the entry experience of over half a million weekly visitors. Every CTA, every flow, every surface decision has direct downstream revenue consequences. Design as a precision instrument, not a finish.</p>
       <p>This case study covers one tax season. One measurement audit that changed what the program was optimizing for. Seven tests built on that foundation. And one failure test that made everything else more credible.</p>
@@ -856,6 +868,13 @@
           </div>
         </div>
 
+      </div>
+
+      <div class="cs-section">
+        <h3>What made it hard</h3>
+        <p>The program sat at an intersection of too many teams with legitimate but competing interests: search optimization, paid search, expert matching, Full Service product, content design, and engineering all had access to these pages and all measured success differently. The design approver role I held formally was structurally real but operationally contested. Mandates arrived from senior leadership that overrode working agreements already in place.</p>
+        <p>Search and content teams redesigned approved pages without design involvement after senior leadership and VP approval had already been secured. Two weeks of design time went to search optimization feature work with no committed path to production, a risk flagged at kickoff that proceeded anyway. I documented the breakdown formally. The documentation created accountability but didn't recover the time or the design coherence of the pages that shipped without it.</p>
+        <p>The documentation debt made everything harder. The program was running tests against a baseline nobody had fully mapped. Building a complete end-to-end audit under two-day time pressure for a VP review was what made the rest of the season coherent, but it consumed capacity that should have been available from day one.</p>
       </div>
 
       <div class="cs-subsection-label label">Principles</div>
