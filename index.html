@@ -2410,6 +2410,7 @@
           .then(function (r) { return r.text(); })
           .then(function (html) {
             var doc  = new DOMParser().parseFromString(html, 'text/html');
+            doc.querySelectorAll('.skill-file-toggle, .skill-drawer').forEach(function (el) { el.remove(); });
             var frag = document.createDocumentFragment();
             var title = doc.querySelector('h1.cs-title');
             if (title) { var h1 = document.createElement('h1'); h1.textContent = title.textContent; frag.appendChild(h1); }
