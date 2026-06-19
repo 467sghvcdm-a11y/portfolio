@@ -37,7 +37,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 8px 12px 72px;
+      padding: 8px 12px 24px;
       position: relative;
       z-index: 1;
       transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
@@ -349,21 +349,18 @@
 
     /* ── Footer ── */
     .footer {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 40px;
-      font-size: var(--fs-label);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: rgba(244,237,226,0.35);
+      position: relative;
       z-index: 10;
-      pointer-events: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 48px;
+      font-size: var(--fs-label);
+      color: rgba(244,237,226,0.55);
     }
-    .footer-links { display: flex; gap: 20px; pointer-events: auto; }
+    .footer-link.copy-btn { padding: 0; margin: 0; background: none; border: none; cursor: pointer; color: inherit; border-radius: 0; }
+    .footer-link.copy-btn:hover { color: rgba(244,237,226,0.9); background: none; }
+    .footer-links { display: flex; gap: 20px; }
     .footer-link {
       color: rgba(244,237,226,0.35);
       text-decoration: none;

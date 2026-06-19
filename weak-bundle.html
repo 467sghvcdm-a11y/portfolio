@@ -37,7 +37,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 8px 12px 72px;
+      padding: 8px 12px 24px;
       position: relative;
       z-index: 1;
     }
@@ -185,21 +185,18 @@
 
     /* ── Footer ── */
     .footer {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 40px;
-      font-size: var(--fs-label);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: rgba(244,237,226,0.35);
+      position: relative;
       z-index: 10;
-      pointer-events: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 48px;
+      font-size: var(--fs-label);
+      color: rgba(244,237,226,0.55);
     }
-    .footer-links { display: flex; gap: 20px; pointer-events: auto; }
+    .footer-link.copy-btn { padding: 0; margin: 0; background: none; border: none; cursor: pointer; color: inherit; border-radius: 0; }
+    .footer-link.copy-btn:hover { color: rgba(244,237,226,0.9); background: none; }
+    .footer-links { display: flex; gap: 20px; }
     .footer-link {
       color: rgba(244,237,226,0.35);
       text-decoration: none;
@@ -302,6 +299,7 @@
     <span class="footer-links">
       <a href="resume.html" class="footer-link" target="_blank">Resume</a>
       <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="footer-link" target="_blank">LinkedIn</a>
+      <a href="mailto:m.k.kirkpatrick@icloud.com" class="footer-link copy-btn" data-copy="m.k.kirkpatrick@icloud.com" onclick="event.preventDefault()" style="display:inline-flex;align-items:center;gap:5px;">Email <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 4V2.5A.5.5 0 0 0 9.5 2h-7a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5H4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></a>
     </span>
   </footer>
 
