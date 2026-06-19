@@ -67,16 +67,14 @@
     .hero {
       background: transparent;
       color: #f4ede2;
-      min-height: 52vh;
-      padding: 36px var(--card-h) 56px;
+      padding: 96px var(--card-h) 56px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
     }
     .hero-body {
       display: flex;
       flex-direction: column;
-      margin-top: 72px;
+      margin-top: 0;
     }
     .hero-eyebrow {
       color: var(--accent);
@@ -97,6 +95,8 @@
       text-wrap: balance;
     }
     .hero-foot {
+      text-transform: none;
+      letter-spacing: 0;
       display: flex;
       gap: 48px;
       margin-top: 48px;
@@ -335,10 +335,12 @@
 
     /* ── Opening pull quote ── */
     .essay-lede {
-      font-family: 'Fraunces', Georgia, serif;
-      font-size: var(--fs-2xl);
+      font-family: inherit;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      font-size: var(--fs-xl);
       font-weight: 300;
-      font-style: italic;
+      font-style: normal;
       line-height: 1.45;
       color: var(--c-primary);
       max-width: 540px;
@@ -368,6 +370,8 @@
       transition: color 150ms;
     }
     .footer-link:hover { color: rgba(244,237,226,0.7); }
+    .footer-link.copy-btn { padding: 0; margin: 0; background: none; border: none; cursor: pointer; color: inherit; border-radius: 0; }
+    .footer-link.copy-btn:hover { color: rgba(244,237,226,0.7); background: none; }
 
     /* ── Responsive ── */
     @media (max-width: 760px) {
@@ -420,10 +424,7 @@
       <div class="hero-body">
         <p class="hero-eyebrow label">Field notes</p>
         <h1 class="cs-title">What I learned building AI tools for my own design practice</h1>
-        <div class="hero-foot label">
-          <span>Read<b>6 min</b></span>
-          <span>Built with<b>Claude</b></span>
-        </div>
+
       </div>
     </div>
 
@@ -1927,7 +1928,7 @@ Read `config/user-profile.yaml` for:
     <span class="footer-links">
       <a href="resume.html" class="footer-link" target="_blank">Resume</a>
       <a href="https://www.linkedin.com/in/mattkkirkpatrick/" class="footer-link" target="_blank">LinkedIn</a>
-      <a href="mailto:m.k.kirkpatrick@icloud.com" class="footer-link">Email →</a>
+      <a href="mailto:m.k.kirkpatrick@icloud.com" class="footer-link copy-btn" data-copy="m.k.kirkpatrick@icloud.com" onclick="event.preventDefault()" style="display:inline-flex;align-items:center;gap:5px;">Email <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 4V2.5A.5.5 0 0 0 9.5 2h-7a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5H4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></a>
     </span>
   </footer>
 
@@ -2049,6 +2050,22 @@ Read `config/user-profile.yaml` for:
     closeBtn.addEventListener('click', close);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawer.classList.contains('open')) close(); });
   })();
+  </script>
+  <script>
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    var text = btn.dataset.copy;
+    function showCopied() {
+      var svg = btn.querySelector('svg');
+      var origSvg = svg.outerHTML;
+      svg.outerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      setTimeout(function () { btn.querySelector('svg').outerHTML = origSvg; }, 2000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(function () { showCopied(); });
+    } else { showCopied(); }
+  }, true);
   </script>
 
 </body>
