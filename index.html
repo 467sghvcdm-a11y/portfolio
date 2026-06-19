@@ -1200,14 +1200,19 @@
       padding: 36px 40px 64px;
       scrollbar-width: thin;
     }
-    .essay-drawer-body .essay-lede {
+    .essay-drawer-body h1 {
       font-family: 'Fraunces', Georgia, serif;
       font-weight: 300;
-      font-style: italic;
-      font-size: var(--fs-2xl);
-      line-height: 1.3;
-      letter-spacing: -0.01em;
+      font-size: var(--fs-3xl);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
       color: var(--c-primary);
+      margin: 0 0 28px;
+    }
+    .essay-drawer-body .essay-lede {
+      font-size: var(--fs-body);
+      line-height: 1.7;
+      color: var(--c-secondary);
       margin: 0 0 32px;
     }
     .essay-drawer-body .essay p,
@@ -2406,6 +2411,8 @@
           .then(function (html) {
             var doc  = new DOMParser().parseFromString(html, 'text/html');
             var frag = document.createDocumentFragment();
+            var title = doc.querySelector('h1.cs-title');
+            if (title) { var h1 = document.createElement('h1'); h1.textContent = title.textContent; frag.appendChild(h1); }
             var lede = doc.querySelector('.essay-lede');
             if (lede) frag.appendChild(lede.cloneNode(true));
             var essay = doc.querySelector('.essay');
