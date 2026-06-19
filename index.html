@@ -2359,7 +2359,7 @@
   });
 
   // Field notes essay drawer
-  (function () {
+  document.addEventListener('DOMContentLoaded', function () {
     var drawer     = document.getElementById('essay-drawer');
     var drawerBody = document.getElementById('essay-drawer-body');
     var drawerFile = document.getElementById('essay-drawer-filename');
@@ -2423,7 +2423,7 @@
           });
       });
     });
-  })();
+  });
 
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
