@@ -1653,8 +1653,8 @@
     .work-lock-wrap.locked .work-item {
       filter: blur(28px);
       transform: translateZ(0);
-      pointer-events: none;
       user-select: none;
+      cursor: default;
     }
     .work-lock-wrap .work-item { transition: filter 0.4s ease; }
     .work-lock-overlay {
@@ -1664,7 +1664,9 @@
       align-items: center;
       justify-content: center;
       z-index: 10;
+      pointer-events: none;
     }
+    .work-lock-btn, .work-lock-form { pointer-events: auto; }
     .work-lock-overlay.hidden {
       opacity: 0;
       pointer-events: none;
@@ -2145,6 +2147,8 @@
       link.addEventListener('click', e => {
         if (e.metaKey || e.ctrlKey || e.shiftKey) return;
         e.preventDefault();
+        const lockWrap = document.getElementById('work-lock-wrap');
+        if (lockWrap && lockWrap.classList.contains('locked')) return;
         const href = link.href;
         inner.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
         inner.style.opacity = '0';
@@ -2457,6 +2461,12 @@
 
     submit.addEventListener('click', attempt);
     input.addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(); });
+
+    document.querySelectorAll('.work-item').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        if (wrap.classList.contains('locked')) e.preventDefault();
+      });
+    });
   });
   </script>
   <script>
