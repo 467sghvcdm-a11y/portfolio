@@ -1648,10 +1648,86 @@
       .footer { position: relative; padding: 20px 20px; background: transparent; }
     }
 
+    /* ── Work lock ── */
+    .work-lock-wrap { position: relative; }
+    .work-lock-wrap.locked .work-item {
+      filter: blur(28px);
+      transform: translateZ(0);
+      pointer-events: none;
+      user-select: none;
+    }
+    .work-lock-wrap .work-item { transition: filter 0.4s ease; }
+    .work-lock-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .work-lock-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .work-lock-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: #1a1a1a;
+      color: #faf7f2;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      transition: opacity 150ms;
+    }
+    .work-lock-btn:hover { opacity: 0.8; }
+    .work-lock-form {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #1a1a1a;
+      border-radius: 100px;
+      padding: 6px 6px 6px 20px;
+    }
+    .work-lock-form.visible { display: flex; }
+    .work-lock-form input {
+      background: none;
+      border: none;
+      outline: none;
+      color: #faf7f2;
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      width: 180px;
+    }
+    .work-lock-form input::placeholder { color: rgba(244,237,226,0.4); }
+    .work-lock-form input.error { animation: lock-shake 300ms ease; }
+    .work-lock-submit {
+      height: 36px;
+      padding: 0 18px;
+      background: #faf7f2;
+      color: #1a1a1a;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    @keyframes lock-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
   </style>
 </head>
 <body>
-  <script src="password-gate.js"></script>
   <script>
     // ── Tweaks bootstrap (must run before canvas/gradient IIFEs) ──
     window.__TWEAKS = /*EDITMODE-BEGIN*/{
@@ -1704,6 +1780,7 @@
     <!-- ── Featured Work ── -->
     <div class="card" id="work">
       <h2>Work</h2>
+      <div class="work-lock-wrap locked" id="work-lock-wrap">
       <div class="work-grid">
         <a href="ae-tof.html" class="work-item">
           <div class="work-thumb">
@@ -1733,6 +1810,17 @@
           </div>
         </a>
       </div>
+      <div class="work-lock-overlay" id="work-lock-overlay">
+        <button class="work-lock-btn" id="work-lock-btn" aria-label="Enter password to view work">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="2" y="6" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 6V4a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Enter password
+        </button>
+        <div class="work-lock-form" id="work-lock-form">
+          <input type="password" id="work-lock-input" placeholder="Password" autocomplete="off" spellcheck="false">
+          <button class="work-lock-submit" id="work-lock-submit">Unlock →</button>
+        </div>
+      </div>
+      </div><!-- /.work-lock-wrap -->
     </div>
 
     <!-- ── About ── -->
@@ -2328,6 +2416,48 @@
       });
     });
   })();
+  </script>
+  <script>
+  // ── Work lock ──
+  document.addEventListener('DOMContentLoaded', function () {
+    var KEY = 'mkp_auth';
+    var PASS = 'solvehardproblems';
+    var wrap = document.getElementById('work-lock-wrap');
+    var overlay = document.getElementById('work-lock-overlay');
+    var lockBtn = document.getElementById('work-lock-btn');
+    var form = document.getElementById('work-lock-form');
+    var input = document.getElementById('work-lock-input');
+    var submit = document.getElementById('work-lock-submit');
+    if (!wrap) return;
+
+    function unlock() {
+      localStorage.setItem(KEY, '1');
+      wrap.classList.remove('locked');
+      overlay.classList.add('hidden');
+    }
+
+    if (localStorage.getItem(KEY) === '1') { unlock(); return; }
+
+    lockBtn.addEventListener('click', function () {
+      lockBtn.style.display = 'none';
+      form.classList.add('visible');
+      input.focus();
+    });
+
+    function attempt() {
+      if (input.value === PASS) {
+        unlock();
+      } else {
+        input.classList.add('error');
+        input.value = '';
+        input.focus();
+        setTimeout(function () { input.classList.remove('error'); }, 350);
+      }
+    }
+
+    submit.addEventListener('click', attempt);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(); });
+  });
   </script>
   <script>
   // /about-matt drawer

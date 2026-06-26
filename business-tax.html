@@ -525,9 +525,13 @@
       .cs-metric-val { font-size: var(--fs-5xl); }
       .footer { position: relative; padding: 20px 20px; background: transparent; }
     }
+    .cs-role { border-top: 1px solid var(--c-rule); padding-top: 28px; margin-top: 80px; }
+    .cs-role .label { margin-bottom: 12px; }
+    .cs-role-body { font-size: var(--fs-small); line-height: 1.5; color: #1a1a1a; max-width: 55ch; }
   </style>
 </head>
 <body>
+  <script src="password-gate.js"></script>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
   <a href="index.html" class="cs-back caption">← Work</a>
   <nav class="cs-chap-nav" id="cs-chap-nav">
@@ -818,6 +822,10 @@
       </div>
 
       <div class="card">
+        <div class="cs-role">
+          <div class="label">My role</div>
+          <p class="cs-role-body">Sole designer on TurboTax Business, T6. I named the structural problem, ran the test cascade from hypothesis through spec, built the patterns library, and authored the complete product redesign vision. Working with one PM on test prioritization and launch logistics, and a data science team who defined cohorts and analyzed results. The 18× revenue lift came from a test I designed.</p>
+        </div>
         <div class="cs-takeaway">
           <div class="cs-takeaway-text">Name the structural problem earlier and louder.</div>
           <div class="cs-takeaway-sub">I spent most of the season treating the broken architecture as context for the test work. It deserved to be the primary argument. The test wins were evidence for it, not the other way around.</div>

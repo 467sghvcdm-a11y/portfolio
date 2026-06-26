@@ -503,9 +503,13 @@
       .cs-metric-val { font-size: var(--fs-5xl); }
       .footer { position: relative; padding: 20px 20px; background: transparent; }
     }
+    .cs-role { border-top: 1px solid var(--c-rule); padding-top: 28px; margin-top: 80px; }
+    .cs-role .label { margin-bottom: 12px; }
+    .cs-role-body { font-size: var(--fs-small); line-height: 1.5; color: #1a1a1a; max-width: 55ch; }
   </style>
 </head>
 <body>
+  <script src="password-gate.js"></script>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
   <a href="index.html" class="cs-back caption">← Work</a>
   <nav class="cs-chap-nav" id="cs-chap-nav">
@@ -1007,6 +1011,10 @@
       </div>
 
       <div class="card">
+      <div class="cs-role">
+        <div class="label">My role</div>
+        <p class="cs-role-body">Sole designer on the Activate Experts acquisition track, T6. I owned the measurement reframe, all test hypotheses and design specs, the component library build-out, and the strategic framework connecting individual experiments to a coherent principle. Working with one PM on roadmap and stakeholder alignment, a data science team on experiment methodology and results analysis, and an engineering team on implementation and the experiment platform.</p>
+      </div>
       <div class="cs-takeaway">
         <div class="cs-takeaway-text">The most strategic thing a designer can do is name the problems the system has no incentive to surface.</div>
         <div class="cs-takeaway-sub">Build the foundation. Map the actual measurement. Name what is being optimized and what it costs. Then move fast, because you know what you're looking at.</div>
