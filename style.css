@@ -50,6 +50,21 @@ html {
   --fs-7xl:     64px;   /* case-study titles, hero metrics */
   --fs-8xl:     96px;   /* hero display headline */
   --fs-9xl:    140px;   /* decorative chapter numerals */
+
+  /* ─────────────────────────────────────
+     Line-height ramp — paired to each font-size step.
+     Smaller sizes carry proportionally MORE leading (tight absolute
+     line-length reads cramped otherwise); larger display sizes get
+     tighter, near-1.0 leading since they're already visually spacious.
+     Headings (h1–h6) keep their own bespoke leading, set per context.
+  ───────────────────────────────────── */
+  --lh-label:   1.55;
+  --lh-caption: 1.75;
+  --lh-small:   1.7;
+  --lh-body:    1.65;
+  --lh-lg:      1.55;
+  --lh-xl:      1.4;
+  --lh-2xl:     1.3;
 }
 
 /* ─────────────────────────────────────
