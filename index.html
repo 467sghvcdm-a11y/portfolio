@@ -24,16 +24,22 @@
       background-color: #000000;
     }
 
-    body {
-      min-height: 100dvh;
+    /* Nebula lives on a fixed div — background-attachment:fixed is broken in iOS Safari */
+    #bg-nebula {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
       background-color: #000000;
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
         radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
-      background-size: 100% 100dvh;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+      pointer-events: none;
+    }
+
+    body {
+      min-height: 100dvh;
+      background-color: #000000;
       --accent: #d92638;
       --card-radius: 20px;
       --card-h: max(40px, calc((100vw - 16px - 1000px) / 2));
@@ -1843,6 +1849,7 @@
     document.body.dataset.floatstyle = window.__TWEAKS.floatstyle;
     document.body.dataset.previewlock = window.__TWEAKS.previewlock;
   </script>
+  <div id="bg-nebula" aria-hidden="true"></div>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
   <nav class="nav" id="nav">
