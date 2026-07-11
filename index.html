@@ -22,6 +22,16 @@
     html {
       min-height: 100dvh;
       background-color: #000000;
+      /* iOS Safari paints the status-bar and home-indicator safe areas from the
+         ROOT element's background — position:fixed children never reach there.
+         Mirror the nebula here so those strips match instead of going flat black. */
+      background-image:
+        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
+      background-attachment: fixed;
+      background-size: cover;
+      background-repeat: no-repeat;
     }
 
     /* Nebula lives on a fixed div — background-attachment:fixed is broken in iOS Safari */
@@ -46,7 +56,9 @@
 
     body {
       min-height: 100dvh;
-      background-color: #000000;
+      /* Transparent so the html-level nebula shows through into the iOS safe
+         areas; the fixed #bg-nebula still covers the scrollable content area. */
+      background-color: transparent;
       --accent: #d92638;
       --card-radius: 20px;
       --card-h: max(40px, calc((100vw - 16px - 1000px) / 2));
