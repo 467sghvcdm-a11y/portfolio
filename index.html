@@ -27,11 +27,14 @@
     /* Nebula lives on a fixed div — background-attachment:fixed is broken in iOS Safari */
     #bg-nebula {
       position: fixed;
-      top: 0;
+      /* Overshoot every edge by 120px so the nebula paints behind the iOS
+         status bar and home-indicator safe areas instead of leaving flat-black
+         bands. z-index:-1 + pointer-events:none make the overshoot harmless. */
+      top: -120px;
       left: 0;
       right: 0;
-      height: 100vh;   /* iOS Safari treats 100vh as the large (toolbar-hidden) viewport */
-      height: 100lvh;  /* explicit large viewport where supported */
+      height: calc(100vh + 240px);   /* fallback */
+      height: calc(100lvh + 240px);  /* large viewport + overshoot */
       z-index: -1;
       background-color: #000000;
       background-image:
