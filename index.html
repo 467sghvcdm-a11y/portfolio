@@ -27,7 +27,11 @@
     /* Nebula lives on a fixed div — background-attachment:fixed is broken in iOS Safari */
     #bg-nebula {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100vh;   /* iOS Safari treats 100vh as the large (toolbar-hidden) viewport */
+      height: 100lvh;  /* explicit large viewport where supported */
       z-index: -1;
       background-color: #000000;
       background-image:
