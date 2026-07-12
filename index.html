@@ -43,18 +43,17 @@
     /* Nebula lives on a fixed div — background-attachment:fixed is broken in iOS Safari */
     #bg-nebula {
       position: fixed;
-      /* Overshoot every edge by 120px so the nebula paints behind the iOS
-         status bar and home-indicator safe areas instead of leaving flat-black
-         bands. z-index:-1 + pointer-events:none make the overshoot harmless. */
-      top: -120px;
-      left: 0;
-      right: 0;
-      height: calc(100vh + 240px);   /* fallback */
-      height: calc(100lvh + 240px);  /* large viewport + overshoot */
-      /* --vvh (set via JS from visualViewport) wins where supported. CSS
-         dvh/lvh don't recompute in sync with Safari's toolbar show/hide
-         animation, so a black gap flashes at the edge mid-transition. */
-      height: calc(var(--vvh, 100vh) + 240px);
+      /* Static, generously oversized box — deliberately NOT sized from vh/dvh/lvh
+         or a JS-updated custom property. Web Inspector's Layers panel showed the
+         compositor's rasterized backing store (714px) was shorter than the box's
+         actual bounds (954px) by exactly our old overshoot amount: WebKit wasn't
+         reallocating the GPU texture when a dynamic height changed, leaving an
+         unpainted strip that showed through as black. A fixed size at first
+         paint means there's nothing to ever resize, so nothing to fall behind on. */
+      top: -600px;
+      left: -50px;
+      right: -50px;
+      height: 3000px;
       /* z-index:0, not -1 — negative z-index fixed layers can composite behind
          Safari's own transient backing store during the toolbar's live resize
          animation, flashing black. Page content (.pv-inner) is already z-index:1,
@@ -1881,27 +1880,6 @@
     document.body.dataset.chrome   = window.__TWEAKS.chrome;
     document.body.dataset.floatstyle = window.__TWEAKS.floatstyle;
     document.body.dataset.previewlock = window.__TWEAKS.previewlock;
-  </script>
-  <script>
-    // Keep --vvh pinned to the live visualViewport height. CSS dvh/lvh lag
-    // Safari's toolbar show/hide animation by a frame or two, which flashes
-    // the raw black html background at the edge of the fixed nebula div.
-    // visualViewport's own resize/scroll events fire in step with that
-    // animation, so driving the custom property from JS closes the gap.
-    (function () {
-      const root = document.documentElement;
-      function setVVH() {
-        const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
-        root.style.setProperty('--vvh', h + 'px');
-      }
-      setVVH();
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', setVVH);
-        window.visualViewport.addEventListener('scroll', setVVH);
-      }
-      window.addEventListener('resize', setVVH);
-      window.addEventListener('orientationchange', setVVH);
-    })();
   </script>
   <div id="bg-nebula" aria-hidden="true"></div>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
