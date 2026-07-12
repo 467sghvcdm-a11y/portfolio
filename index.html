@@ -27,13 +27,17 @@
       /* iOS Safari paints the status-bar and home-indicator safe areas from the
          ROOT element's background — position:fixed children never reach there.
          Mirror the nebula here so those strips match instead of going flat black. */
+      /* NOT background-attachment:fixed — that's the exact property already
+         diagnosed as broken on iOS Safari (why #bg-nebula exists as a JS-driven
+         fixed div in the first place). Plain scroll-attachment on a single
+         100dvh-tall root paints reliably once, with no scroll-tied repaint. */
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
         radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
-      background-attachment: fixed;
-      background-size: cover;
+      background-size: 100% 100dvh;
       background-repeat: no-repeat;
+      background-position: top;
     }
 
     /* Nebula lives on a fixed div — background-attachment:fixed is broken in iOS Safari */
