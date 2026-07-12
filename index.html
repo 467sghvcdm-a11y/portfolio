@@ -45,6 +45,10 @@
       right: 0;
       height: calc(100vh + 240px);   /* fallback */
       height: calc(100lvh + 240px);  /* large viewport + overshoot */
+      /* --vvh (set via JS from visualViewport) wins where supported. CSS
+         dvh/lvh don't recompute in sync with Safari's toolbar show/hide
+         animation, so a black gap flashes at the edge mid-transition. */
+      height: calc(var(--vvh, 100vh) + 240px);
       z-index: -1;
       background-color: #000000;
       background-image:
@@ -1868,6 +1872,27 @@
     document.body.dataset.floatstyle = window.__TWEAKS.floatstyle;
     document.body.dataset.previewlock = window.__TWEAKS.previewlock;
   </script>
+  <script>
+    // Keep --vvh pinned to the live visualViewport height. CSS dvh/lvh lag
+    // Safari's toolbar show/hide animation by a frame or two, which flashes
+    // the raw black html background at the edge of the fixed nebula div.
+    // visualViewport's own resize/scroll events fire in step with that
+    // animation, so driving the custom property from JS closes the gap.
+    (function () {
+      const root = document.documentElement;
+      function setVVH() {
+        const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+        root.style.setProperty('--vvh', h + 'px');
+      }
+      setVVH();
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', setVVH);
+        window.visualViewport.addEventListener('scroll', setVVH);
+      }
+      window.addEventListener('resize', setVVH);
+      window.addEventListener('orientationchange', setVVH);
+    })();
+  </script>
   <div id="bg-nebula" aria-hidden="true"></div>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
@@ -2258,6 +2283,13 @@
     }
 
     let resizeRaf = 0;
+    function onViewportResize() {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => { resizeRaf = 0; resize(); });
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', onViewportResize);
+    }
     window.addEventListener('resize', () => {
       if (resizeRaf) return;
       resizeRaf = requestAnimationFrame(() => { resizeRaf = 0; resize(); });
