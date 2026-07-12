@@ -43,23 +43,19 @@
     /* Nebula lives on a fixed div — background-attachment:fixed is broken in iOS Safari */
     #bg-nebula {
       position: fixed;
-      /* Static, generously oversized box — deliberately NOT sized from vh/dvh/lvh
-         or a JS-updated custom property. Web Inspector's Layers panel showed the
-         compositor's rasterized backing store (714px) was shorter than the box's
-         actual bounds (954px) by exactly our old overshoot amount: WebKit wasn't
-         reallocating the GPU texture when a dynamic height changed, leaving an
-         unpainted strip that showed through as black. A fixed size at first
-         paint means there's nothing to ever resize, so nothing to fall behind on. */
       top: -600px;
       left: -50px;
       right: -50px;
       height: 3000px;
-      /* z-index:0, not -1 — negative z-index fixed layers can composite behind
-         Safari's own transient backing store during the toolbar's live resize
-         animation, flashing black. Page content (.pv-inner) is already z-index:1,
-         so 0 is enough to stay behind it without the negative-z compositing risk. */
       z-index: 0;
-      background-color: #000000;
+      /* NO background-color fallback here on purpose. iOS Safari appears unable
+         to rasterize ANY position:fixed layer into the status-bar/home-indicator
+         safe-area strip, regardless of box size (a 3000px static box still didn't
+         help) — likely a hard WebKit limitation, not a sizing bug. An opaque
+         black fallback here would paint solid black in that unrasterized strip,
+         masking the identical gradient html already paints correctly underneath
+         as an ordinary (non-fixed) background. Leaving this transparent lets
+         that correct html gradient show through instead. */
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
