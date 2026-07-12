@@ -48,18 +48,22 @@
       right: -50px;
       height: 3000px;
       z-index: 0;
-      /* iOS 26 Safari's "Liquid Glass" toolbar tints itself by sampling color
-         from nearby fixed elements rather than compositing this layer into the
-         safe-area strip directly. With no explicit background-color here, it
-         has nothing valid to sample and falls back to a flat black/white bar.
-         A dark-navy solid (the gradient's own base tone, not pure black) gives
-         it a real color to read that also blends with the gradient itself. */
+      pointer-events: none;
+      /* No background here on the fixed element itself — iOS 26 Safari's
+         Liquid Glass tinting specifically inspects fixed/sticky elements' OWN
+         background-color, so painting directly on a fixed element that spans
+         the edges is exactly what triggers the wrong tint. The actual gradient
+         lives on #bg-nebula-fill, a plain (non-fixed) absolutely-positioned
+         child, which is invisible to that sampling rule. */
+    }
+    #bg-nebula-fill {
+      position: absolute;
+      inset: 0;
       background-color: #070912;
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
         radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
-      pointer-events: none;
     }
 
     body {
@@ -265,18 +269,17 @@
       }
     }
 
-    /* ── Thought card ── */
+    /* ── Thought card ──
+       Visual background/blur/border live on .thought-card-inner (a plain,
+       non-fixed child), not on .thought-card itself. iOS 26 Safari's Liquid
+       Glass toolbar tints itself by inspecting the background-color of
+       fixed/sticky elements directly — a fixed shell with no background of
+       its own is invisible to that sampling rule. */
     .thought-card {
       position: fixed;
       top: 66px;
       left: 16px;
       max-width: 272px;
-      background: rgba(10,10,10,0.82);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      padding: 20px 22px;
       z-index: 200;
       opacity: 0;
       visibility: hidden;
@@ -288,6 +291,14 @@
          even an opacity:0 element is "parsed" for that, which can explain a
          stray dark toolbar tint independent of anything actually rendered. */
       transition: opacity 0.42s ease, transform 0.42s ease, visibility 0s linear 0.42s;
+    }
+    .thought-card-inner {
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 20px 22px;
     }
     .thought-eyebrow { color: var(--accent); margin-bottom: 12px; }
     .thought-text {
@@ -1882,7 +1893,7 @@
     document.body.dataset.floatstyle = window.__TWEAKS.floatstyle;
     document.body.dataset.previewlock = window.__TWEAKS.previewlock;
   </script>
-  <div id="bg-nebula" aria-hidden="true"></div>
+  <div id="bg-nebula" aria-hidden="true"><div id="bg-nebula-fill"></div></div>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
   <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
   <nav class="nav" id="nav">
@@ -2144,8 +2155,10 @@
 
   <!-- ── Footer ── -->
   <div class="thought-card" id="thought-card">
-    <div class="thought-eyebrow label" id="thought-date"></div>
-    <div class="thought-text" id="thought-text"></div>
+    <div class="thought-card-inner">
+      <div class="thought-eyebrow label" id="thought-date"></div>
+      <div class="thought-text" id="thought-text"></div>
+    </div>
   </div>
 
   <footer class="footer">
