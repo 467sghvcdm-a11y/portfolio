@@ -23,7 +23,7 @@
     html {
       min-height: 100dvh;
       color-scheme: dark;
-      background-color: #000000;
+      background-color: #070912;
       /* iOS Safari paints the status-bar and home-indicator safe areas from the
          ROOT element's background — position:fixed children never reach there.
          Mirror the nebula here so those strips match instead of going flat black. */
@@ -48,14 +48,13 @@
       right: -50px;
       height: 3000px;
       z-index: 0;
-      /* NO background-color fallback here on purpose. iOS Safari appears unable
-         to rasterize ANY position:fixed layer into the status-bar/home-indicator
-         safe-area strip, regardless of box size (a 3000px static box still didn't
-         help) — likely a hard WebKit limitation, not a sizing bug. An opaque
-         black fallback here would paint solid black in that unrasterized strip,
-         masking the identical gradient html already paints correctly underneath
-         as an ordinary (non-fixed) background. Leaving this transparent lets
-         that correct html gradient show through instead. */
+      /* iOS 26 Safari's "Liquid Glass" toolbar tints itself by sampling color
+         from nearby fixed elements rather than compositing this layer into the
+         safe-area strip directly. With no explicit background-color here, it
+         has nothing valid to sample and falls back to a flat black/white bar.
+         A dark-navy solid (the gradient's own base tone, not pure black) gives
+         it a real color to read that also blends with the gradient itself. */
+      background-color: #070912;
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
@@ -65,9 +64,9 @@
 
     body {
       min-height: 100dvh;
-      /* Transparent so the html-level nebula shows through into the iOS safe
-         areas; the fixed #bg-nebula still covers the scrollable content area. */
-      background-color: transparent;
+      /* NOT transparent — iOS 26 Safari's Liquid Glass toolbar tinting falls
+         back to white when it can't read an explicit root background color. */
+      background-color: #070912;
       --accent: #d92638;
       --card-radius: 20px;
       --card-h: max(40px, calc((100vw - 16px - 1000px) / 2));
@@ -280,9 +279,15 @@
       padding: 20px 22px;
       z-index: 200;
       opacity: 0;
+      visibility: hidden;
       transform: translateY(-8px);
       pointer-events: none;
-      transition: opacity 0.42s ease, transform 0.42s ease;
+      /* visibility (not just opacity:0) so this fixed, near-black-backdrop
+         element is fully derendered when closed. iOS 26 Safari's Liquid Glass
+         toolbar tints itself by sampling nearby fixed elements' background —
+         even an opacity:0 element is "parsed" for that, which can explain a
+         stray dark toolbar tint independent of anything actually rendered. */
+      transition: opacity 0.42s ease, transform 0.42s ease, visibility 0s linear 0.42s;
     }
     .thought-eyebrow { color: var(--accent); margin-bottom: 12px; }
     .thought-text {
@@ -2393,7 +2398,8 @@
       open = true;
       dot.classList.add('active');
       dot.setAttribute('aria-expanded', 'true');
-      card.style.transition = 'opacity 0.42s ease, transform 0.42s ease';
+      card.style.transition = 'opacity 0.42s ease, transform 0.42s ease, visibility 0s linear 0s';
+      card.style.visibility = 'visible';
       card.style.opacity = '1';
       card.style.transform = 'translateY(0)';
       card.style.pointerEvents = 'auto';
@@ -2403,7 +2409,8 @@
       open = false;
       dot.classList.remove('active');
       dot.setAttribute('aria-expanded', 'false');
-      card.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
+      card.style.transition = 'opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s';
+      card.style.visibility = 'hidden';
       card.style.opacity = '0';
       card.style.transform = 'translateY(-8px)';
       card.style.pointerEvents = 'none';
