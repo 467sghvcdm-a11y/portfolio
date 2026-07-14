@@ -2252,7 +2252,12 @@
           const length = rand(40, 240);
           const opacity = rand(0.06, 0.28);
           const width = rand(0.4, 1.8);
-          const travel = Math.max(w, h) * 1.6;
+          // Short travel loop (~1 viewport) so each meteor recycles quickly,
+          // like the original canvas respawning a meteor the moment it left
+          // the screen. The earlier 1.6x-field travel meant each meteor spent
+          // most of its cycle far outside the field, so at any moment most
+          // were invisible and the sky looked near-empty.
+          const travel = Math.max(window.innerWidth, window.innerHeight) * 1.2;
           const dx = Math.cos(angleRad) * travel;
           const dy = Math.sin(angleRad) * travel;
           const speed = rand(30, 90); // px/sec, matches original feel
