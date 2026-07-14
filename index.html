@@ -110,10 +110,13 @@
        fixed element instead of a fixed background on html/body. */
     #starfield {
       position: fixed;
-      top: -600px;
-      left: -50px;
-      right: -50px;
-      height: 3000px;
+      /* inset:0, NOT the old -600px/-50px overshoot box. The overshoot pushed
+         this fixed element underneath Safari's own chrome, and iOS 26 renders
+         a translucent glass scrim over fixed content that intrudes into the
+         safe areas — the tint bars. Sites that look clean stop their fixed
+         elements at the viewport and let the root background paint the
+         safe-area strips, which html's matching gradient does here. */
+      inset: 0;
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
