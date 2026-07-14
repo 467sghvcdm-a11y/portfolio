@@ -66,25 +66,6 @@
         radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
     }
 
-    /* Dedicated, invisible-in-practice slivers purpose-built for iOS 26 Safari's
-       Liquid Glass tint sampling: it reads background-color from a fixed/sticky
-       element within ~4px of the top edge or ~3px of the bottom edge, >=80%
-       viewport width. Rather than leaving that sampling to accidentally land on
-       nav/thought-card/drawers (unpredictable, and the actual bug so far), give
-       it something explicit and correctly colored to find on purpose. Mostly
-       positioned off-screen; only a few px are ever technically on-screen. */
-    #tint-anchor-top, #tint-anchor-bottom {
-      position: fixed;
-      left: 0;
-      width: 100%;
-      min-height: 12px;
-      background-color: #070912;
-      z-index: 5;
-      pointer-events: none;
-    }
-    #tint-anchor-top { top: -8px; }
-    #tint-anchor-bottom { bottom: -8px; }
-
     body {
       min-height: 100dvh;
       /* NOT transparent — iOS 26 Safari's Liquid Glass toolbar tinting falls
@@ -141,12 +122,25 @@
       border-radius: 0;
     }
 
-    canvas.hero-canvas {
+    /* #hero-canvas-shell is the fixed element (bare, no rendered content of
+       its own); the <canvas> is a plain absolute child inside it. Diagnostic
+       testing confirmed this specific <canvas> element being position:fixed
+       was the actual cause of the iOS bottom black bar -- a plain fixed div
+       (#bg-nebula) at the same edges was completely unaffected, isolating it
+       to something about a fixed canvas specifically, not fixed elements
+       generally. Mirrors the #bg-nebula/#bg-nebula-fill split that already
+       proved safe. */
+    #hero-canvas-shell {
       position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    canvas.hero-canvas {
+      position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
       pointer-events: none;
     }
 
@@ -1883,20 +1877,6 @@
     body[data-chrome="floating"] .essay-drawer-close:hover { background: rgba(244,237,226,0.08); }
 
   </style>
-  <style>
-    /* ============================================================
-       DIAGNOSTIC ONLY — strips position:fixed from every fixed
-       element site-wide to test whether that's actually the cause
-       of the persistent iOS black-bar bug. REVERT THIS BLOCK
-       (git revert) once the test is done, do not build on top of it. */
-    /* Round 5: tint-anchors cleared (round 4, bug stayed present with them
-       absolute). Culprit is nebula and/or canvas. Now also disable canvas,
-       leaving ONLY #bg-nebula fixed (plus drawers, always fixed by
-       default) to isolate which of the two it is. */
-    .nav, .thought-card, #tint-anchor-top, #tint-anchor-bottom, canvas.hero-canvas {
-      position: absolute !important;
-    }
-  </style>
 </head>
 <body>
   <script>
@@ -1927,10 +1907,8 @@
     document.body.dataset.previewlock = window.__TWEAKS.previewlock;
   </script>
   <div id="bg-nebula" aria-hidden="true"><div id="bg-nebula-fill"></div></div>
-  <div id="tint-anchor-top" aria-hidden="true"></div>
-  <div id="tint-anchor-bottom" aria-hidden="true"></div>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
-  <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+  <div id="hero-canvas-shell" aria-hidden="true"><canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas></div>
   <nav class="nav" id="nav">
     <div class="nav-identity" id="nav-identity">
       <div class="avatar"><img src="assets/portrait.jpg" alt="" width="513" height="513"></div>
