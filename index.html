@@ -125,24 +125,14 @@
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
         radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
     }
-    /* Parallax: the sky drifts at roughly quarter speed of the content, so it
-       reads as a distant backdrop instead of scrolling 1:1 with the page.
-       Scroll-driven animation on purpose — it runs on the compositor thread
-       (perfectly smooth, no JS, none of the jitter per-frame JS pinning had),
-       and because the layer genuinely moves, it never trips iOS 26 Safari's
-       scrim treatment of visually stationary full-viewport layers (which
-       killed position:fixed, transform-pinning, and canvas approaches alike).
-       Browsers without scroll-timeline support just get the static 1:1 layer. */
-    @supports (animation-timeline: scroll()) {
-      #starfield {
-        animation: sky-parallax linear both;
-        animation-timeline: scroll(root);
-      }
-      @keyframes sky-parallax {
-        from { transform: translateY(0); }
-        to   { transform: translateY(65%); }
-      }
-    }
+    /* NO scroll coupling of any kind on this layer — every variant was tried
+       on-device and failed: position:fixed (black bars / glass scrim from
+       iOS 26's treatment of visually stationary layers), per-frame JS
+       transform pinning (star jitter), and scroll-driven animation-timeline
+       parallax (also jitter — not compositor-smooth on iOS Safari yet). The
+       sky stays static in the document; the slow time-based drift on the
+       stars themselves (see star-drift keyframes) is what keeps it feeling
+       detached from the content. */
     .star {
       position: absolute;
       border-radius: 50%;
@@ -151,6 +141,12 @@
     @keyframes star-twinkle {
       0%, 100% { opacity: var(--op-lo); }
       50% { opacity: var(--op-hi); }
+    }
+    /* Slow ambient wander (alternates back and forth, so no loop snap).
+       Time-based, never scroll-linked — see the comment above #starfield. */
+    @keyframes star-drift {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(var(--drift-x), var(--drift-y)); }
     }
     .meteor {
       position: absolute;
@@ -2240,13 +2236,16 @@
         const lo = Math.max(0, base - 0.08);
         const hi = base + 0.08;
         const dur = rand(9, 45);
+        const driftDur = rand(50, 120);
         const el = document.createElement('div');
         el.className = 'star';
         el.style.cssText =
           `left:${rand(0, w)}px; top:${rand(0, h)}px; width:${r * 2}px; height:${r * 2}px;` +
           `--op-lo:${lo}; --op-hi:${hi};` +
+          `--drift-x:${rand(-40, 40)}px; --drift-y:${rand(-30, 30)}px;` +
           (reduceMotion ? `opacity:${base};` :
-            `animation: star-twinkle ${dur}s ease-in-out ${-rand(0, dur)}s infinite;`);
+            `animation: star-twinkle ${dur}s ease-in-out ${-rand(0, dur)}s infinite,` +
+            ` star-drift ${driftDur}s ease-in-out ${-rand(0, driftDur)}s infinite alternate;`);
         field.appendChild(el);
       }
 
