@@ -1888,12 +1888,11 @@
 
   </style>
   <style>
-    /* DIAGNOSTIC ONLY — fully derender the three hidden fixed overlays
-       (drawers + thought-card) with display:none. visibility:hidden is NOT
-       enough for iOS 26's tint sampler per research; testing whether these
-       are the source of the remaining glass scrim bars. Drawers/thought-card
-       won't open while this is active. Revert after testing. */
-    .about-drawer, .essay-drawer, .thought-card { display: none !important; }
+    /* DIAGNOSTIC ONLY — hidden overlays cleared (display:none on them changed
+       nothing). .nav is now the ONLY remaining full-width fixed element;
+       forcing it absolute (it will scroll away with the page — expected) to
+       test whether it is the source of the glass scrim bars. Revert after. */
+    .nav { position: absolute !important; }
   </style>
 </head>
 <body>
@@ -2314,9 +2313,13 @@
     // real device), but its edge sampler only looks at fixed/sticky elements,
     // so a transform-pinned absolute element paints edge-to-edge cleanly.
     let scrollRaf = 0;
+    const dpr = window.devicePixelRatio || 1;
     function pin() {
       scrollRaf = 0;
-      field.style.transform = 'translate3d(0,' + Math.max(0, window.scrollY) + 'px,0)';
+      // Snap to whole device pixels — fractional scroll offsets on iOS made
+      // the sharp star points shimmer/jitter during momentum scrolling.
+      const y = Math.round(Math.max(0, window.scrollY) * dpr) / dpr;
+      field.style.transform = 'translate3d(0,' + y + 'px,0)';
     }
     window.addEventListener('scroll', () => {
       if (!scrollRaf) scrollRaf = requestAnimationFrame(pin);
