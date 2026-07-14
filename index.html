@@ -97,30 +97,28 @@
       border-radius: 0;
     }
 
-    /* The single full-viewport backdrop: nebula gradient + stars/meteors in
-       one element. position:ABSOLUTE, not fixed — this is the load-bearing
-       decision. Exhaustive on-device testing showed iOS 26 Safari mangles any
-       full-viewport position:fixed element at the chrome edges no matter what:
-       solid background → black bars, transparent → greenish glass scrim,
-       overshooting into the safe areas or stopping at inset:0 — every
-       combination produced some bar artifact. With zero full-screen fixed
-       elements the page painted edge-to-edge cleanly. So the backdrop is a
-       plain absolute element that a scroll listener re-pins each frame via
-       translate3d (see the starfield script) — visually identical to fixed,
-       but invisible to Safari's fixed/sticky edge sampler.
-       (Not a <canvas> either: a pinned canvas was the original black-bar
-       cause. And not background-attachment:fixed on html/body: broken in
-       iOS Safari.) */
+    /* The backdrop: nebula gradient + stars/meteors in one full-DOCUMENT
+       static layer. Nothing about it is pinned to the viewport — this is the
+       load-bearing decision. Exhaustive on-device testing showed iOS 26
+       Safari scrims/blacks out any full-viewport element that stays visually
+       stationary while the page scrolls, regardless of technique: position:
+       fixed (every variant — solid, transparent, overshoot, inset:0), a
+       pinned <canvas>, even an absolute element re-pinned per frame via
+       translate3d. The trigger is visual pinning itself, not the CSS position
+       value. A static in-flow layer spanning the whole document keeps stars
+       everywhere (page never feels dead below the hero), scrolls naturally
+       like real content, and gives Safari nothing to scrim. The gradient
+       stretches across the full page height; html carries a matching
+       gradient for the safe-area strips.
+       (background-attachment:fixed on html/body is also broken in iOS
+       Safari, which is why that obvious alternative isn't used.) */
+    body { position: relative; }
     #starfield {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100lvh;
+      inset: 0;
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
-      will-change: transform;
       background-color: #070912;
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
@@ -1887,13 +1885,6 @@
     body[data-chrome="floating"] .essay-drawer-close:hover { background: rgba(244,237,226,0.08); }
 
   </style>
-  <style>
-    /* DIAGNOSTIC ONLY — hidden overlays cleared (display:none on them changed
-       nothing). .nav is now the ONLY remaining full-width fixed element;
-       forcing it absolute (it will scroll away with the page — expected) to
-       test whether it is the source of the glass scrim bars. Revert after. */
-    .nav { position: absolute !important; }
-  </style>
 </head>
 <body>
   <script>
@@ -2219,11 +2210,12 @@
       field.innerHTML = '';
       const w = field.offsetWidth, h = field.offsetHeight;
 
-      // Original canvas counts (180/28/40) were per viewport; this field is
-      // ~3.5 viewports tall (3000px overshoot box), so scale by area to keep
-      // the same on-screen density.
+      // Original canvas counts (180/28/40) were per viewport; the field now
+      // spans the full document (~5-7 viewports), so scale by area to keep
+      // the same on-screen density — capped so a long page can't spawn
+      // thousands of animated elements on mobile.
       const density = (w * h) / (window.innerWidth * window.innerHeight);
-      const starCount = Math.round((mode === 'drift' ? 240 : 180) * density);
+      const starCount = Math.min(Math.round((mode === 'drift' ? 240 : 180) * density), 700);
       for (let i = 0; i < starCount; i++) {
         const r = rand(0.2, 1.3);
         const base = rand(0.05, 0.40);
@@ -2241,7 +2233,7 @@
       }
 
       if (mode === 'meteors' && !reduceMotion) {
-        const meteorCount = Math.round(28 * density);
+        const meteorCount = Math.min(Math.round(28 * density), 100);
         for (let i = 0; i < meteorCount; i++) {
           const angleDeg = rand(22.5, 33.75); // matches original PI/8..3PI/16 radians
           const angleRad = angleDeg * Math.PI / 180;
@@ -2268,7 +2260,7 @@
           field.appendChild(el);
         }
       } else if (mode === 'drift' && !reduceMotion) {
-        const driftCount = Math.round(40 * density);
+        const driftCount = Math.min(Math.round(40 * density), 150);
         for (let i = 0; i < driftCount; i++) {
           const r = rand(0.4, 2.0);
           const opacity = rand(0.06, 0.34);
@@ -2306,25 +2298,10 @@
     }
     window.addEventListener('resize', onResize);
 
-    // Visually pin the (absolute-positioned) backdrop to the viewport by
-    // translating it to the scroll offset each frame. Why not position:fixed:
-    // iOS 26 Safari mangles any full-viewport fixed element at the chrome
-    // edges (black bars or glass scrim, confirmed across every variant on a
-    // real device), but its edge sampler only looks at fixed/sticky elements,
-    // so a transform-pinned absolute element paints edge-to-edge cleanly.
-    let scrollRaf = 0;
-    const dpr = window.devicePixelRatio || 1;
-    function pin() {
-      scrollRaf = 0;
-      // Snap to whole device pixels — fractional scroll offsets on iOS made
-      // the sharp star points shimmer/jitter during momentum scrolling.
-      const y = Math.round(Math.max(0, window.scrollY) * dpr) / dpr;
-      field.style.transform = 'translate3d(0,' + y + 'px,0)';
-    }
-    window.addEventListener('scroll', () => {
-      if (!scrollRaf) scrollRaf = requestAnimationFrame(pin);
-    }, { passive: true });
-    pin();
+    // No scroll pinning on purpose: iOS 26 Safari scrims any visually
+    // stationary full-viewport layer (fixed, transform-pinned, or canvas
+    // alike), and per-frame JS pinning also made the stars jitter during
+    // momentum scrolling. The field is a static full-document layer instead.
 
     // Expose controller for the Tweaks panel
     window.__heroAtmos = {
