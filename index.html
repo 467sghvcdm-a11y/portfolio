@@ -1887,6 +1887,14 @@
     body[data-chrome="floating"] .essay-drawer-close:hover { background: rgba(244,237,226,0.08); }
 
   </style>
+  <style>
+    /* DIAGNOSTIC ONLY — fully derender the three hidden fixed overlays
+       (drawers + thought-card) with display:none. visibility:hidden is NOT
+       enough for iOS 26's tint sampler per research; testing whether these
+       are the source of the remaining glass scrim bars. Drawers/thought-card
+       won't open while this is active. Revert after testing. */
+    .about-drawer, .essay-drawer, .thought-card { display: none !important; }
+  </style>
 </head>
 <body>
   <script>
