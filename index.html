@@ -125,6 +125,24 @@
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
         radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
     }
+    /* Parallax: the sky drifts at roughly quarter speed of the content, so it
+       reads as a distant backdrop instead of scrolling 1:1 with the page.
+       Scroll-driven animation on purpose — it runs on the compositor thread
+       (perfectly smooth, no JS, none of the jitter per-frame JS pinning had),
+       and because the layer genuinely moves, it never trips iOS 26 Safari's
+       scrim treatment of visually stationary full-viewport layers (which
+       killed position:fixed, transform-pinning, and canvas approaches alike).
+       Browsers without scroll-timeline support just get the static 1:1 layer. */
+    @supports (animation-timeline: scroll()) {
+      #starfield {
+        animation: sky-parallax linear both;
+        animation-timeline: scroll(root);
+      }
+      @keyframes sky-parallax {
+        from { transform: translateY(0); }
+        to   { transform: translateY(65%); }
+      }
+    }
     .star {
       position: absolute;
       border-radius: 50%;
