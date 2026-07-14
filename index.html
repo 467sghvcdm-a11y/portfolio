@@ -1889,11 +1889,12 @@
        element site-wide to test whether that's actually the cause
        of the persistent iOS black-bar bug. REVERT THIS BLOCK
        (git revert) once the test is done, do not build on top of it. */
-    /* Round 3: drawers cleared (round 2, bug stayed gone). Now re-enable
-       fixed on the background/canvas group (nebula, tint anchors, hero
-       canvas) to test if one of THOSE is the bottom-bar cause. nav and
-       thought-card stay absolute. */
-    .nav, .thought-card {
+    /* Round 4: round 3 (nebula+tint-anchors+canvas fixed) brought the bug
+       back, isolating the culprit to that group. Now disable ONLY the
+       tint-anchors (my own diagnostic bait elements from an earlier fix
+       attempt) to test if THEY are specifically the cause, with nebula and
+       canvas staying fixed. */
+    .nav, .thought-card, #tint-anchor-top, #tint-anchor-bottom {
       position: absolute !important;
     }
   </style>
