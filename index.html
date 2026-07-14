@@ -28,8 +28,8 @@
          ROOT element's background — position:fixed children never reach there.
          Mirror the nebula here so those strips match instead of going flat black. */
       /* NOT background-attachment:fixed — that's the exact property already
-         diagnosed as broken on iOS Safari (why #bg-nebula exists as a JS-driven
-         fixed div in the first place). Plain scroll-attachment on a single
+         diagnosed as broken on iOS Safari (why #starfield exists as a fixed
+         div in the first place). Plain scroll-attachment on a single
          100dvh-tall root paints reliably once, with no scroll-tied repaint. */
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
@@ -40,34 +40,6 @@
       background-position: top;
     }
 
-    /* Nebula lives on a fixed div — background-attachment:fixed is broken in iOS Safari */
-    #bg-nebula {
-      position: fixed;
-      top: -600px;
-      left: -50px;
-      right: -50px;
-      height: 3000px;
-      z-index: 0;
-      pointer-events: none;
-      /* Solid dark base directly on the fixed element ON PURPOSE: iOS 26
-         Safari's Liquid Glass tint samples the edge-touching fixed element's
-         own background-color. During the black-bar hunt this was stripped to
-         a child (the bar's real cause turned out to be the canvas instead),
-         which left Safari sampling a fully transparent fixed element and
-         rendering odd translucent scrim bars at top/bottom. A solid color
-         here gives it the correct dark tone to tint from; the gradient still
-         lives on the #bg-nebula-fill child. */
-      background-color: #070912;
-    }
-    #bg-nebula-fill {
-      position: absolute;
-      inset: 0;
-      background-color: #070912;
-      background-image:
-        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
-        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
-        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
-    }
 
     body {
       min-height: 100dvh;
@@ -125,11 +97,17 @@
       border-radius: 0;
     }
 
-    /* Starfield/meteors as plain DOM elements (see #starfield), NOT canvas —
-       diagnostic testing confirmed a <canvas> kept visually pinned to the
-       viewport during scroll was the actual cause of an iOS Safari black-bar
-       bug; a plain fixed div (#bg-nebula) at the same edges was unaffected.
-       Same overshoot as #bg-nebula so it's safe to stay position:fixed. */
+    /* THE single fixed backdrop: nebula gradient + stars/meteors in one
+       element. Consolidated on purpose — with two stacked fixed elements
+       (a nebula div under a transparent starfield div), iOS 26 Safari's
+       Liquid Glass sampled the topmost transparent one and rendered odd
+       greenish translucent scrim bars at the edges. One fixed element with
+       an explicit solid base color gives the sampler an unambiguous answer.
+       Plain DOM elements, NOT canvas — a <canvas> kept visually pinned to
+       the viewport during scroll was the confirmed cause of the iOS black
+       bar; plain fixed divs at the same edges were unaffected.
+       background-attachment:fixed is also broken in iOS Safari, hence a
+       fixed element instead of a fixed background on html/body. */
     #starfield {
       position: fixed;
       top: -600px;
@@ -139,6 +117,11 @@
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
+      background-color: #070912;
+      background-image:
+        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
     }
     .star {
       position: absolute;
@@ -1929,7 +1912,6 @@
     document.body.dataset.floatstyle = window.__TWEAKS.floatstyle;
     document.body.dataset.previewlock = window.__TWEAKS.previewlock;
   </script>
-  <div id="bg-nebula" aria-hidden="true"><div id="bg-nebula-fill"></div></div>
   <button class="nav-dot" id="nav-dot" aria-label="Today's thought" aria-expanded="false" aria-controls="thought-card"></button>
   <div id="starfield" aria-hidden="true"></div>
   <nav class="nav" id="nav">
@@ -2212,7 +2194,7 @@
     // div (#starfield), NOT a <canvas>. Confirmed via live-device diagnostic
     // that a <canvas> kept visually pinned to the viewport during scroll was
     // the actual cause of an iOS Safari bug (a black bar in the toolbar
-    // safe area); a plain fixed div at the same edges (#bg-nebula) was
+    // safe area); a plain fixed div at the same edges was
     // completely unaffected. This keeps the always-visible pinned-backdrop
     // look without a canvas, and is cheaper too — CSS animations are
     // GPU-composited instead of redrawn every frame in JS.
