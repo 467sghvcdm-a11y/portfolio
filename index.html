@@ -97,29 +97,30 @@
       border-radius: 0;
     }
 
-    /* THE single fixed backdrop: nebula gradient + stars/meteors in one
-       element. Consolidated on purpose — with two stacked fixed elements
-       (a nebula div under a transparent starfield div), iOS 26 Safari's
-       Liquid Glass sampled the topmost transparent one and rendered odd
-       greenish translucent scrim bars at the edges. One fixed element with
-       an explicit solid base color gives the sampler an unambiguous answer.
-       Plain DOM elements, NOT canvas — a <canvas> kept visually pinned to
-       the viewport during scroll was the confirmed cause of the iOS black
-       bar; plain fixed divs at the same edges were unaffected.
-       background-attachment:fixed is also broken in iOS Safari, hence a
-       fixed element instead of a fixed background on html/body. */
+    /* The single full-viewport backdrop: nebula gradient + stars/meteors in
+       one element. position:ABSOLUTE, not fixed — this is the load-bearing
+       decision. Exhaustive on-device testing showed iOS 26 Safari mangles any
+       full-viewport position:fixed element at the chrome edges no matter what:
+       solid background → black bars, transparent → greenish glass scrim,
+       overshooting into the safe areas or stopping at inset:0 — every
+       combination produced some bar artifact. With zero full-screen fixed
+       elements the page painted edge-to-edge cleanly. So the backdrop is a
+       plain absolute element that a scroll listener re-pins each frame via
+       translate3d (see the starfield script) — visually identical to fixed,
+       but invisible to Safari's fixed/sticky edge sampler.
+       (Not a <canvas> either: a pinned canvas was the original black-bar
+       cause. And not background-attachment:fixed on html/body: broken in
+       iOS Safari.) */
     #starfield {
-      position: fixed;
-      /* inset:0, NOT the old -600px/-50px overshoot box. The overshoot pushed
-         this fixed element underneath Safari's own chrome, and iOS 26 renders
-         a translucent glass scrim over fixed content that intrudes into the
-         safe areas — the tint bars. Sites that look clean stop their fixed
-         elements at the viewport and let the root background paint the
-         safe-area strips, which html's matching gradient does here. */
-      inset: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100lvh;
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
+      will-change: transform;
       background-color: #070912;
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
@@ -2297,6 +2298,22 @@
       });
     }
     window.addEventListener('resize', onResize);
+
+    // Visually pin the (absolute-positioned) backdrop to the viewport by
+    // translating it to the scroll offset each frame. Why not position:fixed:
+    // iOS 26 Safari mangles any full-viewport fixed element at the chrome
+    // edges (black bars or glass scrim, confirmed across every variant on a
+    // real device), but its edge sampler only looks at fixed/sticky elements,
+    // so a transform-pinned absolute element paints edge-to-edge cleanly.
+    let scrollRaf = 0;
+    function pin() {
+      scrollRaf = 0;
+      field.style.transform = 'translate3d(0,' + Math.max(0, window.scrollY) + 'px,0)';
+    }
+    window.addEventListener('scroll', () => {
+      if (!scrollRaf) scrollRaf = requestAnimationFrame(pin);
+    }, { passive: true });
+    pin();
 
     // Expose controller for the Tweaks panel
     window.__heroAtmos = {
