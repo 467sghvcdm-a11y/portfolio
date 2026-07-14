@@ -1883,6 +1883,18 @@
     body[data-chrome="floating"] .essay-drawer-close:hover { background: rgba(244,237,226,0.08); }
 
   </style>
+  <style>
+    /* ============================================================
+       DIAGNOSTIC ONLY — strips position:fixed from every fixed
+       element site-wide to test whether that's actually the cause
+       of the persistent iOS black-bar bug. REVERT THIS BLOCK
+       (git revert) once the test is done, do not build on top of it. */
+    #bg-nebula, #tint-anchor-top, #tint-anchor-bottom,
+    canvas.hero-canvas, .nav, .thought-card,
+    .about-drawer, .essay-drawer {
+      position: absolute !important;
+    }
+  </style>
 </head>
 <body>
   <script>
