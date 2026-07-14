@@ -1889,9 +1889,11 @@
        element site-wide to test whether that's actually the cause
        of the persistent iOS black-bar bug. REVERT THIS BLOCK
        (git revert) once the test is done, do not build on top of it. */
+    /* Round 2: re-enable fixed ONLY on the drawers (bottom:16px, own
+       background-color directly on the fixed element) to test if they're
+       the specific cause of the bottom bar. Everything else stays absolute. */
     #bg-nebula, #tint-anchor-top, #tint-anchor-bottom,
-    canvas.hero-canvas, .nav, .thought-card,
-    .about-drawer, .essay-drawer {
+    canvas.hero-canvas, .nav, .thought-card {
       position: absolute !important;
     }
   </style>
