@@ -49,12 +49,15 @@
       height: 3000px;
       z-index: 0;
       pointer-events: none;
-      /* No background here on the fixed element itself — iOS 26 Safari's
-         Liquid Glass tinting specifically inspects fixed/sticky elements' OWN
-         background-color, so painting directly on a fixed element that spans
-         the edges is exactly what triggers the wrong tint. The actual gradient
-         lives on #bg-nebula-fill, a plain (non-fixed) absolutely-positioned
-         child, which is invisible to that sampling rule. */
+      /* Solid dark base directly on the fixed element ON PURPOSE: iOS 26
+         Safari's Liquid Glass tint samples the edge-touching fixed element's
+         own background-color. During the black-bar hunt this was stripped to
+         a child (the bar's real cause turned out to be the canvas instead),
+         which left Safari sampling a fully transparent fixed element and
+         rendering odd translucent scrim bars at top/bottom. A solid color
+         here gives it the correct dark tone to tint from; the gradient still
+         lives on the #bg-nebula-fill child. */
+      background-color: #070912;
     }
     #bg-nebula-fill {
       position: absolute;
