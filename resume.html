@@ -208,19 +208,32 @@
       color: var(--ink);
     }
 
-    /* ── Skills ── */
-    .r-skills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .r-skill {
-      font-size: var(--rfs-small);
-      color: var(--mid);
-      background: #f3f3f1;
-      border-radius: 4px;
-      padding: 3px 10px;
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .page {
+        margin: 0;
+        padding: 32px 22px 40px;
+        box-shadow: none;
+      }
+      body { background: #fff; }
+      .r-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .r-contact {
+        text-align: left;
+      }
+      .r-role, .r-earlier-row {
+        flex-direction: column;
+        gap: 2px;
+      }
+      .r-role-date, .r-earlier-date {
+        width: auto;
+        text-align: left;
+        padding-top: 0;
+      }
+      .r-summary { max-width: none; }
     }
 
     /* ── Print ── */
@@ -322,23 +335,6 @@
           <div class="r-earlier-date">2010—2013</div>
           <div class="r-earlier-body"><strong>StudioPMG</strong> &nbsp;·&nbsp; Art Director</div>
         </div>
-      </div>
-    </div>
-
-    <!-- Skills -->
-    <div class="r-section" style="margin-bottom: 0;">
-      <div class="r-section-label">Craft</div>
-      <div class="r-skills">
-        <span class="r-skill">AI product design</span>
-        <span class="r-skill">Design systems</span>
-        <span class="r-skill">0→1 product work</span>
-        <span class="r-skill">Design strategy</span>
-        <span class="r-skill">Cross-functional leadership</span>
-        <span class="r-skill">Interaction design</span>
-        <span class="r-skill">Figma</span>
-        <span class="r-skill">Prototyping</span>
-        <span class="r-skill">Research synthesis</span>
-        <span class="r-skill">A/B testing</span>
       </div>
     </div>
 
