@@ -97,21 +97,25 @@
       border-radius: 0;
     }
 
-    /* The backdrop: nebula gradient + stars/meteors in one full-DOCUMENT
-       static layer. Nothing about it is pinned to the viewport — this is the
-       load-bearing decision. Exhaustive on-device testing showed iOS 26
-       Safari scrims/blacks out any full-viewport element that stays visually
-       stationary while the page scrolls, regardless of technique: position:
-       fixed (every variant — solid, transparent, overshoot, inset:0), a
-       pinned <canvas>, even an absolute element re-pinned per frame via
-       translate3d. The trigger is visual pinning itself, not the CSS position
-       value. A static in-flow layer spanning the whole document keeps stars
-       everywhere (page never feels dead below the hero), scrolls naturally
-       like real content, and gives Safari nothing to scrim. The gradient
-       stretches across the full page height; html carries a matching
-       gradient for the safe-area strips.
+    /* The backdrop: nebula gradient + stars/meteors in one layer. On touch
+       devices it's a full-DOCUMENT static layer, NOT pinned to the viewport —
+       this is the load-bearing decision. Exhaustive on-device testing showed
+       iOS 26 Safari scrims/blacks out any full-viewport element that stays
+       visually stationary while the page scrolls, regardless of technique:
+       position:fixed (every variant — solid, transparent, overshoot,
+       inset:0), a pinned <canvas>, an absolute element re-pinned per frame
+       via translate3d, and scroll-driven animation-timeline parallax (the JS
+       and scroll-timeline routes also jittered the stars). The trigger is
+       visual pinning itself, not the CSS position value. A static in-flow
+       layer spanning the whole document keeps stars everywhere, scrolls
+       naturally like real content, and gives Safari nothing to scrim; html
+       carries a matching gradient for the safe-area strips.
        (background-attachment:fixed on html/body is also broken in iOS
-       Safari, which is why that obvious alternative isn't used.) */
+       Safari, which is why that obvious alternative isn't used.)
+       On desktop (hover + fine pointer — deliberately NOT a width query, so
+       iPads with the same buggy Safari stay on the static variant) the bug
+       doesn't exist, so the layer is plain position:fixed like the original
+       design and the sky stays pinned while the content scrolls. */
     body { position: relative; }
     #starfield {
       position: absolute;
@@ -124,6 +128,9 @@
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
         radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      #starfield { position: fixed; }
     }
     /* NO scroll coupling of any kind on this layer — every variant was tried
        on-device and failed: position:fixed (black bars / glass scrim from
