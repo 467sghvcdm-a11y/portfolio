@@ -15,7 +15,7 @@
   <meta name="twitter:image" content="https://467sghvcdm-a11y.github.io/portfolio/assets/og-image.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Figtree:wght@400;600;800&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     /* Backdrop pattern ported from index.html (see starfield.js for the full
@@ -84,6 +84,8 @@
       display: flex;
       align-items: center;
       gap: 2px;
+      font-family: var(--font-heading);
+      font-weight: 400;
       background: rgba(10,10,10,0.65);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -107,6 +109,7 @@
       top: 16px;
       left: 16px;
       z-index: 100;
+      font-family: var(--font-heading);
       color: rgba(244,237,226,0.6);
       text-decoration: none;
       background: rgba(10,10,10,0.65);
@@ -130,6 +133,7 @@
     }
 
     .hero-eyebrow {
+      font-family: var(--font-heading);
       color: var(--accent);
       margin-bottom: 20px;
       display: flex;
@@ -139,7 +143,7 @@
     .hero-eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--accent); }
 
     .cs-title {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: var(--font-heading);
       font-size: var(--fs-7xl);
       line-height: 1.08;
       color: var(--c-cream);
@@ -158,7 +162,7 @@
     }
     .hero-foot b {
       display: block;
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: var(--font-heading);
       font-size: var(--fs-2xl);
       font-weight: 380;
       color: var(--c-cream);
@@ -232,11 +236,11 @@
     /* Massive numeral, cream on nebula — floats in left margin at wide viewports */
     .cs-chapter::before {
       content: counter(chapter, decimal-leading-zero);
-      font-family: 'Fraunces', Georgia, serif;
-      font-weight: 300;
+      font-family: var(--font-heading);
+      font-weight: var(--font-heading-weight);
       font-size: var(--fs-9xl);
       line-height: 0.82;
-      letter-spacing: -0.04em;
+      letter-spacing: 0;
       color: var(--c-cream);
       font-feature-settings: 'lnum';
       text-shadow: 0 0 36px rgba(217,38,56,0.18);
@@ -279,9 +283,9 @@
 
     /* ── Callout ── */
     .cs-callout {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: var(--font-heading);
       font-size: var(--fs-lg);
-      font-weight: 300;
+      font-weight: var(--font-heading-weight);
       font-style: italic;
       color: #1a1a1a;
       line-height: 1.4;
@@ -302,16 +306,16 @@
     .cs-metric.win { border-top-color: #007A66; }
     .cs-metric.hi { border-top-color: #1a1a1a; }
     .cs-metric-val {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: var(--font-heading);
       font-size: var(--fs-7xl);
-      font-weight: 300;
+      font-weight: var(--font-heading-weight);
       color: #767676;
       line-height: 1.0;
       letter-spacing: -0.02em;
     }
     .cs-metric-val.win { color: #007A66; }
     .cs-metric-val.hi  { color: #1a1a1a; }
-    .cs-metric-sup { font-family: 'Figtree', sans-serif; font-size: var(--fs-label); color: #767676; font-weight: 400; margin-left: 4px; letter-spacing: 0.04em; }
+    .cs-metric-sup { font-family: var(--font-sans); font-size: var(--fs-label); color: #767676; font-weight: 400; margin-left: 4px; letter-spacing: 0.04em; }
     .cs-metric-lbl { margin-top: 10px; }
     .cs-metric-ctx { color: var(--c-secondary); margin-top: 6px; }
 
@@ -320,9 +324,9 @@
     .cs-inline-stat { color: var(--c-secondary); }
     .cs-inline-stat strong {
       display: block;
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: var(--font-heading);
       font-size: var(--fs-2xl);
-      font-weight: 300;
+      font-weight: var(--font-heading-weight);
       color: #1a1a1a;
       margin-bottom: 2px;
       letter-spacing: -0.02em;
@@ -370,9 +374,9 @@
       border-radius: 12px;
     }
     .cs-quote-text {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: var(--font-heading);
       font-size: var(--fs-lg);
-      font-weight: 300;
+      font-weight: var(--font-heading-weight);
       font-style: italic;
       color: #1a1a1a;
       line-height: 1.55;
@@ -430,15 +434,15 @@
     }
     .cs-learnings li:first-child { border-top: none; padding-top: 0; }
     .cs-learnings-num {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: var(--font-heading);
       font-size: var(--fs-lg);
       color: var(--c-secondary);
     }
     .cs-learnings strong {
       display: block;
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: var(--font-heading);
       font-size: var(--fs-body);
-      font-weight: 300;
+      font-weight: var(--font-heading-weight);
       font-style: italic;
       color: #1a1a1a;
       margin-bottom: 6px;
@@ -446,13 +450,13 @@
 
     /* ── Takeaway / Next ── */
     .cs-takeaway { margin-top: 120px; padding-top: 64px; }
-    .cs-takeaway-text { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-3xl); font-style: italic; max-width: 38ch; margin-bottom: 20px; }
+    .cs-takeaway-text { font-family: var(--font-heading); font-size: var(--fs-3xl); font-style: italic; max-width: 38ch; margin-bottom: 20px; }
     .cs-takeaway-sub { font-size: var(--fs-small); color: #1a1a1a; max-width: 55ch; line-height: 1.5; }
     .cs-next { display: block; margin-top: 80px; padding-top: 32px; border-top: 1px solid #eee; text-decoration: none; color: inherit; }
     .cs-next:hover .cs-next-title { color: var(--accent); }
     .cs-next:hover .cs-next-arrow { transform: translateX(4px); color: var(--accent); }
     .cs-next-label { margin-bottom: 8px; }
-    .cs-next-title { font-family: 'Fraunces', Georgia, serif; font-size: var(--fs-2xl); font-weight: 380; transition: color 200ms ease; display: inline; }
+    .cs-next-title { font-family: var(--font-heading); font-size: var(--fs-2xl); font-weight: 380; transition: color 200ms ease; display: inline; }
     .cs-next-arrow { font-size: var(--fs-lg); color: #767676; transition: transform 200ms ease, color 200ms ease; display: inline-block; margin-left: 8px; vertical-align: middle; }
 
     /* ── Footer ── */
