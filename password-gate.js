@@ -54,7 +54,7 @@
   gate.innerHTML = '<div class="g-box">'
     + '<p class="g-label">Password</p>'
     + '<div class="g-row">'
-    + '<input type="password" id="mkp-input" autocomplete="off" autofocus spellcheck="false">'
+    + '<input type="password" id="mkp-input" autocomplete="current-password" autofocus spellcheck="false">'
     + '<button id="mkp-submit">Enter</button>'
     + '</div>'
     + '<p class="g-error" id="mkp-error"></p>'
