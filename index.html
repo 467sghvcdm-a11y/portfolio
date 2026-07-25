@@ -1664,7 +1664,9 @@
       background: none; border: none; outline: none;
       color: rgba(26,21,16,0.85);
       font-family: var(--font-sans);
-      font-size: 15px; width: 180px; padding: 2px 0;
+      /* 16px, not 15 — iOS Safari auto-zooms the whole page on focus for any
+         input under 16px, and the zoom doesn't reliably reset after blur. */
+      font-size: 16px; width: 180px; padding: 2px 0;
       border-bottom: 1px solid rgba(26,21,16,0.18);
       letter-spacing: -0.01em;
     }
@@ -1696,7 +1698,8 @@
     .wlf-prompt { display: none; align-items: center; font-family: ui-monospace,'Cascadia Code','Source Code Pro',Menlo,monospace; font-size: 13px; margin-top: 6px; }
     .wlf-prompt.open { display: flex; }
     .wlf-prompt-label { color: rgba(26,21,16,0.4); white-space: nowrap; }
-    .wlf-prompt input { background: none; border: none; outline: none; color: rgba(26,21,16,0.85); font-family: inherit; font-size: inherit; width: 220px; padding: 0; }
+    /* font-size: 16px, not inherit -- iOS Safari auto-zooms on focus under 16px. */
+    .wlf-prompt input { background: none; border: none; outline: none; color: rgba(26,21,16,0.85); font-family: inherit; font-size: 16px; width: 220px; padding: 0; }
     .wlf-prompt input.error { animation: lock-shake 300ms ease; }
     /* Skill */
     .wls-block { font-family: ui-monospace,'Cascadia Code','Source Code Pro',Menlo,monospace; font-size: 13px; line-height: 1.8; padding: 8px 0; max-width: 520px; }
@@ -1704,7 +1707,8 @@
     .wls-desc { color: rgba(26,21,16,0.42); margin-bottom: 24px; padding-left: 16px; }
     .wls-input-row { display: flex; align-items: center; gap: 10px; padding-left: 16px; }
     .wls-prompt-label { color: rgba(26,21,16,0.4); }
-    .wls-input-row input { background: none; border: none; border-bottom: 1px solid rgba(26,21,16,0.15); outline: none; color: rgba(26,21,16,0.85); font-family: inherit; font-size: inherit; width: 180px; padding: 2px 0; }
+    /* font-size: 16px, not inherit -- iOS Safari auto-zooms on focus under 16px. */
+    .wls-input-row input { background: none; border: none; border-bottom: 1px solid rgba(26,21,16,0.15); outline: none; color: rgba(26,21,16,0.85); font-family: inherit; font-size: 16px; width: 180px; padding: 2px 0; }
     .wls-input-row input.error { animation: lock-shake 300ms ease; }
     .wls-success { color: rgba(60,160,90,0.85); margin-top: 14px; padding-left: 16px; }
     /* Log */
@@ -1717,7 +1721,9 @@
     .wll-spacer { height: 10px; }
     .wll-prompt-row { display: flex; align-items: center; gap: 10px; }
     .wll-gt { color: var(--accent); font-weight: 600; }
-    .wll-prompt-row input { background: none; border: none; outline: none; color: rgba(26,21,16,0.85); font-family: inherit; font-size: inherit; width: 220px; padding: 2px 0; }
+    /* font-size: 16px, not inherit (the surrounding .wll-block runs 12px) --
+       iOS Safari auto-zooms the page on focus for any input under 16px. */
+    .wll-prompt-row input { background: none; border: none; outline: none; color: rgba(26,21,16,0.85); font-family: inherit; font-size: 16px; width: 220px; padding: 2px 0; }
     .wll-prompt-row input::placeholder { color: rgba(26,21,16,0.22); }
     .wll-prompt-row input.error { animation: lock-shake 300ms ease; }
     @keyframes lock-shake {
