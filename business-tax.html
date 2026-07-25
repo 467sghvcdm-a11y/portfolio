@@ -417,6 +417,12 @@
     }
     figure.fig-flow img { border-radius: 8px; }
 
+    /* ── Recipe pairs (before/after) ── */
+    .cs-recipe-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
+    .cs-recipe-label { margin-bottom: 10px; }
+    .cs-recipe-label .accent { color: var(--c-primary); text-transform: none; font-size: var(--fs-caption); font-weight: 400; margin-left: 8px; }
+    .cs-recipe img { width: 100%; height: auto; border-radius: 8px; display: block; }
+
     /* ── Chapter breaks ── */
     .cs-chapter, .card { scroll-margin-top: 72px; }
 
@@ -610,7 +616,7 @@
       <div class="hero-body" style="margin: 72px 0px 0px; gap: 8px">
         <div>
           <p class="hero-eyebrow label" style="margin: 0px 0px 20px">Business Tax</p>
-          <h1 class="cs-title">The Product Was Broken Before They Got There</h1>
+          <h1 class="cs-title">The product was broken before they got there</h1>
         </div>
         <div class="hero-foot label">
           <span>Role<b>Design Lead</b></span>
@@ -626,21 +632,24 @@
         <img src="assets/work-business-tax.jpg" alt="TurboTax Business Tax product screens" width="2048" height="784" loading="eager" decoding="async" style="max-height: 460px; object-fit: cover; object-position: center center; border-radius: 8px;">
       </figure>
 
-      <h3>The problem</h3>
-      <p>TurboTax had a starts problem in Business Tax. Customers were arriving at the business tax product and not starting. The program realigned around the metric. Fix starts.</p>
+      <h3>The problem no one had named</h3>
+      <p>TurboTax had a starts problem in Business Tax: customers were arriving at the product and not starting. The program realigned around the metric. Fix starts.</p>
       <p>But starts wasn't the real problem.</p>
-      <p>A sole proprietor and a self-employed filer file the exact same tax forms. They have the same tax situation. The only meaningful difference between them is which front door they walked through to reach TurboTax. Sole prop customers were being routed into TTO Premium, a product designed for individual filers, and then asked to navigate a business tax experience that assumed knowledge they didn't have, forced decisions that shouldn't exist, and ended with a pricing surprise they weren't prepared for.</p>
-      <p>The starts problem was a symptom. Naming that changed everything about how I responded to it.</p>
-      <div class="cs-callout">You can't A/B test your way out of a broken product architecture.</div>
-      <p>But you can buy time with metric wins while building the case for the real fix. I ran both tracks simultaneously this season.</p>
+      <p>A sole proprietor and a self-employed filer file the exact same tax forms. The only meaningful difference between them is which front door they walked through to reach TurboTax. Sole prop customers were being routed into TTO Premium, a product designed for individual filers, and then asked to navigate a business tax experience that assumed knowledge they didn't have, forced decisions that shouldn't exist, and ended with a pricing surprise they weren't prepared for.</p>
+      <p>The starts problem was a symptom. You can't A/B test your way out of a broken product architecture, but you can buy time with metric wins while building the case for the real fix, so I ran both tracks simultaneously this season.</p>
 
       <div class="cs-section">
         <h3>The equation</h3>
-        <p>When the program focused on the metric, my first design decision was to build a shared understanding of what was actually happening. Not a task list. Not a roadmap. A diagnosis.</p>
+        <p>When the program focused on the metric, my first design decision was to build a shared, honest diagnosis of what was actually happening.</p>
         <p>The result was a single line I sketched across the top of the canonical design file that became the operating canvas for the rest of the season:</p>
         <div class="cs-callout">Auth + Realm creation + Entity selection = Start</div>
-        <p>Three friction points. Three places where customers were falling out before they ever entered the product. Every test I ran was a response to one of these three variables.</p>
-        <p>This wasn't a complicated insight. But naming it mattered. It gave the program a shared mental model for what "fixing starts" actually meant at the design level. It turned a panic response into a coordinated one.</p>
+
+        <figure class="fig-flow">
+          <img src="https://placehold.co/900x300?text=Equation+sketch%3A+Auth+%2B+Realm+creation+%2B+Entity+selection+%3D+Start" alt="Equation sketch: Auth + Realm creation + Entity selection = Start" width="900" height="300" loading="lazy" decoding="async">
+        </figure>
+
+        <p>Three friction points, three places where customers were falling out before they ever entered the product. Every test I ran was a response to one of these three variables.</p>
+        <p>This wasn't a complicated insight, but naming it gave the program a shared mental model for what "fixing starts" actually meant, turning a panic response into a coordinated one.</p>
       </div>
 
     </div>
@@ -666,7 +675,19 @@
         <h3>The breakout: Dual Auth</h3>
         <p>The Dual Auth test performed at twice the baseline rate. Throughout this case study, test results show percentage lift above or below the control group.</p>
         <p>The design insight was specific. The realm selection screen (the moment where TurboTax asks customers to choose between personal and business tax) was confusing customers who had QuickBooks-linked businesses. They had a business. TurboTax knew they had a business. But the screen didn't show them that. It presented an abstract fork in the road and asked them to make a choice without giving them the information they needed to make it confidently.</p>
-        <p>I redesigned the realm chooser to surface their actual business names directly. Not abstract options. Real names they recognized. The choice became confirmation, not decision-making.</p>
+
+        <div class="cs-recipe-pair">
+          <div class="cs-recipe">
+            <div class="cs-recipe-label label">Before <span class="accent">abstract fork</span></div>
+            <img src="https://placehold.co/700x500?text=Dual+Auth%3A+Before+%28abstract+fork%29" alt="Dual Auth, before: abstract fork with no business context" width="700" height="500" loading="lazy" decoding="async">
+          </div>
+          <div class="cs-recipe">
+            <div class="cs-recipe-label label">After <span class="accent">named businesses</span></div>
+            <img src="https://placehold.co/700x500?text=Dual+Auth%3A+After+%28named+businesses%29" alt="Dual Auth, after: chooser surfacing the customer's QuickBooks-linked business names" width="700" height="500" loading="lazy" decoding="async">
+          </div>
+        </div>
+
+        <p>I redesigned the realm chooser to surface their actual business names directly, real names they recognized. The choice became a simple confirmation.</p>
         <p>The hypothesis was also doing something more important than conversion optimization. By explicitly telling customers they needed to complete their business taxes before their personal taxes, I named the joint-filing dependency for the first time in the flow, reducing the confusion that caused customers to rush through or abandon later in the season.</p>
 
         <div class="cs-metrics cs-metrics-4">
@@ -691,8 +712,11 @@
           </div>
         </div>
 
-        <p>Rolled to 90% traffic. The ~18x revenue lift in the affected cohort wasn't a rounding error. It was evidence that the product had been systematically failing a customer segment that was willing to buy, and that one well-targeted design decision could unlock that segment almost immediately.</p>
-        <div class="cs-callout">One well-targeted design decision unlocked a customer segment the product had been ignoring for years.</div>
+        <figure class="fig-flow">
+          <img src="https://placehold.co/900x400?text=Results+snapshot%3A+Auths%2C+Starts%2C+Revenue%2C+Completion" alt="Results snapshot: Auths, Starts, Revenue, Completion" width="900" height="400" loading="lazy" decoding="async">
+        </figure>
+
+        <p>Rolled to 90% traffic. The ~18x revenue lift in the affected cohort was real evidence, not a rounding error, that the product had been systematically failing a customer segment willing to buy for years, one that a single well-targeted design decision could finally reach.</p>
       </div>
 
       <div class="cs-section">
@@ -702,6 +726,11 @@
 
         <h4>R1: the honest loss</h4>
         <p>The first version presented three tiles: Single-member LLC, Multi-member LLC, S-corp.</p>
+
+        <figure class="fig-flow">
+          <img src="https://placehold.co/700x500?text=R1%3A+Three-tile+entity+screen+%28failed%29" alt="GTKMB R1, three-tile entity selection screen" width="700" height="500" loading="lazy" decoding="async">
+        </figure>
+
         <p>46% of customers selected a tile and continued. 47% abandoned.</p>
         <p>The catchall screen caught another 42% into business tax, but 45% abandoned there too. The test failed. But the failure contained the real insight.</p>
         <p>When the data came back, it showed the actual distribution of entity types:</p>
@@ -734,11 +763,15 @@
           </div>
         </div>
 
-        <p>The vast majority of customers were sole proprietors. The screen was asking them to make a decision they didn't need to make. The entity question had been built for the product's internal taxonomy, not for the customer's self-understanding.</p>
+        <p>The vast majority of customers were sole proprietors. The screen was asking them to make a decision they didn't need to make. The entity question had been built for the product's internal taxonomy.</p>
 
         <h4>R2: the reframe</h4>
         <div class="cs-callout is-quote">"If we provide an 'I'm not sure' option, and then route all customers who select that into the sole prop SKU, reduce and simplify the content, reduce the choices, and lower cognitive burden, then we will reduce abandonment and increase starts."</div>
-        <p>The "I'm not sure" routing is the key design decision. Most onboarding flows force a choice and treat uncertainty as a failure state. I treated uncertainty as information. 58% of customers were sole props. 10% didn't know what they were. Routing uncertain customers to the most likely correct outcome wasn't a hack. It was designing for the actual distribution instead of the assumed one.</p>
+        <p>The "I'm not sure" routing is the key design decision. Most onboarding flows force a choice and treat uncertainty as a failure state. I treated uncertainty as information. 58% of customers were sole props. 10% didn't know what they were. Routing uncertain customers to the most likely correct outcome was designing for the actual distribution instead of the assumed one, not a hack.</p>
+
+        <figure class="fig-flow">
+          <img src="https://placehold.co/700x500?text=R2%3A+Reframed+with+%22I%27m+not+sure%22" alt="GTKMB R2, reframed screen with 'I'm not sure' option added, routing to sole prop" width="700" height="500" loading="lazy" decoding="async">
+        </figure>
 
         <div class="cs-metrics cs-metrics-3">
           <div class="cs-metric win">
@@ -758,7 +791,7 @@
           </div>
         </div>
 
-        <p>The win was structural. It didn't just improve a metric. It changed who got routed where. That's a different category of design decision than copy optimization or visual refinement.</p>
+        <p>The win was structural. It changed who got routed where, not just which metric moved. That's a different category of design decision than copy optimization or visual refinement.</p>
       </div>
 
       </div>
@@ -766,7 +799,7 @@
       <div class="cs-chapter" id="ch2">
         <div class="cs-chapter-label label">The bigger picture</div>
         <h2 class="cs-chapter-title">Running two tracks simultaneously.</h2>
-        <div class="cs-chapter-sub">While the tests were moving metrics, a patterns library, a diagnostic, and a product vision were being built in parallel.</div>
+        <div class="cs-chapter-sub">While the tests were moving metrics, I was building a patterns library, a diagnostic, and a product vision in parallel.</div>
       </div>
 
       <div class="card">
@@ -774,14 +807,14 @@
         <h3>The work underneath the cascade</h3>
         <p>The four shipped tests were the visible layer. Running in parallel, all season, was a complete in-product design system.</p>
         <p>I started the Patterns: Assisted Business Tax file on January 9th with cards and levels scaffolding. By February 11th it had become "Business: modernized landing tables with next best action." The addition of "next best action" signals the shift from a product that collects data to a product that guides behavior. By April 23rd the file contained fully designed Prove identity verification flows: the automated business info collection concept from the vision work, moved into production-quality execution.</p>
-        <p>The vision and the craft work were running in parallel. The big swings weren't sitting in a strategy deck while the patterns file did something else. I was building both simultaneously.</p>
+        <p>The vision and the craft work moved together all season, each one showing up directly in the patterns file as it developed.</p>
         <p>Five screen template categories shipped as ready for dev by end of season: Section onramp, Section topic launcher (3 variants), Worksheet (3 variants), Overview Collection (4 variants), Data collection: Question Answer (3 variants).</p>
       </div>
 
       <div class="cs-section">
         <h3>What the tests were responding to</h3>
         <p>Every test I ran was a response to a documented problem. I built the FY26 sole prop onboarding target state file to map the complete customer journey (from off-platform discovery through auth through entity selection) with problem annotations at each friction point and a reframed design question at each one.</p>
-        <p>This wasn't a wish list. It was a diagnostic. The journey map identified the structural problems. The test cascade addressed the ones solvable within the season. The target state documented the ones that required more runway.</p>
+        <p>This was a diagnostic. The journey map identified the structural problems. The test cascade addressed the ones solvable within the season. The target state documented the ones that required more runway.</p>
 
         <ul class="cs-provocation-list">
           <li>
@@ -817,15 +850,15 @@
         <ul class="cs-provocation-list">
           <li>
             <span class="cs-provocation-num" aria-hidden="true">01</span>
-            <span>Dual login evolves into a post-authentication product experience: a unified hub where business and personal returns are peer entities, not a binary modal fork at the start of every session.</span>
+            <span>Dual login evolves into a post-authentication product experience: a unified hub where business and personal returns sit as peer entities from the start.</span>
           </li>
           <li>
             <span class="cs-provocation-num" aria-hidden="true">02</span>
-            <span>Business profile creation is eliminated. Three automated paths (Prove identity verification, website/Etsy URL, prior-year PDF) all converge on a pre-populated "Review and verify" screen. The customer's job becomes confirmation, not data entry.</span>
+            <span>Business profile creation is eliminated. Three automated paths (Prove identity verification, website/Etsy URL, prior-year PDF) all converge on a pre-populated "Review and verify" screen. The customer's only job is to confirm what's already there.</span>
           </li>
           <li>
             <span class="cs-provocation-num" aria-hidden="true">03</span>
-            <span>There is no more GTKMB. Entity type is inferred from automated business info collection, not asked.</span>
+            <span>There is no more GTKMB. Entity type gets inferred from automated business info collection.</span>
           </li>
           <li>
             <span class="cs-provocation-num" aria-hidden="true">04</span>
@@ -833,16 +866,25 @@
           </li>
         </ul>
 
-        <p>These aren't aspirational positions. They're the logical endpoint of the diagnostic. Entity selection causes 47% abandonment because customers don't know their entity type, so eliminate entity selection. Realm creation introduces unnecessary friction before the product knows enough about the customer to route them correctly, so eliminate realm creation. The dual login forks customers at the wrong moment, so eliminate the fork.</p>
+        <p>These follow directly from the diagnostic: entity selection causes 47% abandonment because customers don't know their entity type, realm creation adds friction before the product knows enough to route people correctly, and the dual login forks customers at the wrong moment.</p>
         <p>I followed every provocation through to production-quality comps. I mapped six distinct customer entry paths (shopping for personal tax, shopping for business, shopping for sole prop, returning customer, optional upgrade, required upgrade) all converging on the same automated onboarding moment. Different front doors. One product.</p>
+
+        <figure class="fig-flow">
+          <img src="https://placehold.co/900x500?text=6+entry+paths+%E2%86%92+1+onboarding+moment" alt="Six entry paths converging on one onboarding moment" width="900" height="500" loading="lazy" decoding="async">
+        </figure>
       </div>
 
       <div class="cs-section">
         <h3>The post-onboarding vision</h3>
-        <p>I started from three customer problems, stated plainly. Sole proprietor customers are treated the same as TTO Premium customers, even though they have fundamentally different needs. Customers are afraid because they think taxes with business income are complicated, and as income grows, that fear compounds. And there is willingness to pay for a solution that builds confidence in tax outcomes, but the product wasn't designed to earn it.</p>
-        <p>My design response was a complete end-to-end product redesign. Not wireframes or concepts. Production-quality screens for every stage of the experience. Business info, income, and expenses flows. Personal info, income, and deductions, all the way through to a deductions outcome screen designed as a resolution, not a handoff. The experience ends at the emotional outcome, not the last data entry field.</p>
-        <p>I designed the personal tax flows inside the business tax file. That wasn't scope expansion. It was the argument made concrete. A sole prop files one return. The product should feel like one return.</p>
-        <p>I grounded every design decision in research. Customer findings were cited at the relevant moments in the flow, not as decoration, but as the evidence chain connecting customer problem to design response. Each question was traceable back to a finding.</p>
+        <p>I started from three customer problems, stated plainly: sole proprietors treated the same as TTO Premium customers despite having fundamentally different needs, customers afraid because they think business income makes taxes complicated, a fear that compounds as income grows, and real willingness to pay for a solution that builds confidence in the outcome, which the product wasn't designed to earn.</p>
+        <p>My design response was a complete end-to-end product redesign: production-quality screens for every stage, from business info, income, and expense flows through personal info, income, and deductions. The experience ends at a deductions outcome screen designed to feel like a resolution rather than a handoff, the emotional outcome rather than just the last data entry field.</p>
+
+        <figure class="fig-flow">
+          <img src="https://placehold.co/700x500?text=Deductions+outcome+screen+comp" alt="Deductions outcome screen comp" width="700" height="500" loading="lazy" decoding="async">
+        </figure>
+
+        <p>Designing the personal tax flows inside the business tax file made the argument concrete: a sole prop files one return, so the product should feel like one.</p>
+        <p>I grounded every design decision in research. Customer findings were cited at the relevant moments in the flow, forming the evidence chain connecting customer problem to design response. Each question was traceable back to a finding.</p>
       </div>
 
       </div>
@@ -850,14 +892,14 @@
       <div class="cs-chapter" id="ch3">
         <div class="cs-chapter-label label">What I learned</div>
         <h2 class="cs-chapter-title">Three altitudes. One season.</h2>
-        <div class="cs-chapter-sub">Vision, diagnostic, and execution: running in parallel, and connected.</div>
+        <div class="cs-chapter-sub">Vision, diagnostic, and execution ran in parallel this season, and stayed connected.</div>
       </div>
 
       <div class="card">
       <div class="cs-section">
         <h3>What made it hard</h3>
         <p>Business Tax was organizationally adolescent. Project briefs arrived incomplete. Scope commitments got made without design alignment. There was no established working model for when design got involved, who approved what, or what done meant. I had to build those agreements while simultaneously producing work.</p>
-        <p>The harder thing was the zero-sum framing baked into program metrics. Business tax starts and completions were measured in isolation from the broader TurboTax business, which meant routing personal tax customers to the right product looked like a loss even when it was the right outcome for both the customer and the business. Getting the analytics framing shifted so that business tax starts going down could be read as expected rather than as failure was a prerequisite for the design work to be evaluated correctly, and it took most of the first half of the season to establish.</p>
+        <p>The harder thing was the zero-sum framing baked into program metrics. Business tax starts and completions were measured in isolation from the broader TurboTax business, which meant routing personal tax customers to the right product looked like a loss even when it was the right outcome for both the customer and the business. Getting the analytics framing shifted so that a starts decline could be read as expected rather than as failure was a prerequisite for the design work to be evaluated correctly. It took most of the first half of the season to establish.</p>
       </div>
 
       <div class="cs-section">
@@ -880,14 +922,14 @@
           </div>
         </div>
 
-        <p>The three layers connect. The "I'm not sure → sole prop" routing in Reductive GTKMB R2 was the literal execution of "shift the burden of entity selection off the customer." The Prove verification flow in the patterns file was the same automated business info collection concept from the vision work. The personal tax flows designed inside the business tax file were the practical expression of "one product, one return."</p>
+        <p>The three layers connect: the sole-prop routing in Reductive GTKMB R2 was the design question from Chapter 2 put into practice, the Prove verification flow in the patterns file was the same automated business info collection concept from the vision work, and the personal tax flows built inside the business tax file were "one product, one return" made real.</p>
         </div>
       </div>
 
       <div class="card">
         <div class="cs-role">
           <div class="label">My role</div>
-          <p class="cs-role-body">Sole designer on TurboTax Business, T6. I named the structural problem, ran the test cascade from hypothesis through spec, built the patterns library, and authored the complete product redesign vision. Working with one PM on test prioritization and launch logistics, and a data science team who defined cohorts and analyzed results. The 18× revenue lift came from a test I designed.</p>
+          <p class="cs-role-body">Sole designer on TurboTax Business, T6. I named the structural problem, ran the test cascade from hypothesis through spec, built the patterns library, and authored the complete product redesign vision. I worked with one PM on test prioritization and launch logistics, and a data science team who defined cohorts and analyzed results. The 18x revenue lift came from a test I designed.</p>
         </div>
         <div class="cs-takeaway">
           <div class="cs-takeaway-text">Name the structural problem earlier and louder.</div>
