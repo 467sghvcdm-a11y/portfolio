@@ -44,6 +44,62 @@
       --card-h: max(64px, calc((100vw - 16px - 1000px) / 2));
     }
 
+    #starfield {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background-color: #070912;
+      background-image:
+        radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      #starfield { position: fixed; }
+    }
+    /* NO scroll coupling of any kind on this layer — every variant was tried
+       on-device and failed: position:fixed (black bars / glass scrim from
+       iOS 26's treatment of visually stationary layers), per-frame JS
+       transform pinning (star jitter), and scroll-driven animation-timeline
+       parallax (also jitter — not compositor-smooth on iOS Safari yet). The
+       sky stays static in the document; the slow time-based drift on the
+       stars themselves (see star-drift keyframes) is what keeps it feeling
+       detached from the content. */
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+    }
+    @keyframes star-twinkle {
+      0%, 100% { opacity: var(--op-lo); }
+      50% { opacity: var(--op-hi); }
+    }
+    /* Slow ambient wander (alternates back and forth, so no loop snap).
+       Time-based, never scroll-linked — see the comment above #starfield. */
+    @keyframes star-drift {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(var(--drift-x), var(--drift-y)); }
+    }
+    .meteor {
+      position: absolute;
+      border-radius: 2px;
+      transform-origin: left center;
+      opacity: 0;
+    }
+    @keyframes meteor-move {
+      0%   { transform: translate(0, 0) rotate(var(--angle)); opacity: 0; }
+      8%   { opacity: 1; }
+      85%  { opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) rotate(var(--angle)); opacity: 0; }
+    }
+    @keyframes drift-rise {
+      0%   { transform: translate(0, 0); }
+      50%  { transform: translate(var(--sway), -50vh); }
+      100% { transform: translate(0, -100vh); }
+    }
+
     .pv-inner {
       display: flex;
       flex-direction: column;
