@@ -1984,9 +1984,9 @@
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="2" y="6" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 6V4a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
           Unlock
         </button>
-        <div class="work-lock-inline-form" id="work-lock-form">
+        <form class="work-lock-inline-form" id="work-lock-form">
           <input type="password" id="work-lock-input" placeholder="password" autocomplete="off" spellcheck="false">
-        </div>
+        </form>
       </div>
       <div class="work-lock-wrap locked" id="work-lock-wrap">
       <div class="work-grid">
@@ -2028,20 +2028,20 @@
           <div><span class="wlf-key">access:&nbsp;&nbsp;&nbsp;&nbsp;</span><button class="wlf-link" id="wlf-link">/authenticate</button></div>
           <div><span class="wlf-sep">---</span></div>
         </div>
-        <div class="wlf-prompt" id="wlf-prompt">
+        <form class="wlf-prompt" id="wlf-prompt">
           <span class="wlf-prompt-label">passphrase:&nbsp;</span>
           <input type="password" id="work-lock-input-fm" autocomplete="off" spellcheck="false">
-        </div>
+        </form>
       </div>
       <!-- Alt lock: skill -->
       <div class="work-alt-lock" id="work-lock-skill">
         <div class="wls-block">
           <div class="wls-cmd">&gt; /view-work</div>
           <div class="wls-desc">Authentication required. This content is restricted to verified viewers.</div>
-          <div class="wls-input-row">
+          <form class="wls-input-row">
             <span class="wls-prompt-label">Passphrase</span>
             <input type="password" id="work-lock-input-skill" autocomplete="off" spellcheck="false">
-          </div>
+          </form>
         </div>
       </div>
       <!-- Alt lock: log -->
@@ -2053,10 +2053,10 @@
           <div class="wll-row"><span class="wll-k">Viewer</span><span class="wll-v" id="wll-viewer">—</span></div>
           <div class="wll-row"><span class="wll-k">Entries</span><span class="wll-v">3 case studies</span></div>
           <div class="wll-spacer"></div>
-          <div class="wll-prompt-row">
+          <form class="wll-prompt-row">
             <span class="wll-gt">&gt;</span>
             <input type="password" id="work-lock-input-log" placeholder="authenticate" autocomplete="off" spellcheck="false">
-          </div>
+          </form>
         </div>
       </div>
       </div><!-- /.work-lock-wrap -->
@@ -2731,6 +2731,12 @@
     [inputPill, inputFm, inputSkill, inputLog].forEach(function (inp) {
       if (!inp) return;
       inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(inp); });
+      // These inputs live inside real <form> elements specifically so mobile
+      // keyboards show a "Go"/"Search" return key that fires a submit event —
+      // without a <form>, iOS often shows a "done" key that just blurs the
+      // field instead, so the password could never be submitted on mobile.
+      var f = inp.closest('form');
+      if (f) f.addEventListener('submit', function (e) { e.preventDefault(); attempt(inp); });
     });
 
     document.querySelectorAll('.work-item').forEach(function (item) {
