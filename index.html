@@ -2736,7 +2736,7 @@
       // the iOS keyboard-return-key ambiguity entirely (some keyboards show
       // "done"/an accessory checkmark that dismisses the keyboard instead of
       // submitting, rather than a "Go" key).
-      inp.addEventListener('input', function () { if (inp.value === PASS) unlock(); });
+      inp.addEventListener('input', function () { if (inp.value === PASS) { unlock(); inp.blur(); } });
       inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(inp); });
       var f = inp.closest('form');
       if (f) f.addEventListener('submit', function (e) { e.preventDefault(); attempt(inp); });
