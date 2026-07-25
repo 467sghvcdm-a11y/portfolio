@@ -2730,11 +2730,14 @@
 
     [inputPill, inputFm, inputSkill, inputLog].forEach(function (inp) {
       if (!inp) return;
+      // Auto-unlock the instant the value matches, on every keystroke — the
+      // password is fixed-length and known in advance, so there's no reason
+      // to make mobile users find a submit affordance at all. This sidesteps
+      // the iOS keyboard-return-key ambiguity entirely (some keyboards show
+      // "done"/an accessory checkmark that dismisses the keyboard instead of
+      // submitting, rather than a "Go" key).
+      inp.addEventListener('input', function () { if (inp.value === PASS) unlock(); });
       inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(inp); });
-      // These inputs live inside real <form> elements specifically so mobile
-      // keyboards show a "Go"/"Search" return key that fires a submit event —
-      // without a <form>, iOS often shows a "done" key that just blurs the
-      // field instead, so the password could never be submitted on mobile.
       var f = inp.closest('form');
       if (f) f.addEventListener('submit', function (e) { e.preventDefault(); attempt(inp); });
     });
