@@ -1,5 +1,5 @@
 (function () {
-  var KEY = 'mkp_auth';
+  var KEY = 'mkp_auth_v6';
   var PASS = 'solvehardproblems';
 
   if (localStorage.getItem(KEY) === '1') return;
