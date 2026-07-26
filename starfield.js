@@ -23,12 +23,12 @@
 (function () {
   var css =
     '#starfield{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;' +
-    'background-color:#070912;background-repeat:repeat-y;background-position:top;' +
+    'background-color:#070912;background-repeat:no-repeat;background-position:top;' +
     'background-size:100% 100dvh;background-image:' +
     'radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),' +
     'radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),' +
     'radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);}' +
-    '@media (hover: hover) and (pointer: fine){#starfield{position:fixed;background-repeat:no-repeat;}}' +
+    '@media (hover: hover) and (pointer: fine){#starfield{position:fixed;}}' +
     '.star{position:absolute;border-radius:50%;background:#fff;}' +
     '@keyframes star-twinkle{0%,100%{opacity:var(--op-lo);}50%{opacity:var(--op-hi);}}' +
     '@keyframes star-drift{from{transform:translate(0,0);}to{transform:translate(var(--drift-x),var(--drift-y));}}' +

@@ -52,7 +52,7 @@
       pointer-events: none;
       overflow: hidden;
       background-color: #070912;
-      background-repeat: repeat-y;
+      background-repeat: no-repeat;
       background-position: top;
       background-size: 100% 100dvh;
       background-image:
@@ -61,7 +61,7 @@
         radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
     }
     @media (hover: hover) and (pointer: fine) {
-      #starfield { position: fixed; background-repeat: no-repeat; }
+      #starfield { position: fixed; }
     }
     /* NO scroll coupling of any kind on this layer — every variant was tried
        on-device and failed: position:fixed (black bars / glass scrim from
@@ -568,7 +568,7 @@
 </head>
 <body>
   <script src="password-gate.js"></script>
-  <script src="starfield.js"></script>
+  <script src="starfield.js?v=2"></script>
   <script src="lightbox.js"></script>
   <a href="index.html" class="cs-back caption">← Work</a>
   <nav class="cs-chap-nav" id="cs-chap-nav">
