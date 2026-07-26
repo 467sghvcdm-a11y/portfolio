@@ -57,8 +57,11 @@
     // Original canvas counts (180 stars / 28 meteors) were per viewport; on
     // touch devices the field spans the full document, so scale by area with
     // hard caps so long pages can't spawn thousands of animated elements.
+    // The caps were tuned for shorter pages — on long case studies (20+
+    // viewport heights) they diluted density far below the per-viewport
+    // intent, leaving most of the scroll with barely any visible stars.
     var density = (w * h) / (window.innerWidth * window.innerHeight);
-    var starCount = Math.min(Math.round(180 * density), 700);
+    var starCount = Math.min(Math.round(180 * density), 1600);
     for (var i = 0; i < starCount; i++) {
       var r = rand(0.2, 1.3);
       var base = rand(0.05, 0.40);
@@ -77,7 +80,7 @@
     }
 
     if (!reduceMotion) {
-      var meteorCount = Math.min(Math.round(28 * density), 100);
+      var meteorCount = Math.min(Math.round(28 * density), 220);
       for (var j = 0; j < meteorCount; j++) {
         var angleDeg = rand(22.5, 33.75);
         var angleRad = angleDeg * Math.PI / 180;
