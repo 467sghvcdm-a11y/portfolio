@@ -124,9 +124,6 @@
       pointer-events: none;
       overflow: hidden;
       background-color: #070912;
-      background-repeat: no-repeat;
-      background-position: top;
-      background-size: 100% 100svh;
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
@@ -2237,49 +2234,20 @@
     // GPU-composited instead of redrawn every frame in JS.
     const field = document.getElementById('starfield');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isDesktopFixed = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     let mode = (document.body.dataset.atmos || 'meteors');
 
     function rand(min, max) { return Math.random() * (max - min) + min; }
 
-    // On touch devices, replace the CSS-defined hero-only background with
-    // one continuous, non-repeating image sized to the page's actual full
-    // height — no tiling at all, so no tiling seam is possible. Desktop
-    // (position:fixed, viewport-pinned) keeps the CSS-defined background.
-    function buildBackground(totalH) {
-      if (isDesktopFixed || !totalH) return;
-      const vh = window.innerHeight;
-      const layers = [
-        `radial-gradient(ellipse at 85% ${Math.round(vh * 0.15)}px, rgba(30,85,200,0.50) 0%, transparent ${Math.round(vh * 0.55)}px)`,
-        `radial-gradient(ellipse at 90% ${Math.round(vh * 0.85)}px, rgba(15,135,135,0.44) 0%, transparent ${Math.round(vh * 0.50)}px)`,
-        `radial-gradient(ellipse at 10% ${Math.round(vh * 0.50)}px, rgba(50,40,165,0.28) 0%, transparent ${Math.round(vh * 0.46)}px)`
-      ];
-      const colors = ['rgba(30,85,200,0.34)', 'rgba(15,135,135,0.28)'];
-      const xPos = [80, 20];
-      const spacing = vh * 1.3;
-      const radius = Math.round(vh * 0.5);
-      let i = 0;
-      for (let y = vh * 1.1; y < totalH - vh * 0.3; y += spacing) {
-        layers.push(`radial-gradient(ellipse at ${xPos[i % 2]}% ${Math.round(y)}px, ${colors[i % 2]} 0%, transparent ${radius}px)`);
-        i++;
-      }
-      field.style.backgroundImage = layers.join(',');
-      field.style.backgroundSize = `100% ${Math.round(totalH)}px`;
-      field.style.backgroundRepeat = 'no-repeat';
-      field.style.backgroundPosition = 'top';
-    }
-
     function build() {
       field.innerHTML = '';
       const w = field.offsetWidth, h = field.offsetHeight;
-      buildBackground(h);
 
       // Original canvas counts (180/28/40) were per viewport; the field now
       // spans the full document (~5-7 viewports), so scale by area to keep
       // the same on-screen density — capped so a long page can't spawn
       // thousands of animated elements on mobile.
       const density = (w * h) / (window.innerWidth * window.innerHeight);
-      const starCount = Math.min(Math.round((mode === 'drift' ? 240 : 180) * density), 1600);
+      const starCount = Math.min(Math.round((mode === 'drift' ? 240 : 180) * density), 700);
       for (let i = 0; i < starCount; i++) {
         const r = rand(0.2, 1.3);
         const base = rand(0.05, 0.40);
@@ -2300,7 +2268,7 @@
       }
 
       if (mode === 'meteors' && !reduceMotion) {
-        const meteorCount = Math.min(Math.round(28 * density), 220);
+        const meteorCount = Math.min(Math.round(28 * density), 100);
         for (let i = 0; i < meteorCount; i++) {
           const angleDeg = rand(22.5, 33.75); // matches original PI/8..3PI/16 radians
           const angleRad = angleDeg * Math.PI / 180;
@@ -2327,7 +2295,7 @@
           field.appendChild(el);
         }
       } else if (mode === 'drift' && !reduceMotion) {
-        const driftCount = Math.min(Math.round(40 * density), 330);
+        const driftCount = Math.min(Math.round(40 * density), 150);
         for (let i = 0; i < driftCount; i++) {
           const r = rand(0.4, 2.0);
           const opacity = rand(0.06, 0.34);
