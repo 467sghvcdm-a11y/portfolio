@@ -566,6 +566,7 @@
 <body>
   <script src="password-gate.js"></script>
   <script src="starfield.js"></script>
+  <script src="lightbox.js"></script>
   <a href="index.html" class="cs-back caption">← Work</a>
   <nav class="cs-chap-nav" id="cs-chap-nav">
     <a class="cs-chap-link caption" href="#intro" aria-current="false">Overview</a>
@@ -623,7 +624,7 @@
 
       <h3>The problem</h3>
       <p>When I arrived, there was no complete picture of what was live, what was in test, and what was baseline across any of the six page types. Search optimization, paid search, and product teams were each making design decisions from their own vantage point, optimizing for their own metrics, with no shared model for what these pages were actually trying to accomplish. The program was running tests against surfaces nobody had fully mapped.</p>
-      <p>The measurement model compounded it. These pages were being evaluated against time-to-start, a metric captured far downstream across flows owned by multiple teams. A click on a top-of-funnel call to action and a completed start are separated by experiences design doesn't control. That finding restructured how every test hypothesis that followed was framed.</p>
+      <p>The measurement model compounded it. These pages were being evaluated against traffic-to-start, a metric captured far downstream across flows owned by multiple teams. A click on a top-of-funnel call to action and a completed start are separated by experiences design doesn't control. That finding restructured how every test hypothesis that followed was framed.</p>
 
       <p>As the design lead for the AE front door, I was responsible for the entry experience of over half a million weekly visitors. Every CTA, every flow, every surface decision has direct downstream revenue consequences at this scale. I treated the page as a precision instrument, tuned for measurable outcomes.</p>
       <p>This case study covers one tax season: a measurement audit that changed what the program was optimizing for, seven tests built on that foundation, and one failure test that made everything else more credible.</p>
@@ -661,32 +662,32 @@
       <div class="cs-chapter" id="ch2">
         <div class="cs-chapter-label label">Preseason</div>
         <h2 class="cs-chapter-title">What we were actually measuring.</h2>
-        <div class="cs-chapter-sub">The top-of-funnel (TOF) pages were being judged by the outcome of a journey they don't fully control.</div>
+        <div class="cs-chapter-sub">The top-of-funnel pages were being judged by the outcome of a journey they don't fully control.</div>
       </div>
 
       <div class="card">
         <h3>Mapping every path from page to start</h3>
-        <p>Before writing a single test hypothesis, I mapped every path a customer could take from an AE TOF page to a start.</p>
+        <p>Before writing a single test hypothesis, I mapped every path a customer could take from an AE top-of-funnel page to a start.</p>
 
         <div class="cs-inline-stats">
-          <div class="cs-inline-stat caption"><strong>5</strong>CTAs on each TOF page</div>
+          <div class="cs-inline-stat caption"><strong>5</strong>CTAs on each top-of-funnel page</div>
           <div class="cs-inline-stat caption"><strong>13</strong>distinct downstream experiences</div>
           <div class="cs-inline-stat caption"><strong>12–15</strong>screens per experience</div>
         </div>
 
         <figure>
-          <img width="1184" height="616" loading="lazy" decoding="async" src="assets/ae-tof/T2S-1.png" alt="Time to start audit map — part 1">
-          <img width="1184" height="616" loading="lazy" decoding="async" src="assets/ae-tof/T2S-2.png" alt="Time to start audit map — part 2">
-          <img width="1184" height="616" loading="lazy" decoding="async" src="assets/ae-tof/T2S-3.png" alt="Time to start audit map — part 3">
-          <figcaption>The visual complexity is intentional. The mess is the point. Optimizing a single TOF metric against this surface area is structurally flawed.</figcaption>
+          <img width="1184" height="616" loading="lazy" decoding="async" src="assets/ae-tof/T2S-1.png" alt="Traffic to start audit map — part 1">
+          <img width="1184" height="616" loading="lazy" decoding="async" src="assets/ae-tof/T2S-2.png" alt="Traffic to start audit map — part 2">
+          <img width="1184" height="616" loading="lazy" decoding="async" src="assets/ae-tof/T2S-3.png" alt="Traffic to start audit map — part 3">
+          <figcaption>The visual complexity is intentional. The mess is the point. Optimizing a single top-of-funnel metric against this surface area is structurally flawed.</figcaption>
         </figure>
 
         <div class="cs-callout">Three things came out of that map that the front door alone could never have shown.</div>
 
         <h3>Three critical findings, none of them visible from the front door</h3>
         <p><strong>01 · Spec vs. production gaps.</strong> Multiple screens in the live product didn't match the design spec. Content was wrong, screens appeared out of order, duplicative questions across flows. Annotated and shared as a formal gap report.</p>
-        <p><strong>02 · A dead end with no exit.</strong> In certain post-auth paths, there was no self-service exit. Users who entered had no way forward without an expert manually intervening. A critical failure invisible from the TOF.</p>
-        <p><strong>03 · Time to start (T2S) as a structurally composite metric.</strong> Starts are captured far downstream, across experiences owned by multiple teams. Optimizing a TOF CTA for T2S alone is structurally flawed. The metric is real. The attribution is not direct. That finding restructured how every test hypothesis that followed was framed.</p>
+        <p><strong>02 · A dead end with no exit.</strong> In certain post-auth paths, there was no self-service exit. Users who entered had no way forward without an expert manually intervening. A critical failure invisible from the top of funnel.</p>
+        <p><strong>03 · Traffic to start (T2S) as a structurally composite metric.</strong> Starts are captured far downstream, across experiences owned by multiple teams. Optimizing a top-of-funnel CTA for T2S alone is structurally flawed. The metric is real. The attribution is not direct. That finding restructured how every test hypothesis that followed was framed.</p>
 
         <p>The program had been optimizing against a metric it didn't fully control. No one had named that. Naming it changed the test strategy.</p>
 
@@ -1043,7 +1044,7 @@
         <ul class="cs-provocation-list">
           <li>
             <span class="cs-provocation-num" aria-hidden="true">01</span>
-            <span>Name the measurement problem on day one. The time-to-start audit happened in preseason only because I initiated it, and it should be a program-level requirement instead.</span>
+            <span>Name the measurement problem on day one. The traffic-to-start audit happened in preseason only because I initiated it, and it should be a program-level requirement instead.</span>
           </li>
           <li>
             <span class="cs-provocation-num" aria-hidden="true">02</span>
