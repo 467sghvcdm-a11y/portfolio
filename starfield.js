@@ -14,6 +14,15 @@
 //   not a width query so iPads with the same buggy Safari stay safe) the
 //   bug doesn't exist, so the layer is plain position:fixed and stays
 //   pinned like the original design.
+// - The nebula gradient is NOT tiled via background-repeat on touch
+//   devices: any repeating background-image seam (even a mathematically
+//   symmetric one) risks a visible hairline at the tile boundary once
+//   rasterized, and dvh-based sizing "breathes" as Safari's toolbar
+//   animates. Instead, once the page's true full height is known (after
+//   defer lets the whole document parse first), buildBackground() below
+//   generates ONE non-repeating background-image explicitly covering that
+//   exact height, with each blob placed at its own fixed pixel position.
+//   No tiling at all means no tiling seam is possible.
 //
 // Each page still needs in its own head CSS (FOUC-critical, so not injected
 // here): viewport-fit=cover in the meta viewport, color-scheme:dark plus the
@@ -23,16 +32,11 @@
 (function () {
   var css =
     '#starfield{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;' +
-    'background-color:#070912;' +
-    'background-repeat:no-repeat, no-repeat, no-repeat, repeat-y, repeat-y;' +
-    'background-position:top, top, top, top, top;' +
-    'background-size:100% 100svh, 100% 100svh, 100% 100svh, 100% 150svh, 100% 190svh;' +
-    'background-image:' +
+    'background-color:#070912;background-repeat:no-repeat;background-position:top;' +
+    'background-size:100% 100svh;background-image:' +
     'radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),' +
     'radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),' +
-    'radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%),' +
-    'radial-gradient(ellipse at 80% 50%, rgba(30,85,200,0.36) 0%, transparent 35%),' +
-    'radial-gradient(ellipse at 20% 50%, rgba(15,135,135,0.30) 0%, transparent 35%);}' +
+    'radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);}' +
     '@media (hover: hover) and (pointer: fine){#starfield{position:fixed;}}' +
     '.star{position:absolute;border-radius:50%;background:#fff;}' +
     '@keyframes star-twinkle{0%,100%{opacity:var(--op-lo);}50%{opacity:var(--op-hi);}}' +
@@ -52,13 +56,47 @@
   document.body.insertBefore(field, document.body.firstChild);
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isDesktopFixed = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  // On touch devices, replace the CSS-defined hero-only background with one
+  // continuous, non-repeating image sized to the page's actual full height —
+  // the hero blobs at their original fixed pixel spot, plus ambient blobs
+  // spaced down the rest of the page. No repeat, so no tiling seam is
+  // possible. Desktop (position:fixed, viewport-pinned) keeps the plain
+  // CSS-defined hero-only background as-is.
+  function buildBackground(totalH) {
+    if (isDesktopFixed || !totalH) return;
+    var vh = window.innerHeight;
+    var layers = [
+      'radial-gradient(ellipse at 85% ' + Math.round(vh * 0.15) + 'px, rgba(30,85,200,0.50) 0%, transparent ' + Math.round(vh * 0.55) + 'px)',
+      'radial-gradient(ellipse at 90% ' + Math.round(vh * 0.85) + 'px, rgba(15,135,135,0.44) 0%, transparent ' + Math.round(vh * 0.50) + 'px)',
+      'radial-gradient(ellipse at 10% ' + Math.round(vh * 0.50) + 'px, rgba(50,40,165,0.28) 0%, transparent ' + Math.round(vh * 0.46) + 'px)'
+    ];
+
+    var colors = ['rgba(30,85,200,0.34)', 'rgba(15,135,135,0.28)'];
+    var xPos = [80, 20];
+    var spacing = vh * 1.3;
+    var radius = Math.round(vh * 0.5);
+    var i = 0;
+    for (var y = vh * 1.1; y < totalH - vh * 0.3; y += spacing) {
+      layers.push('radial-gradient(ellipse at ' + xPos[i % 2] + '% ' + Math.round(y) + 'px, ' + colors[i % 2] + ' 0%, transparent ' + radius + 'px)');
+      i++;
+    }
+
+    field.style.backgroundImage = layers.join(',');
+    field.style.backgroundSize = '100% ' + Math.round(totalH) + 'px';
+    field.style.backgroundRepeat = 'no-repeat';
+    field.style.backgroundPosition = 'top';
+  }
 
   function build() {
     field.innerHTML = '';
     var w = field.offsetWidth, h = field.offsetHeight;
     if (!w || !h) return;
+
+    buildBackground(h);
 
     // Original canvas counts (180 stars / 28 meteors) were per viewport; on
     // touch devices the field spans the full document, so scale by area with

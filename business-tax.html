@@ -52,15 +52,13 @@
       pointer-events: none;
       overflow: hidden;
       background-color: #070912;
-      background-repeat: no-repeat, no-repeat, no-repeat, repeat-y, repeat-y;
-      background-position: top, top, top, top, top;
-      background-size: 100% 100svh, 100% 100svh, 100% 100svh, 100% 150svh, 100% 190svh;
+      background-repeat: no-repeat;
+      background-position: top;
+      background-size: 100% 100svh;
       background-image:
         radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),
-        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%),
-        radial-gradient(ellipse at 80% 50%, rgba(30,85,200,0.36) 0%, transparent 35%),
-        radial-gradient(ellipse at 20% 50%, rgba(15,135,135,0.30) 0%, transparent 35%);
+        radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);
     }
     @media (hover: hover) and (pointer: fine) {
       #starfield { position: fixed; }
@@ -606,7 +604,7 @@
 </head>
 <body>
   <script src="password-gate.js"></script>
-  <script defer src="starfield.js?v=7"></script>
+  <script defer src="starfield.js?v=8"></script>
   <script src="lightbox.js"></script>
   <a href="index.html" class="cs-back caption">← Work</a>
   <nav class="cs-chap-nav" id="cs-chap-nav">
