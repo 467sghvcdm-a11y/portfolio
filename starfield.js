@@ -23,11 +23,12 @@
 (function () {
   var css =
     '#starfield{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;' +
-    'background-color:#070912;background-image:' +
+    'background-color:#070912;background-repeat:repeat-y;background-position:top;' +
+    'background-size:100% 100dvh;background-image:' +
     'radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),' +
     'radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),' +
     'radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);}' +
-    '@media (hover: hover) and (pointer: fine){#starfield{position:fixed;}}' +
+    '@media (hover: hover) and (pointer: fine){#starfield{position:fixed;background-repeat:no-repeat;}}' +
     '.star{position:absolute;border-radius:50%;background:#fff;}' +
     '@keyframes star-twinkle{0%,100%{opacity:var(--op-lo);}50%{opacity:var(--op-hi);}}' +
     '@keyframes star-drift{from{transform:translate(0,0);}to{transform:translate(var(--drift-x),var(--drift-y));}}' +
@@ -57,8 +58,11 @@
     // Original canvas counts (180 stars / 28 meteors) were per viewport; on
     // touch devices the field spans the full document, so scale by area with
     // hard caps so long pages can't spawn thousands of animated elements.
+    // The caps were tuned for shorter pages — on long case studies (20+
+    // viewport heights) they diluted density far below the per-viewport
+    // intent, leaving most of the scroll with barely any visible stars.
     var density = (w * h) / (window.innerWidth * window.innerHeight);
-    var starCount = Math.min(Math.round(180 * density), 700);
+    var starCount = Math.min(Math.round(180 * density), 1600);
     for (var i = 0; i < starCount; i++) {
       var r = rand(0.2, 1.3);
       var base = rand(0.05, 0.40);
@@ -77,7 +81,7 @@
     }
 
     if (!reduceMotion) {
-      var meteorCount = Math.min(Math.round(28 * density), 100);
+      var meteorCount = Math.min(Math.round(28 * density), 220);
       for (var j = 0; j < meteorCount; j++) {
         var angleDeg = rand(22.5, 33.75);
         var angleRad = angleDeg * Math.PI / 180;
