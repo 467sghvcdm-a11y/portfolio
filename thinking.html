@@ -488,9 +488,9 @@
       <p class="essay-lede">Building AI tools for my own design practice taught me more about how I think than anything I've shipped in years.</p>
 
       <div class="essay">
-        <p>Not because the tools are transformative. Because writing them down precisely enough for an agent to follow forced me to make explicit things I'd always left implicit. The moment you try to write "evaluate the design decision" as an instruction, you realize you have no idea what you actually mean.</p>
+        <p>Writing them down precisely enough for an agent to follow forced me to make explicit things I'd always left implicit. That process turned out to matter more than the tools themselves. The moment you try to write "evaluate the design decision" as an instruction, you realize you have no idea what you actually mean.</p>
 
-        <p>Intuit is in the middle of a real transformation. TurboTax Live is now 53% of TurboTax revenue and growing fast. The org is getting leaner: fewer layers, more direct execution. The expectation for the people who remain isn't just to do their jobs well. It's to extend their own capability — to build the tools and institutional memory that make the work more durable than any one person.</p>
+        <p>Intuit is in the middle of a real transformation. TurboTax Live is now 53% of TurboTax revenue and growing fast. The org is getting leaner: fewer layers, more direct execution. The expectation for the people who remain is to extend their own capability, to build the tools and institutional memory that make the work more durable than any one person.</p>
 
         <p>I started building because I was curious what that actually looked like in practice.</p>
       </div>
@@ -504,9 +504,9 @@
       <div class="essay-section" id="skill-section-claim-audit">
         <div class="skill-label">/claim-audit</div>
         <p>Numbers circulate in strategy decks and case studies, get repeated in meeting after meeting, and nobody actually checks whether they mean what the person citing them thinks they mean. The same metric gets defined three different ways across three different dashboards. A finding gets summarized, the summary gets summarized, and by the fourth hop it's asserting something the original study never said.</p>
-        <p>My first instinct was to build a rebuttal machine. That version of the skill is useless — it gets you into a fight before it changes anything. The reframe that made it work: the output is evidence integrity for your own work, not ammunition against the person who made the claim. Functionally identical. Politically deployable.</p>
-        <p>The skill anchors quant claims to the canonical data layer first. It checks the claim against that anchor rather than whatever dashboard the person was looking at when they wrote the number down. Dashboard drift — where the number was real but was pulled with a filter state that doesn't match how the claim is being used — is one of the most common failure modes and the hardest to catch without this kind of check.</p>
-        <p>For qual claims, it routes to the underlying study artifact, sample size, methodology, and conditions. It also surfaces when two research groups produced contradicting findings on the same question — which is often more useful than the audit result itself.</p>
+        <p>My first instinct was to build a rebuttal machine. That version of the skill is useless: it gets you into a fight before it changes anything. The reframe that made it work: the output is evidence integrity for your own work, not ammunition against the person who made the claim. Functionally identical. Politically deployable.</p>
+        <p>The skill anchors quant claims to the canonical data layer first. It checks the claim against that anchor rather than whatever dashboard the person was looking at when they wrote the number down. Dashboard drift, where the number was real but was pulled with a filter state that doesn't match how the claim is being used, is one of the most common failure modes and the hardest to catch without this kind of check.</p>
+        <p>For qual claims, it routes to the underlying study artifact, sample size, methodology, and conditions. It also surfaces when two research groups produced contradicting findings on the same question, often more useful to know than the audit result itself.</p>
         <p>The output is a structured drift report and a corrected claim: the same thing the original claimant was trying to say, written with the qualifications the underlying evidence actually supports.</p>
         <div class="skill-file-toggle">
           <div class="skill-cmd-prompt" data-skill="claim-audit">
@@ -527,7 +527,7 @@
       <div class="essay-section">
         <div class="skill-label">/create-about-me</div>
         <p>Every profile system at a company tells you what someone does. None of them tell you how they think, how they work through ambiguity, where they have friction with other functions. That layer lives in people's heads and evaporates every time someone moves to a new team.</p>
-        <p>This is a three-tier file — public, trusted, private — that captures the interpretive layer in a form that can travel deliberately. The interesting design constraint: the skill mines Slack history, memory files, and past artifacts before asking the user anything. It searches for messages where you reframed a problem, moments where others tagged you for expertise, how cross-functional partners have introduced you in new contexts.</p>
+        <p>This is a three-tier file, public, trusted, and private, that captures the interpretive layer in a form that can travel deliberately. The interesting design constraint: the skill mines Slack history, memory files, and past artifacts before asking the user anything. It searches for messages where you reframed a problem, moments where others tagged you for expertise, how cross-functional partners have introduced you in new contexts.</p>
         <p>Self-report produces what people wish were true about themselves. Observed behavior produces what's actually true.</p>
         <p>The file pairs with <code class="skill-label">/offboard-program</code> and <code class="skill-label">/onboard-program</code>. When you leave a program, offboard packages a slice of your about-me alongside the work context. When someone joins, they can load your about-me and start understanding how you work before your first meeting.</p>
         <div class="skill-file-toggle">
@@ -541,9 +541,9 @@
 
       <div class="essay-section">
         <div class="skill-label">/onboard-program</div>
-        <p>When you join a new program after a reorg or a departure, the knowledge that existed walks out with whoever left. This skill searches for the previous owner's offboard package first — covering what was tried and what worked, the relationship context for each cross-functional partner, what was said in leadership forums that didn't make it into any deck, and the open threads that will fall through the cracks.</p>
+        <p>When you join a new program after a reorg or a departure, the knowledge that existed walks out with whoever left. This skill searches for the previous owner's offboard package first: what was tried and what worked, the relationship context for each cross-functional partner, what was said in leadership forums that didn't make it into any deck, and the open threads that will fall through the cracks.</p>
         <p>If no package exists, it searches Slack, Drive, and Figma to reconstruct what it can and surfaces what's missing explicitly. It maps canonical sources into the workspace and writes a config block you can paste so every subsequent session starts with those sources already loaded. It loads about-me files for key collaborators before you meet them.</p>
-        <p>The orientation document it produces includes a required "what's unknown" section — because an onboarding document that presents itself as complete is lying.</p>
+        <p>The orientation document it produces includes a required "what's unknown" section, because an onboarding document that presents itself as complete is lying.</p>
         <div class="skill-file-toggle">
           <div class="skill-cmd-prompt" data-skill="onboard-program">
             <span class="skill-cmd-prefix">></span>
@@ -555,7 +555,7 @@
 
       <div class="essay-section">
         <div class="skill-label">/case-study-builder</div>
-        <p>I was trying to reconstruct what I actually did on a past project. Not what I remembered — what the record showed. The process worked well enough that I formalized it.</p>
+        <p>I was trying to reconstruct what the record actually showed about a past project, not what I remembered. The process worked well enough that I formalized it.</p>
         <p>The skill runs two Slack passes. The first searches your own messages for how you actually framed the work: the rationale you explained, the moments you pushed back, the frameworks you authored. The second searches the broader record for how others saw it: high-react threads, cross-functional acknowledgment, executive recognition. Then it pulls Drive documents, surfaces a source inventory, extracts the story structure, and waits for you to validate the extraction before writing any narrative prose.</p>
         <p>Memory produces generic case studies. Sources produce specific ones. The moments that make a portfolio entry compelling are almost always in the record. You just have to look.</p>
         <div class="skill-file-toggle">
@@ -568,9 +568,9 @@
       </div>
 
       <div class="essay-section">
-        <p>I expected the value to be in the outputs. It turned out to be in the writing.</p>
+        <p>I expected the value to be in the outputs, but it turned out to be in the writing.</p>
         <p>When you try to encode your own judgment into instructions precise enough for an agent to follow, you find out fast which parts of your thinking are real and which are habits you've never examined. The skills are useful. The process of building them was more useful.</p>
-        <p>Designers and PMs at companies going through real transformation face a version of the same question: how do you make your judgment more durable, more consistent, and less dependent on you personally carrying the context? These are one answer. They're not finished. But the direction is right.</p>
+        <p>Designers and PMs at companies going through real transformation face a version of the same question: how do you make your judgment more durable, more consistent, and less dependent on you personally carrying the context? These skills are one attempt at an answer. Not finished. Pointed the right direction.</p>
         <p>Start where your work reliably breaks. Build there first.</p>
       </div>
 
