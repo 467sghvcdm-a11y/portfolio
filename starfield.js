@@ -23,11 +23,16 @@
 (function () {
   var css =
     '#starfield{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;' +
-    'background-color:#070912;background-repeat:no-repeat;background-position:top;' +
-    'background-size:100% 220dvh;background-image:' +
+    'background-color:#070912;' +
+    'background-repeat:no-repeat, no-repeat, no-repeat, repeat-y, repeat-y;' +
+    'background-position:top, top, top, top, top;' +
+    'background-size:100% 220dvh, 100% 220dvh, 100% 220dvh, 100% 150dvh, 100% 190dvh;' +
+    'background-image:' +
     'radial-gradient(ellipse at 85% 15%, rgba(30,85,200,0.50) 0%, transparent 55%),' +
     'radial-gradient(ellipse at 90% 85%, rgba(15,135,135,0.44) 0%, transparent 50%),' +
-    'radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%);}' +
+    'radial-gradient(ellipse at 10% 50%, rgba(50,40,165,0.28) 0%, transparent 46%),' +
+    'radial-gradient(ellipse at 80% 50%, rgba(30,85,200,0.22) 0%, transparent 62%),' +
+    'radial-gradient(ellipse at 20% 50%, rgba(15,135,135,0.18) 0%, transparent 62%);}' +
     '@media (hover: hover) and (pointer: fine){#starfield{position:fixed;}}' +
     '.star{position:absolute;border-radius:50%;background:#fff;}' +
     '@keyframes star-twinkle{0%,100%{opacity:var(--op-lo);}50%{opacity:var(--op-hi);}}' +
