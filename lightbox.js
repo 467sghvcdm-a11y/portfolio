@@ -164,6 +164,36 @@
       }
     }
 
+    // Swipe-to-navigate: horizontal drag over the image area steps between
+    // grouped images. Only active when not zoomed, so pinch/pan-scroll on a
+    // zoomed image keeps working. A real swipe suppresses the trailing click
+    // so it doesn't also toggle zoom.
+    var touchStartX = 0, touchStartY = 0, touchStartTime = 0, suppressNextClick = false;
+    var SWIPE_MIN_DIST = 40;
+
+    refs.figureWrap.addEventListener('touchstart', function (e) {
+      if (refs.overlay.classList.contains('lightbox-zoomed')) return;
+      if (!e.touches || e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchStartTime = Date.now();
+    }, { passive: true });
+
+    refs.figureWrap.addEventListener('touchend', function (e) {
+      if (refs.overlay.classList.contains('lightbox-zoomed')) return;
+      if (!e.changedTouches || e.changedTouches.length !== 1) return;
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      var dy = e.changedTouches[0].clientY - touchStartY;
+      var dt = Date.now() - touchStartTime;
+      if (Math.abs(dx) >= SWIPE_MIN_DIST && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 600) {
+        suppressNextClick = true;
+        // Most browsers never fire a trailing click after a real drag, so
+        // don't let the flag linger and swallow the *next* tap-to-zoom.
+        setTimeout(function () { suppressNextClick = false; }, 500);
+        step(dx > 0 ? -1 : 1);
+      }
+    }, { passive: true });
+
     targets.forEach(function (el) {
       el.classList.add('lightbox-trigger');
       el.addEventListener('click', function () { open(el); });
@@ -172,7 +202,11 @@
     refs.closeBtn.addEventListener('click', close);
     refs.prevBtn.addEventListener('click', function (e) { e.stopPropagation(); step(-1); });
     refs.nextBtn.addEventListener('click', function (e) { e.stopPropagation(); step(1); });
-    refs.img.addEventListener('click', function (e) { e.stopPropagation(); toggleZoom(); });
+    refs.img.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (suppressNextClick) { suppressNextClick = false; return; }
+      toggleZoom();
+    });
     refs.overlay.addEventListener('click', function (e) {
       if (e.target === refs.overlay) close();
     });
