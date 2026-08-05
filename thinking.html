@@ -478,7 +478,7 @@
     <div class="hero">
       <div class="hero-body">
         <p class="hero-eyebrow label">Field notes</p>
-        <h1 class="cs-title">What I learned building AI tools for my own design practice</h1>
+        <h1 class="cs-title">Building AI tools for my own design practice</h1>
 
       </div>
     </div>
@@ -504,7 +504,7 @@
       <div class="essay-section" id="skill-section-claim-audit">
         <div class="skill-label">/claim-audit</div>
         <p>Numbers circulate in strategy decks and case studies, get repeated in meeting after meeting, and nobody actually checks whether they mean what the person citing them thinks they mean. The same metric gets defined three different ways across three different dashboards. A finding gets summarized, the summary gets summarized, and by the fourth hop it's asserting something the original study never said.</p>
-        <p>My first instinct was to build a rebuttal machine. That version of the skill is useless: it gets you into a fight before it changes anything. The reframe that made it work: the output is evidence integrity for your own work, not ammunition against the person who made the claim. Functionally identical. Politically deployable.</p>
+        <p>My first instinct was to build a rebuttal machine. That version of the skill is useless: it gets you into a fight before it changes anything. The reframe that made it work: the output is evidence integrity for your own work, not ammunition against the person who made the claim. Functionally identical, but politically deployable.</p>
         <p>The skill anchors quant claims to the canonical data layer first. It checks the claim against that anchor rather than whatever dashboard the person was looking at when they wrote the number down. Dashboard drift, where the number was real but was pulled with a filter state that doesn't match how the claim is being used, is one of the most common failure modes and the hardest to catch without this kind of check.</p>
         <p>For qual claims, it routes to the underlying study artifact, sample size, methodology, and conditions. It also surfaces when two research groups produced contradicting findings on the same question, often more useful to know than the audit result itself.</p>
         <p>The output is a structured drift report and a corrected claim: the same thing the original claimant was trying to say, written with the qualifications the underlying evidence actually supports.</p>
@@ -528,7 +528,7 @@
         <div class="skill-label">/create-about-me</div>
         <p>Every profile system at a company tells you what someone does. None of them tell you how they think, how they work through ambiguity, where they have friction with other functions. That layer lives in people's heads and evaporates every time someone moves to a new team.</p>
         <p>This is a three-tier file, public, trusted, and private, that captures the interpretive layer in a form that can travel deliberately. The interesting design constraint: the skill mines Slack history, memory files, and past artifacts before asking the user anything. It searches for messages where you reframed a problem, moments where others tagged you for expertise, how cross-functional partners have introduced you in new contexts.</p>
-        <p>Self-report produces what people wish were true about themselves. Observed behavior produces what's actually true.</p>
+        <p>Self-report produces what people wish were true about themselves, while observed behavior produces what's actually true.</p>
         <p>The file pairs with <code class="skill-label">/offboard-program</code> and <code class="skill-label">/onboard-program</code>. When you leave a program, offboard packages a slice of your about-me alongside the work context. When someone joins, they can load your about-me and start understanding how you work before your first meeting.</p>
         <div class="skill-file-toggle">
           <div class="skill-cmd-prompt" data-skill="create-about-me">
@@ -570,7 +570,7 @@
       <div class="essay-section">
         <p>I expected the value to be in the outputs, but it turned out to be in the writing.</p>
         <p>When you try to encode your own judgment into instructions precise enough for an agent to follow, you find out fast which parts of your thinking are real and which are habits you've never examined. The skills are useful. The process of building them was more useful.</p>
-        <p>Designers and PMs at companies going through real transformation face a version of the same question: how do you make your judgment more durable, more consistent, and less dependent on you personally carrying the context? These skills are one attempt at an answer. Not finished. Pointed the right direction.</p>
+        <p>Designers and PMs at companies going through real transformation face a version of the same question: how do you make your judgment more durable, more consistent, and less dependent on you personally carrying the context? These skills are one attempt at an answer. Not finished, but pointed in the right direction.</p>
         <p>Start where your work reliably breaks. Build there first.</p>
       </div>
 

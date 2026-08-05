@@ -1338,6 +1338,9 @@
       font-size: var(--fs-caption);
       color: var(--c-secondary);
     }
+    .essay-drawer-body figure { margin: 32px 0; max-width: 100%; }
+    .essay-drawer-body figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
+    .essay-drawer-body figcaption { font-size: var(--fs-caption); color: var(--c-secondary); margin-top: 10px; line-height: 1.5; }
     .essay-drawer-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
     .essay-drawer-loading {
       display: flex;
@@ -2092,7 +2095,7 @@
           field-notes/01
         </span>
         <div class="writing-col writing-col-a">
-          <div class="writing-item-title">What I learned building AI tools for my own design practice</div>
+          <div class="writing-item-title">Building AI tools for my own design practice</div>
         </div>
         <div class="writing-col writing-col-b">
           <p class="writing-item-desc">Five AI skills built to catch the specific ways general-purpose AI gets confidently wrong, and what writing instructions precise enough for an agent taught me about my own judgment.</p>
@@ -2109,6 +2112,19 @@
         </div>
         <div class="writing-col writing-col-b">
           <p class="writing-item-desc">An economist's framework for which jobs survive automation intact and which quietly hollow out, and an uncomfortable answer for which one product design is turning into.</p>
+          <div class="writing-item-cta"><span class="cta-arrow">←</span> Read</div>
+        </div>
+      </a>
+      <a href="cost-of-not-knowing.html" class="writing-item">
+        <span class="writing-file" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 1.5h6l3 3v8h-9v-11z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8.5 1.5v3h3" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          field-notes/03
+        </span>
+        <div class="writing-col writing-col-a">
+          <div class="writing-item-title">The Cost of Not Knowing</div>
+        </div>
+        <div class="writing-col writing-col-b">
+          <p class="writing-item-desc">A research framework built to fix a customer trust problem on one product, and why it was still doing work years later on a different part of the funnel.</p>
           <div class="writing-item-cta"><span class="cta-arrow">←</span> Read</div>
         </div>
       </a>
@@ -2845,6 +2861,7 @@
             if (attr) frag.appendChild(attr.cloneNode(true));
             drawerBody.innerHTML = '';
             drawerBody.appendChild(frag);
+            if (window.lightboxScan) window.lightboxScan();
           })
           .catch(function () {
             drawerBody.innerHTML = '<div class="essay-drawer-loading">Could not load.</div>';
@@ -2984,11 +3001,11 @@
 
       <h2>How I think</h2>
       <p>I interrogate what data measures before accepting what it means. When someone presents a result, my first move is to check the metric, the attribution, the population, the filters. The number itself is rarely the issue; the gap between what the number measures and what's being claimed about it is where most decisions go wrong.</p>
-      <p>I think structurally before I think tactically. A problem in front of me is usually the surface of something deeper. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.</p>
+      <p>Structural thinking comes before tactical thinking. A problem in front of me is usually the surface of something deeper. I map the underlying conditions, dependencies, and incentives before iterating on the visible layer.</p>
       <p>I build for durability, not just delivery. I look for the pattern that will hold after the immediate project is done. The framework, the principle, the rule that lets future decisions be made faster and more consistently.</p>
-      <p>I treat research as the primary input to strategy, not a validation step after design decisions are made. Research data feeds directly into the framing that drives design direction. When I co-create with researchers, they're co-authors of the strategy.</p>
+      <p>Research is the primary input to strategy for me, not a validation step after design decisions are made. Research data feeds directly into the framing that drives design direction. When I co-create with researchers, they're co-authors of the strategy.</p>
       <p>I move between registers fluently. Craft, strategy, business, data. Most people operate primarily in one. I read across all of them and know which one the room needs in the moment.</p>
-      <p>I think in systems, not screens. Boundaries between surfaces, teams, and stages are where things break. The handoffs, the transitions, the seams.</p>
+      <p>Systems matter to me more than screens. Boundaries between surfaces, teams, and stages are where things break. The handoffs, the transitions, the seams.</p>
       <p>I separate what I know from what I'm told. Verbal claims, repeated assertions, and inherited assumptions get tested against documented sources.</p>
 
       <hr>
@@ -3004,7 +3021,7 @@
 
       <hr>
 
-      <h2>What I'm uniquely good at</h2>
+      <h2>Where I add the most value</h2>
       <p>Holding craft and strategy as the same practice. The craft rigor is what earns the standing to shape strategy.</p>
       <p>Naming structural problems with no obvious owner. The ones the system has no natural mechanism to surface.</p>
       <p>Building tools other people build on. Things that change what they're able to do, not just deliverables.</p>
@@ -3043,6 +3060,8 @@
 
     </div>
   </div>
+
+  <script src="lightbox.js"></script>
 
 </body>
 </html>

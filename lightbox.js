@@ -1,6 +1,14 @@
 (function () {
   var EXCLUDE_SELECTOR = '.cs-recognition-badge, .hero-img img, .cs-video img';
   var GROUP_SELECTOR = '.cs-recipe-pair, figure';
+  var CANDIDATE_SELECTOR = '.card img, .cs-recipe img, #essay-drawer-body img';
+
+  var refs = null;
+  var wired = typeof WeakSet !== 'undefined' ? new WeakSet() : null;
+  var elToGroup = new Map();
+  var lastFocused = null;
+  var currentGroup = [];
+  var currentIndex = 0;
 
   function captionFor(el) {
     var recipe = el.closest('.cs-recipe');
@@ -21,6 +29,7 @@
     overlay.className = 'lightbox-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('tabindex', '-1');
 
     var figureWrap = document.createElement('div');
     figureWrap.className = 'lightbox-figure';
@@ -63,19 +72,87 @@
     return { overlay: overlay, figureWrap: figureWrap, img: img, info: info, caption: caption, prevBtn: prevBtn, nextBtn: nextBtn, counter: counter, closeBtn: closeBtn };
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    var candidates = document.querySelectorAll('.card img, .cs-recipe img');
+  function unzoom() {
+    refs.overlay.classList.remove('lightbox-zoomed');
+    refs.img.classList.remove('lightbox-zoomed-img');
+  }
+
+  function render() {
+    var el = currentGroup[currentIndex];
+    unzoom();
+    refs.img.src = el.currentSrc || el.src;
+    refs.img.alt = el.alt || '';
+    var captionText = captionFor(el);
+    refs.caption.textContent = captionText;
+    var multi = currentGroup.length > 1;
+    refs.prevBtn.style.display = multi ? '' : 'none';
+    refs.nextBtn.style.display = multi ? '' : 'none';
+    refs.counter.style.display = multi ? '' : 'none';
+    if (multi) refs.counter.textContent = (currentIndex + 1) + ' / ' + currentGroup.length;
+    refs.info.style.display = (captionText || multi) ? '' : 'none';
+  }
+
+  function open(el) {
+    lastFocused = document.activeElement;
+    currentGroup = elToGroup.get(el) || [el];
+    currentIndex = currentGroup.indexOf(el);
+    if (currentIndex < 0) currentIndex = 0;
+    // Images inside the homepage's essay drawer sit on a dark floating
+    // panel over the starfield, not a bone card, so the lightbox itself
+    // should read dark there instead of the usual bone/card treatment.
+    refs.overlay.classList.toggle('lightbox-dark', !!el.closest('#essay-drawer-body'));
+    render();
+    refs.overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Focus the dialog container, not the close button - keeps focus inside
+    // the dialog for screen readers/Escape without triggering the button's
+    // visible focus ring on every single open (browsers treat this kind of
+    // programmatic focus as keyboard-worthy, so it showed up unconditionally).
+    refs.overlay.focus({ preventScroll: true });
+  }
+
+  function close() {
+    refs.overlay.classList.remove('open');
+    unzoom();
+    document.body.style.overflow = '';
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    // Let the 0.22s exit transition finish before clearing the image,
+    // so it fades out in place instead of popping away instantly.
+    setTimeout(function () { refs.img.src = ''; }, 240);
+  }
+
+  function step(dir) {
+    if (currentGroup.length < 2) return;
+    currentIndex = (currentIndex + dir + currentGroup.length) % currentGroup.length;
+    render();
+  }
+
+  function toggleZoom() {
+    var zooming = !refs.img.classList.contains('lightbox-zoomed-img');
+    refs.overlay.classList.toggle('lightbox-zoomed', zooming);
+    refs.img.classList.toggle('lightbox-zoomed-img', zooming);
+    if (zooming) {
+      // Center the scroll position on the point that was tapped, once laid out.
+      requestAnimationFrame(function () {
+        refs.overlay.scrollLeft = (refs.overlay.scrollWidth - refs.overlay.clientWidth) / 2;
+        refs.overlay.scrollTop = (refs.overlay.scrollHeight - refs.overlay.clientHeight) / 2;
+      });
+    }
+  }
+
+  // Re-scans for lightbox-eligible images and (re)builds the group map.
+  // Safe to call repeatedly — e.g. after the homepage's essay drawer
+  // fetches and inserts a different field note's content, since that
+  // content (and its images) don't exist yet at initial page load.
+  function scan() {
+    var candidates = document.querySelectorAll(CANDIDATE_SELECTOR);
     var excluded = document.querySelectorAll(EXCLUDE_SELECTOR);
     var excludedSet = new Set(Array.prototype.slice.call(excluded));
-
     var targets = Array.prototype.filter.call(candidates, function (el) {
       return !excludedSet.has(el);
     });
-
     if (!targets.length) return;
 
-    // Build groups: images sharing the nearest .cs-recipe-pair/figure ancestor
-    // that contains more than one lightbox image are treated as one carousel.
     var groupMap = new Map(); // container -> [img,...]
     var singletons = [];
 
@@ -93,76 +170,21 @@
       }
     });
 
-    var elToGroup = new Map();
     groupMap.forEach(function (imgs) {
       imgs.forEach(function (el) { elToGroup.set(el, imgs); });
     });
     singletons.forEach(function (el) { elToGroup.set(el, [el]); });
 
-    var refs = buildOverlay();
-    var lastFocused = null;
-    var currentGroup = [];
-    var currentIndex = 0;
+    targets.forEach(function (el) {
+      el.classList.add('lightbox-trigger');
+      if (wired && wired.has(el)) return;
+      if (wired) wired.add(el);
+      el.addEventListener('click', function () { open(el); });
+    });
+  }
 
-    function unzoom() {
-      refs.overlay.classList.remove('lightbox-zoomed');
-      refs.img.classList.remove('lightbox-zoomed-img');
-    }
-
-    function render() {
-      var el = currentGroup[currentIndex];
-      unzoom();
-      refs.img.src = el.currentSrc || el.src;
-      refs.img.alt = el.alt || '';
-      var captionText = captionFor(el);
-      refs.caption.textContent = captionText;
-      var multi = currentGroup.length > 1;
-      refs.prevBtn.style.display = multi ? '' : 'none';
-      refs.nextBtn.style.display = multi ? '' : 'none';
-      refs.counter.style.display = multi ? '' : 'none';
-      if (multi) refs.counter.textContent = (currentIndex + 1) + ' / ' + currentGroup.length;
-      refs.info.style.display = (captionText || multi) ? '' : 'none';
-    }
-
-    function open(el) {
-      lastFocused = document.activeElement;
-      currentGroup = elToGroup.get(el) || [el];
-      currentIndex = currentGroup.indexOf(el);
-      if (currentIndex < 0) currentIndex = 0;
-      render();
-      refs.overlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      refs.closeBtn.focus();
-    }
-
-    function close() {
-      refs.overlay.classList.remove('open');
-      unzoom();
-      document.body.style.overflow = '';
-      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
-      // Let the 0.22s exit transition finish before clearing the image,
-      // so it fades out in place instead of popping away instantly.
-      setTimeout(function () { refs.img.src = ''; }, 240);
-    }
-
-    function step(dir) {
-      if (currentGroup.length < 2) return;
-      currentIndex = (currentIndex + dir + currentGroup.length) % currentGroup.length;
-      render();
-    }
-
-    function toggleZoom() {
-      var zooming = !refs.img.classList.contains('lightbox-zoomed-img');
-      refs.overlay.classList.toggle('lightbox-zoomed', zooming);
-      refs.img.classList.toggle('lightbox-zoomed-img', zooming);
-      if (zooming) {
-        // Center the scroll position on the point that was tapped, once laid out.
-        requestAnimationFrame(function () {
-          refs.overlay.scrollLeft = (refs.overlay.scrollWidth - refs.overlay.clientWidth) / 2;
-          refs.overlay.scrollTop = (refs.overlay.scrollHeight - refs.overlay.clientHeight) / 2;
-        });
-      }
-    }
+  document.addEventListener('DOMContentLoaded', function () {
+    refs = buildOverlay();
 
     // Swipe-to-navigate: horizontal drag over the image area steps between
     // grouped images. Only active when not zoomed, so pinch/pan-scroll on a
@@ -194,11 +216,6 @@
       }
     }, { passive: true });
 
-    targets.forEach(function (el) {
-      el.classList.add('lightbox-trigger');
-      el.addEventListener('click', function () { open(el); });
-    });
-
     refs.closeBtn.addEventListener('click', close);
     refs.prevBtn.addEventListener('click', function (e) { e.stopPropagation(); step(-1); });
     refs.nextBtn.addEventListener('click', function (e) { e.stopPropagation(); step(1); });
@@ -216,5 +233,15 @@
       else if (e.key === 'ArrowLeft') step(-1);
       else if (e.key === 'ArrowRight') step(1);
     });
+
+    scan();
   });
+
+  // Exposed so index.html's essay-drawer fetch handler can call it after
+  // inserting a field note's content, whose images don't exist at initial
+  // page load and so are invisible to the DOMContentLoaded scan above.
+  window.lightboxScan = function () {
+    if (!refs) return;
+    scan();
+  };
 })();

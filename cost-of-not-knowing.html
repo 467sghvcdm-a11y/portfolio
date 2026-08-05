@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>The Weak Bundle Problem · Matt Kirkpatrick</title>
-  <meta name="description" content="Product design is a weak bundle. AI is just making the architecture visible. Field notes by Matt Kirkpatrick.">
-  <meta property="og:title" content="The Weak Bundle Problem · Matt Kirkpatrick">
-  <meta property="og:description" content="Product design is a weak bundle. AI is just making the architecture visible. Field notes by Matt Kirkpatrick.">
+  <title>The Cost of Not Knowing · Matt Kirkpatrick</title>
+  <meta name="description" content="A framework survives past its original project only if it's tied to something the business already feels as a cost. Field notes by Matt Kirkpatrick.">
+  <meta property="og:title" content="The Cost of Not Knowing · Matt Kirkpatrick">
+  <meta property="og:description" content="A framework survives past its original project only if it's tied to something the business already feels as a cost. Field notes by Matt Kirkpatrick.">
   <meta property="og:image" content="https://467sghvcdm-a11y.github.io/portfolio/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -241,6 +241,11 @@
       margin-bottom: 36px;
     }
 
+    /* ── Figures (images sit inside essay-section, full column width) ── */
+    figure { margin: 36px 0; max-width: 660px; }
+    figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
+    figcaption { font-size: var(--fs-caption); color: var(--c-secondary); margin-top: 10px; line-height: 1.5; }
+
     /* ── Footer ── */
     .footer {
       position: relative;
@@ -285,6 +290,7 @@
   <script src="password-gate.js"></script>
 
   <script defer src="starfield.js?v=9"></script>
+  <script src="lightbox.js"></script>
 
   <a href="index.html" class="cs-back">← Work</a>
 
@@ -293,57 +299,49 @@
     <div class="hero">
       <div class="hero-body">
         <p class="hero-eyebrow label">Field notes</p>
-        <h1 class="cs-title">The Weak Bundle Problem</h1>
+        <h1 class="cs-title">The Cost of Not Knowing</h1>
 
       </div>
     </div>
 
     <div class="card">
 
-      <p class="essay-lede">Product design is a weak bundle. I think it's been a weak bundle for a long time. AI is just making the architecture visible.</p>
+      <p class="essay-lede">A framework survives past its original project only if it's tied to something the business already feels as a cost.</p>
 
       <div class="essay">
-        <p>For almost nine years I've been designing acquisition experiences for products that move people toward financial decisions they're uncertain about. It's work that requires understanding what people actually need versus what they say they need, and building arguments for that distinction in rooms that don't always want to have the argument.</p>
-        <p>I've been thinking about why that argument never fully resolves. Even when the outcomes are good.</p>
-        <p>I found a framework in <a href="https://www.theatlantic.com/economy/2026/06/ai-job-displacement-questions/687503/" target="_blank" rel="noopener">Three Ways to Think About AI and Jobs</a>, a piece this month from The Atlantic, that explains it better than I've been able to.</p>
+        <p>In 2022 I was working on TurboTax Full Service, and customers weren't leaving because the tax prep was wrong. They were leaving because they didn't know what was happening to their return while they waited for it. Our research lead, Joanna Vodopivec, had done the work to define who these customers actually were, not static personas, but mindsets: a spectrum from Passenger (I don't want to do this) to Pilot (I've got this), organized by how much control and understanding someone needed, not by demographic or filing complexity.</p>
       </div>
 
       <div class="essay-section">
-        <p>Economist Luis Garicano distinguishes between "strong bundles" and "weak bundles" in white-collar work. Strong bundles combine clean tasks and messy tasks in ways that are tightly coupled. You can't do one without the other. Radiology is the example: interpreting a scan requires intimate knowledge of a patient's history, which requires talking to the patient, which requires the clinical judgment that makes the interpretation meaningful. The clean and the messy are load-bearing on each other.</p>
-        <p>Weak bundles are different. The clean tasks and the messy tasks can be separated without losing much. A recruiter can hand resume screening to AI and still do the sourcing, interviewing, and offer negotiation just fine. The clean tasks were scaffolding, not structure.</p>
-        <p>Product design is a weak bundle. I think it's been a weak bundle for a long time. AI is just making the architecture visible.</p>
+        <p>I made the case for designing around that spectrum instead of a fixed persona, because mindsets shift. Someone who was a Passenger their first year, handing everything to an expert because they didn't trust themselves to do it right, could become a Pilot two years later, confident enough to file on their own. A persona locks a person in place. A mindset describes where they are right now, and where they might move next.</p>
+        <p>But a spectrum of mindsets doesn't tell you what to build. It tells you who you're building for. What was mine to figure out was what was actually costing us their trust while they sat in that spectrum, waiting.</p>
       </div>
 
       <div class="essay-section">
-        <p>The clean tasks in design are exactly what AI handles well: wireframes, specifications, asset production, basic prototyping, redlines, documentation. These are already being automated or compressed.</p>
-        <p>The messy tasks are harder to name because they're harder to see. Diagnosing why a product architecture is generating the wrong outcomes. Building the evidence that turns a contested design argument into shared conviction across a room that didn't start out agreeing. Finding the flaw in how a program measures its own success before a single test runs. Navigating a room full of product managers and engineers who weren't expecting design to have a structural argument rather than a deliverable.</p>
-        <p>These tasks require tacit knowledge, sustained judgment, and the ability to read organizational dynamics that aren't written down anywhere.</p>
-        <p>The problem is that in product design, the messy and clean tasks aren't as tightly coupled as they are in radiology or journalism. A product manager can absorb the messy strategic work. An AI tool can do the clean execution work. The designer in the middle loses execution to AI and strategy to PMs who no longer need a designer to facilitate the conversation.</p>
-        <p>That squeeze isn't new. It's been the structural condition of the profession for decades. AI is accelerating the timeline.</p>
+        <p>I brought in Nielsen Norman Group's interaction cost model: the sum of mental and physical effort a person has to spend to reach their goal. Every product has some interaction cost. The question is whether that cost is doing something useful, or just accumulating as friction nobody's accounting for.</p>
+        <p>Our support data had a number sitting in it that nobody had connected to anything: not knowing where their return stood in the process was the single biggest reason customers contacted support in Tax Year 2021, ahead of any tax question itself. Of the customers who called in confused about status, seventeen percent asked to leave Full Service entirely on that same call. Sixty-three percent of those requests traced back to one thing: a status they'd never been given.</p>
+        <figure>
+          <img src="assets/field-note-03-before.png" alt="Diagnostic view of the support problem: three contact attempts before a customer reaches a real person, ending with the customer asking why they're being ignored" width="2438" height="1388" loading="lazy" decoding="async">
+          <figcaption>Three contact attempts before a customer reached a real person, with no status signal along the way.</figcaption>
+        </figure>
       </div>
 
       <div class="essay-section">
-        <p>MIT economists David Autor and Neil Thompson draw a distinction that maps directly onto this. They studied what happened when computers hit accounting clerks versus inventory clerks.</p>
-        <p>For accounting clerks, computers replaced the least expert skills (manual calculations, transaction recording) and freed up capacity for more complex work: explaining budget variances, reconciling discrepancies, interpreting what the numbers meant. The job got smaller in headcount but higher in value.</p>
-        <p>For inventory clerks, computers replaced the most expert skill (encyclopedic knowledge of physical inventory) and left behind the basic tasks: scanning, restocking, receiving. The job survived but paid less and required less expertise.</p>
-        <p>The pattern held across more than 300 occupations over four decades. What mattered wasn't whether automation came for the job. Whether automation enhanced the worker's expertise or commodified it. That was the thing that determined what happened next.</p>
-        <p>There are two versions of a product designer. One whose primary expertise is encyclopedic knowledge of components, patterns, and specifications. That's the inventory clerk. The tools are commodifying that expertise fast. The job survives but shrinks, pays less, and fills from a much larger pool.</p>
-        <p>The other version figures out why the product isn't working, what the measurement system is getting wrong, and how to build the case for the real fix. That's the accounting clerk. AI hasn't touched that yet. The job gets smaller in headcount but the remaining work is higher stakes.</p>
-        <p>My portfolio is an argument that I've been doing the accounting clerk version of design. A measurement audit that found a structural flaw in how a program tracked its own success. A diagnosis of a broken product architecture with no owner and no prior framing. A framework that separated two kinds of CTAs that looked identical but produced opposite outcomes depending on surface and intent. These are judgment skills. They compound across years. They don't reduce to a prompt.</p>
-        <p>What I can't fully answer is whether the organizations that employ designers can tell the difference between the two versions. The profession has always struggled to make the accounting clerk work visible, because the most important moments happen before the artifact exists. In the framing, the diagnosis, the argument that changed what got built. The artifact is what survives the meeting. The thinking that produced it mostly doesn't.</p>
+        <p>On its own, that's a support metric. Once I ran it through the interaction cost lens, it became something else: every hour a customer spent not knowing what was happening to their return was interaction cost with zero benefit attached. They weren't getting anything for that wait. It was pure tax on their trust in the product.</p>
+        <p>That reframe is what turned a pain point into a design brief. The question stopped being how do we make the wait shorter and became how do we keep customers informed about what's going on, which is a question you can actually design against. The answer was a set of vignettes mapping exactly where in the journey a customer was left waiting with no signal, and what would replace that silence: sync options for people who wanted resolution now, async checkpoints for people who didn't, status visibility everywhere a person had previously been asked to just trust that something was happening.</p>
+        <figure>
+          <img src="assets/field-note-03-after.png" alt="Redesigned flow replacing coach mode with an optional TPA welcome call for customers who want it" width="2446" height="1316" loading="lazy" decoding="async">
+          <figcaption>The redesign: an optional TPA welcome call, only for the customers who wanted it.</figcaption>
+        </figure>
       </div>
 
       <div class="essay-section">
-        <p>Nine years of trying to raise the floor. For the designers I've led, and for myself. The weak bundle framework explains why that argument never fully resolves. In a weak bundle, the function has to keep justifying its existence because the clean tasks that fill most of the day can always be questioned, and the messy tasks that justify the role are hard to point to. When the strategic work goes well, credit diffuses. When it goes badly, the artifact is what gets blamed.</p>
-        <p>The irony is not lost on me. I design AI-assisted experiences for a product that AI is disrupting. I am simultaneously the accounting clerk and someone building the tools that commodify the inventory clerk version of the work. An uncomfortable position, but an honest one.</p>
+        <p>None of this was novel UX theory. Interaction cost is a known concept. What made it hold up was that it wasn't left as theory. It got tied to a number the business already tracked, and once a framework is load-bearing for a metric someone already reports on, it's much harder for it to quietly disappear when the project ends.</p>
+        <p>It didn't disappear. Years later, on Activate Experts, TurboTax's top-of-funnel acquisition program, evaluating a different part of the customer journey, that same mindset structure resurfaced inside a custom Gemini tool I built to help reason through design rationale and test interpretation, one of the reference frameworks it was grounded in from the start. Nobody had to reintroduce the concept. It had already become part of how I thought about customers.</p>
       </div>
 
       <div class="essay-section">
-        <p>The open question I keep returning to is what comes after the container.</p>
-        <p>The portfolio is the best version of the current title. It earns conversations at companies that value this kind of work. The case studies are real, the outcomes are documented, the thinking is specific enough to be useful to someone trying to understand how I operate.</p>
-        <p>But the title is eroding. Product designer as a named function with dedicated headcount, a seat in the strategy conversation, and a career ladder that rewards the accounting clerk version of the work. That's the thing I'm less certain about. The strategic thinking is going to whoever can own outcomes. The execution is being automated or absorbed. The middle, production design, spec work, the coordination layer, is what's gone.</p>
-        <p>I don't know what someone with the accounting clerk version of design skills positions themselves as when that container no longer fits. The category doesn't have a clean name yet. The market isn't hiring for it explicitly. So you use the container that works today while building toward something that doesn't have a job title yet.</p>
-        <p>The hardest design problem of my career is figuring that out.</p>
+        <p>I don't think that happened because the framework was clever. I think it happened because it was never just a framework. It was a framework wired to a cost someone already felt.</p>
       </div>
 
       <p class="essay-attr">Matt Kirkpatrick is a Principal Product Designer at Intuit.</p>
@@ -361,5 +359,23 @@
     </span>
   </footer>
 
+  <script>
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    var text = btn.dataset.copy;
+    function showCopied() {
+      if (btn.classList.contains('footer-link')) {
+        var svg = btn.querySelector('svg');
+        var origSvg = svg.outerHTML;
+        svg.outerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        setTimeout(function () { btn.querySelector('svg').outerHTML = origSvg; }, 2000);
+      }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(showCopied);
+    } else { showCopied(); }
+  }, true);
+  </script>
 </body>
 </html>
